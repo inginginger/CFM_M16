@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EPC4) Path("C:/Projects/Orb_M16/") File("OrbM16.pof") MfrSpec(OpMask(1));
+		Device PartName(EPC4) Path("C:/Projects/CFM/") File("OrbM16.pof") MfrSpec(OpMask(1));
 
 ChainEnd;
 
