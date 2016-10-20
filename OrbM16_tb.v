@@ -58,25 +58,25 @@ module OrbM16_tb();
 	
 	initial begin
 		data[0] = 0;
-		data[1] = 100;
-		data[2] = 150;
-		data[3] = 200;
-		data[4] = 250;
-		data[5] = 300;
-		data[6] = 350;
-		data[7] = 400;
-		data[8] = 450;
-		data[9] = 500;
-		data[10] = 550;
-		data[11] = 600;
-		data[12] = 650;
-		data[13] = 700;
-		data[14] = 750;
-		data[15] = 800;
-		data[16] = 850;
-		data[17] = 900;
-		data[18] = 950;
-		data[19] = 1000;
+		data[1] = 10;
+		data[2] = 20;
+		data[3] = 30;
+		data[4] = 40;
+		data[5] = 50;
+		data[6] = 60;
+		data[7] = 70;
+		data[8] = 80;
+		data[9] = 90;
+		data[10] = 100;
+		data[11] = 110;
+		data[12] = 120;
+		data[13] = 130;
+		data[14] = 140;
+		data[15] = 150;
+		data[16] = 160;
+		data[17] = 170;
+		data[18] = 180;
+		data[19] = 190;
 	end
 	initial begin
 		//for(k=0; k < 32; k=k+1'b1)
