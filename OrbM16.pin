@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Thu Oct 20 09:51:46 2016
+File Generation Date & Time: Thu Oct 20 10:01:57 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -75,7 +75,7 @@ GND*                         : 30        :        :                   :         
 GND*                         : 31        :        :                   :         :           :                
 GND_INT                      : 32        : gnd    :                   :         :           :                
 GND*                         : 33        :        :                   :         :           :                
-GND*                         : 34        :        :                   :         :           :                
+ValRX                        : 34        : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 35        :        :                   :         :           :                
 GND*                         : 36        :        :                   :         :           :                
 VCC_IO                       : 37        : power  :                   : 3.3V    :           :                
@@ -87,7 +87,7 @@ GND_INT                      : 42        : gnd    :                   :         
 UART_RX                      : 43        : input  : LVTTL/LVCMOS      :         :           : Y              
 GND*                         : 44        :        :                   :         :           :                
 GND*                         : 45        :        :                   :         :           :                
-ValRX                        : 46        : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 46        :        :                   :         :           :                
 VCC_INT                      : 47        : power  :                   : 2.5V    :           :                
 GND*                         : 48        :        :                   :         :           :                
 GND*                         : 49        :        :                   :         :           :                

@@ -40,14 +40,14 @@ begin
 		test <= 0;
 	end
 	else begin
-		if(syncSW[1] != oldSW) begin
+		if(SW != oldSW) begin
 			cntAddr <= 0;
 			cntPack <= 0;
 			cntWrd <= 0;
 			test <= 1;
 		end
 		else test <= 0;
-		oldSW <= syncSW[1];
+		oldSW <= SW;//syncSW[1];
 		
 		case(state)
 			IDLE: begin
