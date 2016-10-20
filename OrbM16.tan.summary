@@ -1,0 +1,66 @@
+--------------------------------------------------------------------------------------
+Timing Analyzer Summary
+--------------------------------------------------------------------------------------
+
+Type           : Worst-case tco
+Slack          : N/A
+Required Time  : None
+Actual Time    : 23.900 ns
+From           : UARTTXBIG:inst9|tx
+To             : UART_TX
+From Clock     : clk100MHz
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Clock Setup: 'clk100MHz'
+Slack          : 2.134 ns
+Required Time  : 100.66 MHz ( period = 9.934 ns )
+Actual Time    : 128.21 MHz ( period = 7.800 ns )
+From           : clkDiv21:inst2|cntdiv[4]
+To             : clkDiv21:inst2|cntdiv[0]
+From Clock     : clk100MHz
+To Clock       : clk100MHz
+Failed Paths   : 0
+
+Type           : Clock Setup: 'clk80MHz'
+Slack          : 4.800 ns
+Required Time  : 80.00 MHz ( period = 12.500 ns )
+Actual Time    : 129.87 MHz ( period = 7.700 ns )
+From           : OrbPacker:inst5|orbWord[3]
+To             : ramM16:inst6|altdpram:altdpram_component|q[3]~reg_in
+From Clock     : clk80MHz
+To Clock       : clk80MHz
+Failed Paths   : 0
+
+Type           : Clock Hold: 'clk100MHz'
+Slack          : 0.200 ns
+Required Time  : 100.66 MHz ( period = 9.934 ns )
+Actual Time    : N/A
+From           : clkDiv21:inst2|cntdiv[0]
+To             : clkDiv21:inst2|cntdiv[0]
+From Clock     : clk100MHz
+To Clock       : clk100MHz
+Failed Paths   : 0
+
+Type           : Clock Hold: 'clk80MHz'
+Slack          : 0.200 ns
+Required Time  : 80.00 MHz ( period = 12.500 ns )
+Actual Time    : N/A
+From           : OrbPacker:inst5|lpm_counter:cntPack_rtl_8|alt_counter_f10ke:wysi_counter|counter_cell[5]
+To             : OrbPacker:inst5|lpm_counter:cntPack_rtl_8|alt_counter_f10ke:wysi_counter|counter_cell[5]
+From Clock     : clk80MHz
+To Clock       : clk80MHz
+Failed Paths   : 0
+
+Type           : Total number of failed paths
+Slack          : 
+Required Time  : 
+Actual Time    : 
+From           : 
+To             : 
+From Clock     : 
+To Clock       : 
+Failed Paths   : 0
+
+--------------------------------------------------------------------------------------
+

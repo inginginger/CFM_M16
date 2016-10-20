@@ -1,0 +1,15 @@
+/simulation/
+/incremental_db/
+/db/
+/OrbM16.asm.rpt
+/OrbM16.done
+/OrbM16.eda.rpt
+/OrbM16.fit.rpt
+/OrbM16.flow.rpt
+/OrbM16.map.rpt
+/OrbM16.map.smsg
+/OrbM16.tan.rpt
+/OrbM16_nativelink_simulation.rpt
+/serv_req_info.txt
+*.qws
+*.v.bak
