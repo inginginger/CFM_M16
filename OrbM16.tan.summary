@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 20.000 ns
-From           : UARTTXBIG:inst9|tx
-To             : UART_TX
+Actual Time    : 18.400 ns
+From           : UARTTXBIG:inst9|dirTX
+To             : UART_dTX
 From Clock     : clk100MHz
 To Clock       : --
 Failed Paths   : 0
@@ -33,10 +33,10 @@ To Clock       : clk80MHz
 Failed Paths   : 0
 
 Type           : Clock Setup: 'clkDiv100:inst3|Outdiv8'
-Slack          : 62.772 ns
+Slack          : 65.472 ns
 Required Time  : 12.58 MHz ( period = 79.472 ns )
-Actual Time    : 59.88 MHz ( period = 16.700 ns )
-From           : M16:inst8|lpm_counter:cntWrd_rtl_4|alt_counter_f10ke:wysi_counter|counter_cell[7]
+Actual Time    : 71.43 MHz ( period = 14.000 ns )
+From           : M16:inst8|lpm_counter:cntWrd_rtl_4|alt_counter_f10ke:wysi_counter|counter_cell[4]
 To             : M16:inst8|lpm_counter:cntGrp_rtl_7|alt_counter_f10ke:wysi_counter|counter_cell[4]
 From Clock     : clkDiv100:inst3|Outdiv8
 To Clock       : clkDiv100:inst3|Outdiv8

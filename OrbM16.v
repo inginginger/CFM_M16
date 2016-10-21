@@ -31,13 +31,18 @@ wire [5:0]cycle;
 wire [8:0] LCB_rq_addr;
 wire [7:0] LCB_rq_data;
 wire [4:0] switch;
-wire [10:0] RdAddr, WrAddr;
+wire [10:0] RdAddr;
+wire [10:0] WrAddr;
 reg [11:0] OrbData;
 wire RE, WE;
 wire SW, test;
-reg [10:0] RdAddr1, RdAddr2, WrAddr1, WrAddr2;
+reg [10:0] RdAddr1;
+reg [10:0] RdAddr2;
+reg [10:0] WrAddr1;
+reg [10:0] WrAddr2;
 reg RE1, RE2, WE1, WE2;
-wire [11:0] MemData1, MemData2;
+wire [11:0] MemData1;
+wire [11:0] MemData2;
 wire [7:0] DataFromLCB;
 wire [11:0] orbWord;
 
@@ -46,10 +51,16 @@ assign doubleOrbData = orbFrame;//дублирование на контакт, который выводит кадр 
 //assign DataFromLCB = (!SW)?MemData2:MemData1;
 assign test1 = WE1;
 assign test2 = test;//SW;//0;//WE2;
-assign test3 = RE1;//RdAddr[10];
+assign test3 = WrAddr[1];
 assign test4 = RE2;//0;//WE2;
 
-reg [1:0] syncRE, syncSW, syncWE, syncRE1, syncRE2, syncWE1, syncWE2;
+reg [1:0] syncRE;    
+reg [1:0] syncSW;
+reg [1:0] syncWE;
+reg [1:0] syncRE1;
+reg [1:0] syncRE2;
+reg [1:0] syncWE1;
+reg [1:0] syncWE2;
 
 always@(posedge clk80MHz)
 begin
@@ -72,6 +83,7 @@ begin
 		0: begin
 			OrbData = MemData1;
 			RdAddr1 = RdAddr + 1'b1;
+			WrAddr2 = WrAddr;
 			RE2 = 1'b0;
 			RE1 = syncRE[1];
 			//DataFromLCB = MemData2;
@@ -85,6 +97,7 @@ begin
 		1: begin
 			OrbData = MemData2;
 			RdAddr2 = RdAddr + 1'b1;
+			WrAddr1 = WrAddr;
 			RE1 = 1'b0;
 			RE2 = syncRE[1];
 			//DataFromLCB = MemData1;
@@ -156,7 +169,7 @@ ramM16 inst6(
 	.data(orbWord),
 	.rdaddress(RdAddr1),
 	.rden(syncRE1[1]),
-	.wraddress(WrAddr),
+	.wraddress(WrAddr1),
 	.wren(syncWE1[1]),
 	.q(MemData1));
 	
@@ -165,7 +178,7 @@ ramM16 inst7(
 	.data(orbWord),
 	.rdaddress(RdAddr2),
 	.rden(syncRE2[1]),
-	.wraddress(WrAddr),
+	.wraddress(WrAddr2),
 	.wren(syncWE2[1]),
 	.q(MemData2));
 
