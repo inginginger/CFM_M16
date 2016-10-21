@@ -50,12 +50,11 @@ begin
 			cntWE <= 5'd0;
 		end
 		else test <= 0;
-		oldSW <= SW;//syncSW[1];
+		oldSW <= SW;
 		
 		case(state)
 			IDLE: begin
 				if(syncStr[1]) begin
-					//WE <= 1'b1;
 					WrAddr <= (cntAddr << 1) + (cntPack << 5);
 					cntWrd <= cntWrd + 1'b1;
 					case(cntWrd)
@@ -84,7 +83,6 @@ begin
 				end
 			end
 			WAIT: begin
-				
 				if(~syncStr[1]) begin
 					WE <= 1'b0;
 					state <= IDLE;
