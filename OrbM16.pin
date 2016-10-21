@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Thu Oct 20 12:46:25 2016
+File Generation Date & Time: Fri Oct 21 10:18:01 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -75,8 +75,8 @@ GND*                         : 30        :        :                   :         
 GND*                         : 31        :        :                   :         :           :                
 GND_INT                      : 32        : gnd    :                   :         :           :                
 GND*                         : 33        :        :                   :         :           :                
-ValRX                        : 34        : output : LVTTL/LVCMOS      :         :           : N              
-GND*                         : 35        :        :                   :         :           :                
+GND*                         : 34        :        :                   :         :           :                
+ValRX                        : 35        : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 36        :        :                   :         :           :                
 VCC_IO                       : 37        : power  :                   : 3.3V    :           :                
 UART_TX                      : 38        : output : LVTTL/LVCMOS      :         :           : Y              
