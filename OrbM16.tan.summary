@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 18.400 ns
-From           : UARTTXBIG:inst9|dirTX
-To             : UART_dTX
+Actual Time    : 23.500 ns
+From           : UARTTXBIG:inst9|tx
+To             : UART_TX
 From Clock     : clk100MHz
 To Clock       : --
 Failed Paths   : 0
@@ -23,9 +23,9 @@ To Clock       : clk100MHz
 Failed Paths   : 0
 
 Type           : Clock Setup: 'clk80MHz'
-Slack          : 2.500 ns
+Slack          : 2.400 ns
 Required Time  : 80.00 MHz ( period = 12.500 ns )
-Actual Time    : 100.00 MHz ( period = 10.000 ns )
+Actual Time    : 99.01 MHz ( period = 10.100 ns )
 From           : OrbPacker:inst5|state.00
 To             : OrbPacker:inst5|lpm_counter:cntWrd_rtl_0|alt_counter_f10ke:wysi_counter|counter_cell[3]
 From Clock     : clk80MHz
@@ -33,11 +33,11 @@ To Clock       : clk80MHz
 Failed Paths   : 0
 
 Type           : Clock Setup: 'clkDiv100:inst3|Outdiv8'
-Slack          : 65.472 ns
+Slack          : 64.872 ns
 Required Time  : 12.58 MHz ( period = 79.472 ns )
-Actual Time    : 71.43 MHz ( period = 14.000 ns )
-From           : M16:inst8|lpm_counter:cntWrd_rtl_4|alt_counter_f10ke:wysi_counter|counter_cell[4]
-To             : M16:inst8|lpm_counter:cntGrp_rtl_7|alt_counter_f10ke:wysi_counter|counter_cell[4]
+Actual Time    : 68.49 MHz ( period = 14.600 ns )
+From           : M16:inst8|lpm_counter:cntWrd_rtl_4|alt_counter_f10ke:wysi_counter|counter_cell[7]
+To             : M16:inst8|lpm_counter:cntFrm_rtl_5|alt_counter_f10ke:wysi_counter|counter_cell[6]
 From Clock     : clkDiv100:inst3|Outdiv8
 To Clock       : clkDiv100:inst3|Outdiv8
 Failed Paths   : 0
@@ -56,8 +56,8 @@ Type           : Clock Hold: 'clk80MHz'
 Slack          : 0.200 ns
 Required Time  : 80.00 MHz ( period = 12.500 ns )
 Actual Time    : N/A
-From           : OrbPacker:inst5|lpm_counter:cntWE_rtl_1|alt_counter_f10ke:wysi_counter|counter_cell[4]
-To             : OrbPacker:inst5|lpm_counter:cntWE_rtl_1|alt_counter_f10ke:wysi_counter|counter_cell[4]
+From           : OrbPacker:inst5|lpm_counter:cntWrd_rtl_0|alt_counter_f10ke:wysi_counter|counter_cell[3]
+To             : OrbPacker:inst5|lpm_counter:cntWrd_rtl_0|alt_counter_f10ke:wysi_counter|counter_cell[3]
 From Clock     : clk80MHz
 To Clock       : clk80MHz
 Failed Paths   : 0

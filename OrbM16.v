@@ -45,14 +45,14 @@ wire [11:0] MemData1;
 wire [11:0] MemData2;
 wire [7:0] DataFromLCB;
 wire [11:0] orbWord;
-
+wire testpin2016, testpin1984;
 
 assign doubleOrbData = orbFrame;//дублирование на контакт, который выводит кадр на стенде
 //assign DataFromLCB = (!SW)?MemData2:MemData1;
 assign test1 = WE1;
 assign test2 = test;//SW;//0;//WE2;
-assign test3 = WrAddr[1];
-assign test4 = RE2;//0;//WE2;
+assign test3 = testpin1984;//WrAddr[1];
+assign test4 = testpin2016;//RE2;//0;//WE2;
 
 reg [1:0] syncRE;    
 reg [1:0] syncSW;
@@ -161,7 +161,9 @@ OrbPacker inst5(
 	//.req,
 	.orbWord(orbWord),
 	.WE(WE),
-	.WrAddr(WrAddr)
+	.WrAddr(WrAddr),
+	.test1(testpin2016),
+	.test2(testpin1984)
 );
 
 ramM16 inst6(

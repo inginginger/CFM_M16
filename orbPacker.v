@@ -8,7 +8,9 @@ input SW,
 output reg test,
 output reg [11:0] orbWord,
 output  reg WE,
-output  reg [10:0] WrAddr
+output  reg [10:0] WrAddr,
+output reg test1,
+output reg test2
 );
 
 reg [1:0] syncStr;
@@ -19,6 +21,7 @@ reg [1:0] state;
 reg [3:0] cntAddr;
 reg oldSW;
 reg [4:0] cntWE;
+
 localparam IDLE = 0, WESET = 1, WAIT = 2;
 
 always@(posedge clk)
@@ -40,6 +43,8 @@ begin
 		oldSW <= 0;
 		test <= 0;
 		cntWE <= 5'd0;
+		test1 <= 0;
+		test2 <= 0;
 	end
 	else begin
 		if(SW != oldSW) begin
@@ -55,11 +60,11 @@ begin
 		case(state)
 			IDLE: begin
 				if(syncStr[1]) begin
-					WrAddr <= (cntAddr << 1) + (cntPack << 5);
 					cntWrd <= cntWrd + 1'b1;
 					case(cntWrd)
 						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15: begin
 							orbWord <= {1'b0, iData, 3'd0};
+							WrAddr <= (cntAddr << 1) + (cntPack << 5);
 							cntAddr <= cntAddr + 1'b1;
 							state <= WESET;
 						end
@@ -70,7 +75,6 @@ begin
 							state <= WAIT;				
 						end
 					endcase					
-					
 				end
 			end
 			WESET: begin
@@ -83,6 +87,14 @@ begin
 				end
 			end
 			WAIT: begin
+				if(WrAddr == 2016)
+					test1 <= 1;
+				else if(WrAddr == 0)
+					test2 <= 1;
+				else begin
+					test1 <= 0;
+					test2 <= 0;
+				end
 				if(~syncStr[1]) begin
 					WE <= 1'b0;
 					state <= IDLE;
