@@ -79,9 +79,9 @@ begin
 			end
 			WESET: begin
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 5'd27)
+				if(cntWE == 5'd30)
 					WE <= 1'b1;
-				else if(cntWE == 6'd31) begin
+				else if(cntWE == 5'd31) begin
 					cntWE <= 5'd0;
 					state <= WAIT;
 				end

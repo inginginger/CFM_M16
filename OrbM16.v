@@ -79,10 +79,10 @@ end
 
 always@(*)
 begin
-	case(syncSW[1])
+	case(SW)
 		0: begin
 			OrbData = MemData1;
-			RdAddr1 = RdAddr + 1'b1;
+			RdAddr1 = RdAddr+1;
 			WrAddr2 = WrAddr;
 			RE2 = 1'b0;
 			RE1 = syncRE[1];
@@ -96,7 +96,7 @@ begin
 		end
 		1: begin
 			OrbData = MemData2;
-			RdAddr2 = RdAddr + 1'b1;
+			RdAddr2 = RdAddr+1;
 			WrAddr1 = WrAddr;
 			RE1 = 1'b0;
 			RE2 = syncRE[1];
@@ -109,6 +109,7 @@ begin
 			//RE2 = RE;
 			
 		end
+		
 	endcase
 end
 

@@ -598,7 +598,7 @@ cntmas[ 255 ] =  255 ;
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
 		UART_RX = 1;
-		repeat (160) begin					// 5 times
+		repeat (300) begin					// 5 times
 			j=0;
 			wait(UART_dRX == 1);
 			wait(UART_dRX == 0);
