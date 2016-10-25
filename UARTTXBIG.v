@@ -43,12 +43,12 @@ always@(posedge clk or negedge reset)
 begin
 if (~reset) begin          // global asyncronous reset, initial values
   state <= 1'b0;
-  serialize <= 0;
-  delay <= 1'b0;
+  serialize <= 4'd0;
+  delay <= 5'b0;
   tx <= 1'b1;
-  switch <= 0;
-  dirTX <= 0;
-  dirRX <= 0;
+  switch <= 5'd0;
+  dirTX <= 1'd0;
+  dirRX <= 1'd0;
 end else begin            // main circuit
   case (state)          // state machine
     WAIT: begin          // waiting for transfer request
@@ -56,26 +56,26 @@ end else begin            // main circuit
     end
     DIRON: begin         // set the DIR pins to high level with a tiny delay
       delay <= delay + 1'b1;  // count while in this state
-      if (delay == 0) begin dirRX <= 1; end
-      if (delay == 15) begin dirTX <= 1; end
-      if (delay == 30) begin state <= TX; end  // proceed to next state
+      if (delay == 5'd0) begin dirRX <= 1'd1; end
+      if (delay == 5'd15) begin dirTX <= 1'd1; end
+      if (delay == 5'd30) begin state <= TX; end  // proceed to next state
     end
     TX: begin          // the transfer
       serialize <= serialize + 1'b1;    // count while in this state
       case (serialize)          // make a sequence while here
         0: begin 
-          tx <= 0;      // startbit
-          delay <= 0;    // reset previous counter
+          tx <= 1'd0;      // startbit
+          delay <= 5'd0;    // reset previous counter
         end
-        1,2,3,4,5,6,7,8: tx <= data[(serialize - 1)];  // transmit every bit of data
+        1,2,3,4,5,6,7,8: tx <= data[(serialize - 1'b1)];  // transmit every bit of data
         9: begin 
-          tx <= 1;    // stopbit
+          tx <= 1'd1;    // stopbit
           switch <= switch + 1'b1;  // switch memory
         end
         10: begin
-          serialize <= 0; // reset sequencer
-          if (switch == 4) begin 
-            switch <= 0; 
+          serialize <= 4'd0; // reset sequencer
+          if (switch == 5'd4) begin 
+            switch <= 5'd0; 
             state <= DIROFF; 
           end  // if completed transfer proceed to next state 
         end  
@@ -83,11 +83,11 @@ end else begin            // main circuit
     end
     DIROFF: begin        // set the DIR pins to low level with a tiny delay
       delay <= delay + 1'b1;  // count while in this state
-      if (delay == 15) begin dirTX <= 0; end
-      if (delay == 30) begin dirRX <= 0; state <= MEGAWAIT; end  // proceed to next state
+      if (delay == 5'd15) begin dirTX <= 1'd0; end
+      if (delay == 5'd30) begin dirRX <= 1'd0; state <= MEGAWAIT; end  // proceed to next state
     end
     MEGAWAIT: begin      // checking the low level of request signal
-      delay <= 0;        // reset previous counter
+      delay <= 5'd0;        // reset previous counter
       if (~rqsync[1]) state <= WAIT; // just move on
     end
   endcase 

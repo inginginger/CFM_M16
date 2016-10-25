@@ -22,7 +22,7 @@ reg [3:0] cntAddr;
 reg oldSW;
 reg [4:0] cntWE;
 
-localparam IDLE = 0, WESET = 1, WAIT = 2;
+localparam IDLE = 2'd0, WESET = 2'd1, WAIT = 2'd2;
 
 always@(posedge clk)
 begin
@@ -40,22 +40,22 @@ begin
 		cntPack <= 6'd0;
 		state <= 2'd0;
 		cntAddr <= 4'd0;
-		oldSW <= 0;
-		test <= 0;
+		oldSW <= 1'b0;
+		test <= 1'b0;
 		cntWE <= 5'd0;
-		test1 <= 0;
-		test2 <= 0;
+		test1 <= 1'b0;
+		test2 <= 1'b0;
 	end
 	else begin
-		if(SW != oldSW) begin
+		if(syncSW[1] != oldSW) begin
 			cntAddr <= 4'd0;
 			cntPack <= 6'd0;
 			cntWrd <= 5'd0;
-			test <= 1;
+			test <= 1'b1;
 			cntWE <= 5'd0;
 		end
-		else test <= 0;
-		oldSW <= SW;
+		else test <= 1'b0;
+		oldSW <= syncSW[1];
 		
 		case(state)
 			IDLE: begin
@@ -87,13 +87,13 @@ begin
 				end
 			end
 			WAIT: begin
-				if(WrAddr == 2016)
-					test1 <= 1;
-				else if(WrAddr == 0)
-					test2 <= 1;
+				if(WrAddr == 11'd2016)
+					test1 <= 1'b1;
+				else if(WrAddr == 11'd0)
+					test2 <= 1'b1;
 				else begin
-					test1 <= 0;
-					test2 <= 0;
+					test1 <= 1'b0;
+					test2 <= 1'b0;
 				end
 				if(~syncStr[1]) begin
 					WE <= 1'b0;

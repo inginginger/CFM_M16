@@ -88,3 +88,4 @@ set_location_assignment PIN_173 -to test3
 set_location_assignment PIN_169 -to test4
 set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT simulation/modelsim/wave.do -section_id eda_simulation
 set_global_assignment -name MIF_FILE initmem100.mif
+set_global_assignment -name MISC_FILE "C:/Projects/CFM/OrbM16.dpf"

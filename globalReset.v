@@ -12,11 +12,11 @@ module globalReset			// to use this: set the initial for (~reset) and main circu
 	input clk,				// 40 MHz
 	output reg rst			// global enable
 );
-reg [31:0] count = 0;
+reg [31:0] count = 32'd0;
 
 always@(posedge clk)
 begin
-	if (count > 8'd62/*clockFreq*delayInSec*/) rst <= 1;		// on fpga start count 62 clocks and set global enable
-	else begin rst <= 0; count <= count + 1'b1; end		// while count set enabe to low level
+	if (count > 8'd62/*clockFreq*delayInSec*/) rst <= 1'b1;		// on fpga start count 62 clocks and set global enable
+	else begin rst <= 1'b0; count <= count + 1'b1; end		// while count set enabe to low level
 end
 endmodule
