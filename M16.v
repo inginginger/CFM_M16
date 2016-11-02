@@ -9,7 +9,8 @@ module M16(
 	output reg [11:0]oParallel,
 	output reg oVal,
 	output reg [5:0] cycle,
-	output reg oLCB_rq
+	output reg oLCB_rq1,
+	output reg oLCB_rq2
 );
 
 reg [3:0]cntBit;
@@ -40,9 +41,9 @@ always@(negedge reset or posedge iClkOrb)begin
 		cntWrd <= 11'd0;
 		seq <= 3'd0;
 		cycle <= 6'd0;
-		oLCB_rq <= 1'd0;
+		oLCB_rq1 <= 1'd0;
+		oLCB_rq2 <= 1'd0;
 		cntLCBrq <= 12'd0;
-		//cntAddr <= 0;
 	end else begin
 		seq <= seq + 1'b1;
 		case(seq)
@@ -67,9 +68,7 @@ always@(negedge reset or posedge iClkOrb)begin
 					cntBit <= 4'd0;
 					outWord <= iWord;
 					cntWrd <= cntWrd + 1'b1;
-					//cntAddr <= cntAddr + 1'b1;
 					if (cntWrd == 11'd2047) begin
-						//cntWrd <= 0;
 						oSwitch <= ~oSwitch;
 						cntGrp <= cntGrp + 1'b1;
 						if (cntGrp == 31) cntGrp <= 5'd0;
@@ -111,8 +110,10 @@ always@(negedge reset or posedge iClkOrb)begin
 		endcase
 		cntLCBrq <= cntLCBrq + 1'b1;
 		case (cntLCBrq)
-			0: oLCB_rq <= 1'd1;
-			20: oLCB_rq <= 1'd0;
+			0: oLCB_rq1 <= 1'd1;
+			20: oLCB_rq1 <= 1'd0;
+			600: oLCB_rq2 <= 1'd1;
+			620: oLCB_rq2 <= 1'd0;
 			1500: cycle <= cycle + 1'b1;
 			1535: cntLCBrq <= 11'd0;
 		endcase

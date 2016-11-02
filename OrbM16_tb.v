@@ -22,10 +22,14 @@ module OrbM16_tb();
 	//reg LCBreq; 
 	reg clk4_8MHz;
 	//reg [8:0] LCB_rq_addr;
-	wire UART_TX;          // serial transmitted data
-	reg UART_RX;
-	wire UART_dTX;        // rs485 TX dir controller 
-	wire UART_dRX;        // rs485 RX dir controller
+	wire UART_TX1;          // serial transmitted data
+	reg UART_RX1;
+	wire UART_dTX1;        // rs485 TX dir controller 
+	wire UART_dRX1;        // rs485 RX dir controller
+	wire UART_TX2;          // serial transmitted data
+	reg UART_RX2;
+	wire UART_dTX2;        // rs485 TX dir controller 
+	wire UART_dRX2;        // rs485 RX dir controller
 	//reg [7:0] LCB_rq_data;
 	//reg  [5:0] cycle;
 	//reg  [4:0] switch;
@@ -39,7 +43,7 @@ module OrbM16_tb();
 	reg [7:0] nowdata = 0;
 	
 	// Instantiate UUT
-	OrbM16 M16frame(.clk100MHz(clk100MHz), .clk80MHz(clk80MHz), .UART_RX(UART_RX), /*.clk4_8MHz(clk4_8MHz),*/ .doubleOrbData(doubleOrbData),.ValRX(ValRX),.test1(test1), .test2(test2), .test3(test3), .test4(test4), .UART_TX(UART_TX), .UART_dTX(UART_dTX), .UART_dRX(UART_dRX));
+	OrbM16 M16frame(.clk100MHz(clk100MHz), .clk80MHz(clk80MHz), .UART_RX1(UART_RX1), .UART_RX2(UART_RX2),/*.clk4_8MHz(clk4_8MHz),*/ .doubleOrbData(doubleOrbData),.ValRX(ValRX),.test1(test1), .test2(test2), .test3(test3), .test4(test4), .UART_TX1(UART_TX1), .UART_TX2(UART_TX2), .UART_dTX1(UART_dTX1), .UART_dTX2(UART_dTX2), .UART_dRX1(UART_dRX1), .UART_dRX2(UART_dRX2));
 
 	// Clock definition
 	initial begin
@@ -597,28 +601,28 @@ cntmas[ 255 ] =  255 ;
 	end
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
-		UART_RX = 1;
+		UART_RX2 = 1;
 		repeat (300) begin					// 5 times
 			j=0;
-			wait(UART_dRX == 1);
-			wait(UART_dRX == 0);
+			wait(UART_dRX2 == 1);
+			wait(UART_dRX2 == 0);
 
 			repeat (30)@(posedge clk4_8MHz);
 			repeat (20) begin				// 20 bytes
 				repeat(10)@(posedge clk4_8MHz);
-				UART_RX = 0;
+				UART_RX2 = 0;
 				repeat (8)					// 8 bit
 				begin
 					nowdata = cntmas[q];
 					@(posedge clk4_8MHz)
 					if(j == 0)
-						UART_RX = cntmas[q][i];
+						UART_RX2 = cntmas[q][i];
 					else
-						UART_RX=data[j][i];
+						UART_RX2=data[j][i];
 					i=i+1;
 				end
 				@(posedge clk4_8MHz);
-				UART_RX = 1;
+				UART_RX2 = 1;
 				
 				j=j+1;
 			end
