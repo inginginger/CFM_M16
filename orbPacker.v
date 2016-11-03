@@ -9,11 +9,13 @@ input req,
 input SW,
 output reg test,
 output reg [11:0] orbWord,
-output  reg WE,
-output [10:0] WrAddr,
+output reg WE,
+output reg [10:0] WrAddr,
 output reg testWE,
 output reg test1,
-output reg test2
+output reg test2,
+output reg test00,
+output reg test01
 );
 
 reg [1:0] syncStr1;
@@ -32,8 +34,11 @@ reg [4:0] cntWE1;
 reg [4:0] cntWE2;
 reg [10:0] WrAddr1;
 reg [10:0] WrAddr2;
+reg WE1, WE2;
+reg [11:0] orbWord1,orbWord2;
 
-assign WrAddr = WrAddr1 | WrAddr2;
+//assign WrAddr = WrAddr1 | WrAddr2;
+//assign WE = WE1 | WE2;
 
 localparam IDLE1 = 2'd0, WESET1 = 2'd1, WAIT1 = 2'd2;
 localparam IDLE2 = 2'd0, WESET2 = 2'd1, WAIT2 = 2'd2;
@@ -48,8 +53,10 @@ end
 always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
-		orbWord <= 12'd0;
-		WE <= 1'd0;
+		orbWord1 <= 12'd0;
+		orbWord2 <= 12'd0;
+		WE1 <= 1'd0;
+		WE2 <= 1'd0;
 		WrAddr1 <= 11'd0;
 		WrAddr2 <= 11'd0;
 		cntWrd1 <= 5'd0;
@@ -78,18 +85,35 @@ begin
 			cntWrd2 <= 5'd0;
 			test <= 1'b1;
 			cntWE1 <= 5'd0;
+			cntWE2 <= 5'd0;
 		end
 		else test <= 1'b0;
 		oldSW <= syncSW[1];
-		if(strob1 ==1'b1)
-			testWE <= 1'b1;
+		
+		if(strob1 == 1'b1) begin
+			WE <= WE1;
+			WrAddr <= WrAddr1;
+			orbWord <= orbWord1;
+			test01 <= 1;
+		end
+		else if( strob2 == 1'b1) begin
+			WE <= WE2;
+			WrAddr <= WrAddr2;
+			orbWord <= orbWord2;
+			test00 <= 1;
+		end
+		else begin
+			test00 <= 0;
+			test01 <= 0;
+		end
+		
 		case(state1)
 			IDLE1: begin
 				if(syncStr1[1]) begin
 					cntWrd1 <= cntWrd1 + 1'b1;
 					case(cntWrd1)
 						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15: begin
-							orbWord <= {1'b0, iData1, 3'd0};
+							orbWord1 <= {1'b0, iData1, 3'd0};
 							WrAddr1 <= (cntAddr1 << 1) + (cntPack1 << 5);
 							cntAddr1 <= cntAddr1 + 1'b1;
 							state1 <= WESET1;
@@ -106,7 +130,7 @@ begin
 			WESET1: begin
 				cntWE1 <= cntWE1 + 1'b1;
 				if(cntWE1 == 5'd30)
-					WE <= 1'b1;
+					WE1 <= 1'b1;
 				else if(cntWE1 == 5'd31) begin
 					cntWE1 <= 5'd0;
 					state1 <= WAIT1;
@@ -122,7 +146,7 @@ begin
 					test2 <= 1'b0;
 				end
 				if(~syncStr1[1]) begin
-					WE <= 1'b0;
+					WE1 <= 1'b0;
 					testWE <= 1'b0;
 					state1 <= IDLE1;
 				end
@@ -134,7 +158,7 @@ begin
 					cntWrd2 <= cntWrd2 + 1'b1;
 					case(cntWrd2)
 						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14: begin
-							orbWord <= {1'b0, iData2, 3'd0};
+							orbWord2 <= {1'b0, iData2, 3'd0};
 							WrAddr2 <= ((cntAddr2 << 1) + 1'b1) + (cntPack2 << 5);
 							cntAddr2 <= cntAddr2 + 1'b1;
 							state2 <= WESET2;
@@ -151,7 +175,7 @@ begin
 			WESET2: begin
 				cntWE2 <= cntWE2 + 1'b1;
 				if(cntWE2 == 5'd30)
-					WE <= 1'b1;
+					WE2 <= 1'b1;
 				else if(cntWE2 == 5'd31) begin
 					cntWE2 <= 5'd0;
 					state2 <= WAIT2;
@@ -167,7 +191,7 @@ begin
 					test2 <= 1'b0;
 				end
 				if(~syncStr2[1]) begin
-					WE <= 1'b0;
+					WE2 <= 1'b0;
 					testWE <= 1'b0;
 					state2 <= IDLE2;
 				end

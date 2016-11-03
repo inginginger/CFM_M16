@@ -93,3 +93,4 @@ set_global_assignment -name MIF_FILE Mif1.mif
 set_global_assignment -name VERILOG_FILE orbPacker.v
 set_global_assignment -name MIF_FILE mem2.mif
 set_global_assignment -name MIF_FILE initmem100.mif
+set_global_assignment -name VERILOG_FILE orbPackerPar.v

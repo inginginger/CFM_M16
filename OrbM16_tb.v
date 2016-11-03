@@ -601,6 +601,36 @@ cntmas[ 255 ] =  255 ;
 	end
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
+		UART_RX1 = 1;
+		repeat (300) begin					// 5 times
+			j=0;
+			wait(UART_dRX1 == 1);
+			wait(UART_dRX1 == 0);
+
+			repeat (30)@(posedge clk4_8MHz);
+			repeat (20) begin				// 20 bytes
+				repeat(10)@(posedge clk4_8MHz);
+				UART_RX1 = 0;
+				repeat (8)					// 8 bit
+				begin
+					nowdata = cntmas[q];
+					@(posedge clk4_8MHz)
+					if(j == 0)
+						UART_RX1 = cntmas[q][i];
+					else
+						UART_RX1=data[j][i];
+					i=i+1;
+				end
+				@(posedge clk4_8MHz);
+				UART_RX1 = 1;
+				
+				j=j+1;
+			end
+			q = q+1;
+		end
+	end
+	initial begin						// Main
+		repeat (30)@(posedge clk80MHz);
 		UART_RX2 = 1;
 		repeat (300) begin					// 5 times
 			j=0;

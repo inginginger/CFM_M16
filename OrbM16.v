@@ -3,6 +3,7 @@ module OrbM16(
 	input clk80MHz,
 	output orbFrame,
 	output doubleOrbData,
+	output ValRX,
 	
 output test1,
 output test2,
@@ -38,16 +39,16 @@ wire [10:0] WrAddr2;
 wire RE1, RE2, WE1, WE2;
 wire [11:0] MemData1;
 wire [11:0] MemData2;
-wire [7:0] DataFromLCB;
+//wire [7:0] DataFromLCB;
 wire [11:0] orbWord;
 wire testpin2016, testpin1984;
 wire [7:0] DataFromLCB1, DataFromLCB2;
-wire ValRX1, ValRX2, lenWE;
+wire ValRX1, ValRX2, testVal1, testVal2;
 
 assign doubleOrbData = orbFrame;//дублирование на контакт, который выводит кадр на стенде
-assign test1 = WE1;
-assign test2 = test;//SW;//0;//WE2;
-assign test3 = lenWE;//WrAddr[1];
+assign test1 = testVal1;
+assign test2 = testVal2;//SW;//0;//WE2;
+assign test3 = testpin1984;//WrAddr[1];
 assign test4 = testpin2016;//RE2;//0;//WE2;
 
 reg [1:0] syncRE1;
@@ -77,7 +78,7 @@ assign RdAddr2= (SW == 1'b1)?(RdAddr+1'b1):11'hx;
 assign WrAddr1 = (SW == 1'b1)?WrAddr:11'hx;
 assign RE2 = (SW == 1'b1)?RE:1'hx;
 assign WE1 = (SW == 1'b1)?WE:1'hx;
-//assign ValRX = ValRX1 | ValRX2;
+assign ValRX = ValRX1 | ValRX2;
 
 globalReset inst1(
 	.clk(clk80MHz),				// 40 MHz
@@ -121,11 +122,12 @@ OrbPacker inst6(
 	.strob2(ValRX2),
 	.SW(SW),
 	.test(test),
+	.test00(testVal1),
+	.test01(testVal2),
 	//.req,
 	.orbWord(orbWord),
 	.WE(WE),
 	.WrAddr(WrAddr),
-	.testWE(lenWE),
 	.test1(testpin2016),
 	.test2(testpin1984)
 );
