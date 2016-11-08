@@ -112,8 +112,8 @@ always@(negedge reset or posedge iClkOrb)begin
 		case (cntLCBrq)
 			0: oLCB_rq1 <= 1'd1;
 			20: oLCB_rq1 <= 1'd0;
-			700: oLCB_rq2 <= 1'd1;
-			720: oLCB_rq2 <= 1'd0;
+			100: oLCB_rq2 <= 1'd1;
+			120: oLCB_rq2 <= 1'd0;
 			1500: cycle <= cycle + 1'b1;
 			1535: cntLCBrq <= 11'd0;
 		endcase

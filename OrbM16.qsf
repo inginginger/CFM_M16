@@ -94,3 +94,17 @@ set_global_assignment -name VERILOG_FILE orbPacker.v
 set_global_assignment -name MIF_FILE mem2.mif
 set_global_assignment -name MIF_FILE initmem100.mif
 set_global_assignment -name VERILOG_FILE orbPackerPar.v
+set_location_assignment PIN_31 -to UART_RX3
+set_location_assignment PIN_26 -to UART_RX4
+set_location_assignment PIN_21 -to UART_RX5
+set_location_assignment PIN_28 -to UART_TX3
+set_location_assignment PIN_23 -to UART_TX4
+set_location_assignment PIN_17 -to UART_TX5
+set_location_assignment PIN_30 -to UART_dRX3
+set_location_assignment PIN_25 -to UART_dRX4
+set_location_assignment PIN_19 -to UART_dRX5
+set_location_assignment PIN_29 -to UART_dTX3
+set_location_assignment PIN_24 -to UART_dTX4
+set_location_assignment PIN_18 -to UART_dTX5
+set_global_assignment -name QIP_FILE ramUART.qip
+set_global_assignment -name VERILOG_FILE commutAdr.v

@@ -3,8 +3,14 @@ input clk,
 input rst,
 input [7:0] iData1,
 input [7:0] iData2,
+input [7:0] iData3,
+input [7:0] iData4,
+input [7:0] iData5,
 input strob1,
 input strob2,
+input strob3,
+input strob4,
+input strob5,
 input req,
 input SW,
 output reg test,
@@ -163,6 +169,8 @@ begin
 							orbWord2 <= {1'b0, iData2, 3'd0};
 							WrAddr2 <= ((cntAddr2 << 1) + 1'b1) + (cntPack2 << 5);
 							cntAddr2 <= cntAddr2 + 1'b1;
+							if(cntAddr2 == 4'd14)
+								cntAddr2 <= 4'd0;
 							state2 <= WESET2;
 						end
 						15, 16, 17, 18: state2 <= WAIT2;
