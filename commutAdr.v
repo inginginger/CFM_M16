@@ -2,7 +2,7 @@ module commutAdr(
 	input clk,
 	input rst,
 	input strob,
-	output [4:0] rdAdr,
+	output [4:0] wrAdr,
 	output reg full,
 	output reg WE
 );
@@ -10,11 +10,11 @@ module commutAdr(
 reg [1:0] syncStr;
 reg [1:0] state;
 reg [4:0] cntWrd;
-reg [3:0] cntWE;
+reg [4:0] cntWE;
 
-localparam IDLE = 3'd0, CNTWRD = 3'd1, WRSET = 3'd2, FULLSET = 3'd3, WAIT = 3'd4;
+localparam IDLE = 2'd0, CNTWRD = 2'd1, WRSET = 2'd2, WAIT = 2'd3;
 
-assign rdAdr = cntWrd;
+assign wrAdr = cntWrd;
 
 always@(posedge clk)
 	syncStr <= {syncStr[0], strob};
@@ -31,7 +31,6 @@ begin
 	else begin
 		case(state)
 			IDLE: begin
-				full <= 1'b0;
 				if(syncStr[1])
 					state <= CNTWRD;
 			end
@@ -39,25 +38,22 @@ begin
 				cntWrd <= cntWrd + 1'b1;
 				if(cntWrd == 5'd19) begin
 					cntWrd <= 5'd0;
-					state <= FULLSET;
+					full <= 1'b1;
 				end
 				state <= WRSET;
 			end
 			WRSET: begin
+				full <= 1'b0;
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 4'd13)
+				if(cntWE == 5'd29)
 					WE <= 1'b1;
-				else if(cntWE == 4'd15) begin
-					cntWE <= 4'd0;
+				else if(cntWE == 5'd31) begin
+					WE <= 1'b0;
+					cntWE <= 5'd0;
 					state <= WAIT;
 				end
 			end
-			FULLSET: begin
-				full <= 1'b1;
-				state <= WAIT;
-			end
 			WAIT: begin
-				WE <= 1'b0;
 				if(~syncStr[1])
 					state <= IDLE;
 			end

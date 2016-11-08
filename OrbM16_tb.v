@@ -30,20 +30,31 @@ module OrbM16_tb();
 	reg UART_RX2;
 	wire UART_dTX2;        // rs485 TX dir controller 
 	wire UART_dRX2;        // rs485 RX dir controller
+	wire UART_TX3;          // serial transmitted data
+	reg UART_RX3;
+	wire UART_dTX3;        // rs485 TX dir controller 
+	wire UART_dRX3;        // rs485 RX dir controller
+	wire UART_TX4;          // serial transmitted data
+	reg UART_RX4;
+	wire UART_dTX4;        // rs485 TX dir controller 
+	wire UART_dRX4;        // rs485 RX dir controller
+	wire UART_TX5;          // serial transmitted data
+	reg UART_RX5;
+	wire UART_dTX5;        // rs485 TX dir controller 
+	wire UART_dRX5;        // rs485 RX dir controller
 	//reg [7:0] LCB_rq_data;
 	//reg  [5:0] cycle;
 	//reg  [4:0] switch;
 	//local variables
 	reg [7:0] data [0:19];
 	reg [7:0] cntmas[0:255];
-	reg [2:0] i = 0;
-	reg [4:0] j = 0;
-	reg [7:0] q = 0;
-	reg [4:0] k = 0;
+	reg [2:0] i = 0, p = 0, s = 0, z = 0, c = 0;
+	reg [4:0] j = 0, k = 0, n = 0, y = 0, b = 0;
+	reg [7:0] q = 0, m = 0, x = 0, a = 0, d = 0;
 	reg [7:0] nowdata = 0;
 	
 	// Instantiate UUT
-	OrbM16 M16frame(.clk100MHz(clk100MHz), .clk80MHz(clk80MHz), .UART_RX1(UART_RX1), .UART_RX2(UART_RX2),/*.clk4_8MHz(clk4_8MHz),*/ .doubleOrbData(doubleOrbData),.ValRX(ValRX),.test1(test1), .test2(test2), .test3(test3), .test4(test4), .UART_TX1(UART_TX1), .UART_TX2(UART_TX2), .UART_dTX1(UART_dTX1), .UART_dTX2(UART_dTX2), .UART_dRX1(UART_dRX1), .UART_dRX2(UART_dRX2));
+	OrbM16 M16frame(.clk100MHz(clk100MHz), .clk80MHz(clk80MHz), .UART_RX1(UART_RX1), .UART_RX2(UART_RX2), .UART_RX3(UART_RX3), .UART_RX4(UART_RX4), .UART_RX5(UART_RX5),/*.clk4_8MHz(clk4_8MHz),*/ .doubleOrbData(doubleOrbData),.ValRX(ValRX),.test1(test1), .test2(test2), .test3(test3), .test4(test4), .UART_TX1(UART_TX1), .UART_TX2(UART_TX2), .UART_TX3(UART_TX3), .UART_TX4(UART_TX4), .UART_TX5(UART_TX5), .UART_dTX1(UART_dTX1), .UART_dTX2(UART_dTX2), .UART_dTX3(UART_dTX3), .UART_dTX4(UART_dTX4), .UART_dTX5(UART_dTX5), .UART_dRX1(UART_dRX1), .UART_dRX2(UART_dRX2), .UART_dRX3(UART_dRX3), .UART_dRX4(UART_dRX4), .UART_dRX5(UART_dRX5));
 
 	// Clock definition
 	initial begin
@@ -633,7 +644,7 @@ cntmas[ 255 ] =  255 ;
 		repeat (30)@(posedge clk80MHz);
 		UART_RX2 = 1;
 		repeat (300) begin					// 5 times
-			j=0;
+			k=0;
 			wait(UART_dRX2 == 1);
 			wait(UART_dRX2 == 0);
 
@@ -645,18 +656,108 @@ cntmas[ 255 ] =  255 ;
 				begin
 					nowdata = cntmas[q];
 					@(posedge clk4_8MHz)
-					if(j == 0)
-						UART_RX2 = cntmas[q][i];
+					if(k == 0)
+						UART_RX2 = cntmas[m][p];
 					else
-						UART_RX2=data[j][i];
-					i=i+1;
+						UART_RX2=data[k][p];
+					p=p+1;
 				end
 				@(posedge clk4_8MHz);
 				UART_RX2 = 1;
 				
-				j=j+1;
+				k=k+1;
 			end
-			q = q+1;
+			m = m+1;
+		end
+	end
+	initial begin						// Main
+		repeat (30)@(posedge clk80MHz);
+		UART_RX3 = 1;
+		repeat (300) begin					// 5 times
+			n=0;
+			wait(UART_dRX3 == 1);
+			wait(UART_dRX3 == 0);
+
+			repeat (30)@(posedge clk4_8MHz);
+			repeat (20) begin				// 20 bytes
+				repeat(10)@(posedge clk4_8MHz);
+				UART_RX3 = 0;
+				repeat (8)					// 8 bit
+				begin
+					nowdata = cntmas[q];
+					@(posedge clk4_8MHz)
+					if(n == 0)
+						UART_RX3 = cntmas[x][s];
+					else
+						UART_RX3=data[n][s];
+					s=s+1;
+				end
+				@(posedge clk4_8MHz);
+				UART_RX3 = 1;
+				
+				n=n+1;
+			end
+			x = x+1;
+		end
+	end
+	initial begin						// Main
+		repeat (30)@(posedge clk80MHz);
+		UART_RX4 = 1;
+		repeat (300) begin					// 5 times
+			y=0;
+			wait(UART_dRX4 == 1);
+			wait(UART_dRX4 == 0);
+
+			repeat (30)@(posedge clk4_8MHz);
+			repeat (20) begin				// 20 bytes
+				repeat(10)@(posedge clk4_8MHz);
+				UART_RX4 = 0;
+				repeat (8)					// 8 bit
+				begin
+					nowdata = cntmas[q];
+					@(posedge clk4_8MHz)
+					if(j == 0)
+						UART_RX4 = cntmas[a][z];
+					else
+						UART_RX4=data[y][z];
+					z=z+1;
+				end
+				@(posedge clk4_8MHz);
+				UART_RX4 = 1;
+				
+				y=y+1;
+			end
+			a = a+1;
+		end
+	end
+	initial begin						// Main
+		repeat (30)@(posedge clk80MHz);
+		UART_RX5 = 1;
+		repeat (300) begin					// 5 times
+			b=0;
+			wait(UART_dRX5 == 1);
+			wait(UART_dRX5 == 0);
+
+			repeat (30)@(posedge clk4_8MHz);
+			repeat (20) begin				// 20 bytes
+				repeat(10)@(posedge clk4_8MHz);
+				UART_RX5 = 0;
+				repeat (8)					// 8 bit
+				begin
+					nowdata = cntmas[q];
+					@(posedge clk4_8MHz)
+					if(b == 0)
+						UART_RX5 = cntmas[d][c];
+					else
+						UART_RX5=data[b][c];
+					c=c+1;
+				end
+				@(posedge clk4_8MHz);
+				UART_RX5 = 1;
+				
+				b=b+1;
+			end
+			d = d+1;
 		end
 		$stop;
 	end

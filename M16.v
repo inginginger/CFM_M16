@@ -9,8 +9,8 @@ module M16(
 	output reg [11:0]oParallel,
 	output reg oVal,
 	output reg [5:0] cycle,
-	output reg oLCB_rq1,
-	output reg oLCB_rq2
+	output reg RqSlow,
+	output reg RqFast
 );
 
 reg [3:0]cntBit;
@@ -21,7 +21,8 @@ reg [6:0]cntFrm;
 reg cntMem;
 reg [11:0]outWord;
 reg [2:0]seq;
-reg [11:0] cntLCBrq;
+reg [11:0] cntRqFast;
+reg [15:0] cntRqSlow;
 
 //assign oSwitch = cntAddr[11];
 
@@ -41,9 +42,10 @@ always@(negedge reset or posedge iClkOrb)begin
 		cntWrd <= 11'd0;
 		seq <= 3'd0;
 		cycle <= 6'd0;
-		oLCB_rq1 <= 1'd0;
-		oLCB_rq2 <= 1'd0;
-		cntLCBrq <= 12'd0;
+		RqFast <= 1'd0;
+		RqSlow <= 1'd0;
+		cntRqFast <= 12'd0;
+		cntRqSlow <= 16'd0;
 	end else begin
 		seq <= seq + 1'b1;
 		case(seq)
@@ -108,14 +110,19 @@ always@(negedge reset or posedge iClkOrb)begin
 				end
 			end			
 		endcase
-		cntLCBrq <= cntLCBrq + 1'b1;
-		case (cntLCBrq)
-			0: oLCB_rq1 <= 1'd1;
-			20: oLCB_rq1 <= 1'd0;
-			100: oLCB_rq2 <= 1'd1;
-			120: oLCB_rq2 <= 1'd0;
-			1500: cycle <= cycle + 1'b1;
-			1535: cntLCBrq <= 11'd0;
+		cntRqFast <= cntRqFast + 1'b1;
+		case (cntRqFast)
+			0: RqFast <= 1'd1;
+			20: RqFast <= 1'd0;
+//			100: oLCB_rq2 <= 1'd1;
+//			120: oLCB_rq2 <= 1'd0;
+			1535: cntRqFast <= 11'd0;
+		endcase
+		cntRqSlow <= cntRqSlow + 1'b1;
+		case (cntRqSlow)
+			0: RqSlow <= 1'd1;
+			2048: RqSlow <= 1'd0;
+			24575: cntRqSlow <= 16'd0;
 		endcase
 	end
 end

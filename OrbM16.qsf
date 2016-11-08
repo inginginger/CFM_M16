@@ -108,3 +108,4 @@ set_location_assignment PIN_24 -to UART_dTX4
 set_location_assignment PIN_18 -to UART_dTX5
 set_global_assignment -name QIP_FILE ramUART.qip
 set_global_assignment -name VERILOG_FILE commutAdr.v
+set_global_assignment -name VERILOG_FILE commRdAdr.v
