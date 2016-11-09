@@ -67,9 +67,10 @@ reg [1:0] syncRE1;
 reg [1:0] syncRE2;
 reg [1:0] syncWE1;
 reg [1:0] syncWE2;
-wire [7:0] iUART1, iUART2, iUART3, iUART4, iUART5;
+wire [7:0] iUART1, iUART2, iUART3, iUART4, iUART5, oUART1, oUART2, oUART3, oUART4, oUART5;
 wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
+wire done1, done2, done3, done4, done5;
 
 always@(posedge clk80MHz)
 begin
@@ -249,11 +250,23 @@ commutAdr instWrAdr5(
 commRdAdr instRdAdr1(
 	.clk(clk80MHz),
 	.rst(rst),
-	.strob(done1),
-	.RD(RD1),
-	.RdAdr(RAdr1)
+	.strob1(done1),
+	.strob2(done2),
+	.strob3(done3),
+	.strob4(done4),
+	.strob5(done5),
+	.RD1(RD1),
+	.RD2(RD2),
+	.RD3(RD3),
+	.RD4(RD4),
+	.RD5(RD5),
+	.RdAdr1(RAdr1),
+	.RdAdr2(RAdr2),
+	.RdAdr3(RAdr3),
+	.RdAdr4(RAdr4),
+	.RdAdr5(RAdr5)
 );
-
+/*
 commRdAdr instRdAdr2(
 	.clk(clk80MHz),
 	.rst(rst),
@@ -284,26 +297,24 @@ commRdAdr instRdAdr5(
 	.strob(done5),
 	.RD(RD5),
 	.RdAdr(RAdr5)
-);
+);*/
 	
 
 OrbPacker instPACKER(
 	.clk(clk80MHz),
 	.rst(rst),
 	.iData1(oUART1),
-	.strob1(done1),
+	.strob1(RD1),
 	.iData2(oUART2),
-	.strob2(done2),
+	.strob2(RD2),
 	.iData3(oUART3),
-	.strob3(done3),
+	.strob3(RD3),
 	.iData4(oUART4),
-	.strob4(done4),
+	.strob4(RD4),
 	.iData5(oUART5),
-	.strob5(done5),
+	.strob5(RD5),
 	.SW(SW),
 	.test(test),
-	.test00(testVal1),
-	.test01(testVal2),
 	//.req,
 	.orbWord(orbWord),
 	.WE(WE),
@@ -374,7 +385,7 @@ defparam instTX2.BYTES = 5'd4;
 UARTTXBIG instTX3(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
-  .RQ(RqSlow),
+  .RQ(RqFast),
   .cycle(cycle + 1'b1),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data3),      // data to transmit (from ROM)
   .addr(LCB_rq_addr3),      // address to read (to ROM)

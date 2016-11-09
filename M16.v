@@ -114,8 +114,6 @@ always@(negedge reset or posedge iClkOrb)begin
 		case (cntRqFast)
 			0: RqFast <= 1'd1;
 			20: RqFast <= 1'd0;
-//			100: oLCB_rq2 <= 1'd1;
-//			120: oLCB_rq2 <= 1'd0;
 			1535: cntRqFast <= 11'd0;
 		endcase
 		cntRqSlow <= cntRqSlow + 1'b1;

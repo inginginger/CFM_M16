@@ -8,13 +8,14 @@ module commutAdr(
 );
 
 reg [1:0] syncStr;
-reg [1:0] state;
+reg [2:0] state;
 reg [4:0] cntWrd;
-reg [4:0] cntWE;
+reg [5:0] cntWE;
+reg [5:0] pause;
 
-localparam IDLE = 2'd0, CNTWRD = 2'd1, WRSET = 2'd2, WAIT = 2'd3;
+localparam IDLE = 3'd0, CNTWRD = 3'd1, WRSET = 3'd2, PAUSE = 3'd3, WAIT = 3'd4;
 
-assign wrAdr = cntWrd;
+assign wrAdr = (cntWrd > 0 && cntWrd <= 20) ? (cntWrd - 1'b1) : 5'hZ;
 
 always@(posedge clk)
 	syncStr <= {syncStr[0], strob};
@@ -23,10 +24,11 @@ always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
 		full <= 1'b0;
-		state <= 2'd0;
+		state <= 3'd0;
 		cntWrd <= 5'd0;
-		cntWE <= 4'd0;
+		cntWE <= 6'd0;
 		WE <= 1'b0;
+		pause <= 6'd0;
 	end
 	else begin
 		case(state)
@@ -36,24 +38,34 @@ begin
 			end
 			CNTWRD: begin
 				cntWrd <= cntWrd + 1'b1;
-				if(cntWrd == 5'd19) begin
-					cntWrd <= 5'd0;
-					full <= 1'b1;
-				end
 				state <= WRSET;
 			end
 			WRSET: begin
-				full <= 1'b0;
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 5'd29)
+				if(cntWE == 6'd46)
 					WE <= 1'b1;
-				else if(cntWE == 5'd31) begin
+				else if(cntWE == 6'd50)
 					WE <= 1'b0;
-					cntWE <= 5'd0;
+				else if(cntWE == 6'd63) begin
+					cntWE <= 6'd0;
+					if(cntWrd == 5'd20)
+						state <= PAUSE;
+					else 
+						state <= WAIT;
+				end
+			end
+			PAUSE: begin
+				pause <= pause + 1'b1;
+				if(pause == 6'd60)
+					full <= 1'b1;
+				else if(pause == 6'd63) begin
+					cntWrd <= 5'd0;
 					state <= WAIT;
+					pause <= 6'd0;
 				end
 			end
 			WAIT: begin
+				full <= 1'b0;
 				if(~syncStr[1])
 					state <= IDLE;
 			end
