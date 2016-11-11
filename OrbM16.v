@@ -266,13 +266,6 @@ commRdAdr instRdAdr1(
 	.RdAdr3(RAdr3),
 	.RdAdr4(RAdr4),
 	.RdAdr5(RAdr5)
-);
-
-cycleDelay instDelayCycle(
-	.slowRcv(slowRcv),
-	.cycle(cycle),
-	.rst(rst),
-	.adr(adrCycle)
 );	
 
 OrbPacker instPACKER(
@@ -406,7 +399,7 @@ defparam instTX5.BYTES = 5'd4;
 
 
 romRqAdr instRomAdr1(
-	.address(adrCycle),
+	.address(cycle),
 	.inclock(clk80MHz),
 	.outclock(clk80MHz),
 	.q(addrRamGr)

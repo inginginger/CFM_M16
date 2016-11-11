@@ -621,7 +621,7 @@ cntmas[ 255 ] =  255 ;
 
 			repeat (30)@(posedge clk4_8MHz);
 			repeat (20) begin				// 20 bytes
-				repeat(10)@(posedge clk4_8MHz);
+				repeat(1)@(posedge clk4_8MHz);
 				UART_RX1 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -651,7 +651,7 @@ cntmas[ 255 ] =  255 ;
 
 			repeat (30)@(posedge clk4_8MHz);
 			repeat (20) begin				// 20 bytes
-				repeat(10)@(posedge clk4_8MHz);
+				repeat(1)@(posedge clk4_8MHz);
 				UART_RX2 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -681,7 +681,7 @@ cntmas[ 255 ] =  255 ;
 
 			repeat (30)@(posedge clk4_8MHz);
 			repeat (20) begin				// 20 bytes
-				repeat(10)@(posedge clk4_8MHz);
+				repeat(1)@(posedge clk4_8MHz);
 				UART_RX3 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -711,7 +711,7 @@ cntmas[ 255 ] =  255 ;
 
 			repeat (30)@(posedge clk4_8MHz);
 			repeat (20) begin				// 20 bytes
-				repeat(10)@(posedge clk4_8MHz);
+				repeat(1)@(posedge clk4_8MHz);
 				UART_RX4 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -741,7 +741,7 @@ cntmas[ 255 ] =  255 ;
 
 			repeat (30)@(posedge clk4_8MHz);
 			repeat (20) begin				// 20 bytes
-				repeat(10)@(posedge clk4_8MHz);
+				repeat(1)@(posedge clk4_8MHz);
 				UART_RX5 = 0;
 				repeat (8)					// 8 bit
 				begin
