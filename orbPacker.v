@@ -155,10 +155,8 @@ begin
 			end
 			WESET1: begin
 				cntWE1 <= cntWE1 + 1'b1;
-				if(cntWE1 == 5'd13)
+				if(cntWE1 == 5'd30)
 					WE1 <= 1'b1;
-				else if(cntWE1 == 5'd16)
-					WE1 <= 1'b0;
 				else if(cntWE1 == 5'd31) begin
 					cntWE1 <= 5'd0;
 					state1 <= WAIT1;
@@ -174,13 +172,12 @@ begin
 					test2 <= 1'b0;
 				end
 				if(~syncStr1[1]) begin
+					WE1 <= 1'b0;
 					testWE <= 1'b0;
 					state1 <= IDLE1;
 				end
 			end
 		endcase
-		
-		
 		case(state2)
 			IDLE2: begin
 				if(syncStr2[1]) begin
@@ -205,21 +202,30 @@ begin
 			end
 			WESET2: begin
 				cntWE2 <= cntWE2 + 1'b1;
-				if(cntWE2 == 5'd13)
+				if(cntWE2 == 5'd30)
 					WE2 <= 1'b1;
-				else if(cntWE2 == 5'd16)
-					WE2 <= 1'b0;
 				else if(cntWE2 == 5'd31) begin
 					cntWE2 <= 5'd0;
 					state2 <= WAIT2;
 				end
 			end
 			WAIT2: begin
+				if(WrAddr2 == 11'd2016)
+					test2 <= 1'b1;
+				else if(WrAddr2 == 11'd0)
+					test2 <= 1'b1;
+				else begin
+					test1 <= 1'b0;
+					test2 <= 1'b0;
+				end
 				if(~syncStr2[1]) begin
+					WE2 <= 1'b0;
+					testWE <= 1'b0;
 					state2 <= IDLE2;
 				end
 			end
-		endcase	
+		endcase
+			
 		if(cntWrd1 == 5'd16)
 			tmp17 <= iData1;
 		else if(cntWrd1 == 5'd17) begin
