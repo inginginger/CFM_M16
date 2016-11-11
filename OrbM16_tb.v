@@ -1,4 +1,5 @@
-`timescale 1 ns/1 ns
+`timescale 10 ps/10 ps
+
 
 module OrbM16_tb();
 
@@ -59,15 +60,15 @@ module OrbM16_tb();
 	// Clock definition
 	initial begin
 		clk100MHz = 0;
-		forever #10 clk100MHz = ~clk100MHz;
+		forever #500 clk100MHz = ~clk100MHz;
 	end
 	initial begin
 		clk80MHz = 0;
-		forever #12.5 clk80MHz = ~clk80MHz;
+		forever #625 clk80MHz = ~clk80MHz;
     end
     initial begin
 		clk4_8MHz = 0;
-		forever #210 clk4_8MHz = ~clk4_8MHz;
+		forever #10416 clk4_8MHz = ~clk4_8MHz;
 	end
     
 	

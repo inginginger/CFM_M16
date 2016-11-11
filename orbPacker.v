@@ -1,11 +1,15 @@
 module OrbPacker(
 input clk,
 input rst,
+input done,
+input [5:0] cycle,
+input [7:0] RqData,
 input [7:0] iData1,
 input [7:0] iData2,
 input [7:0] iData3,
 input [7:0] iData4,
 input [7:0] iData5,
+input [10:0] slowAddr,
 input strob1,
 input strob2,
 input strob3,
@@ -13,6 +17,7 @@ input strob4,
 input strob5,
 input req,
 input SW,
+output reg SlowRcv,
 output reg test,
 output reg [11:0] orbWord,
 output WE,
@@ -45,30 +50,37 @@ reg [4:0] cntWE3;
 reg [10:0] WrAddr1;
 reg [10:0] WrAddr2;
 reg [10:0] WrAddr3;
-reg WE1, WE2, WE3;
+reg WE1, WE2, WE3, WEslow;
 reg [11:0] orbWord1,orbWord2, orbWord3;
 reg [7:0] tmp17;
+
+reg [10:0] AddrSlow;
+reg [11:0] orbWordSlow;
+reg [3:0] step;
 
 //assign WrAddr = WrAddr1 | WrAddr2;
 //assign WE = WE1 | WE2;
 
 localparam IDLE1 = 2'd0, WESET1 = 2'd1, WAIT1 = 2'd2;
 localparam IDLE2 = 2'd0, WESET2 = 2'd1, WAIT2 = 2'd2;
-localparam IDLE3 = 2'd0, WESET3 = 2'd1, WAIT3 = 2'd2;
+localparam IDLE3 = 2'd0, WESET3 = 2'd1, WAIT3 = 2'd2, CNT3 = 2'd3;
 
-assign WE = WE1 | WE2 | WE3;
+assign WE = WE1 | WE2 | WEslow;
 
 always@(posedge clk)
 begin
 syncStr1 <= {syncStr1[0], strob1};
 syncStr2 <= {syncStr2[0], strob2};
-syncStr3 <= {syncStr3[0], strob3};
+syncStr3 <= {syncStr3[0], done};
 syncSW <= {syncSW[0], SW};
 end
 
 always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
+		SlowRcv <= 0;
+		orbWordSlow <= 12'd0;
+		step <= 3'd0;
 		orbWord1 <= 12'd0;
 		orbWord2 <= 12'd0;
 		orbWord3 <= 12'd0;
@@ -98,6 +110,8 @@ begin
 		test2 <= 1'b0;
 		testWE <= 1'b0;
 		tmp17 <= 8'd0;
+		WEslow <= 1'b0;
+		AddrSlow <= 0;
 	end
 	else begin
 		if(syncSW[1] != oldSW) begin
@@ -118,18 +132,16 @@ begin
 		oldSW <= syncSW[1];
 		
 		if(WE1 == 1'b1) begin
-			//WE <= WE1;
 			WrAddr <= WrAddr1;
 			orbWord <= orbWord1;
 		end
 		else if(WE2 == 1'b1) begin
-			//WE <= WE2;
 			WrAddr <= WrAddr2;
 			orbWord <= orbWord2;
 		end
-		else if(WE3 == 1'b1) begin
-			WrAddr <= WrAddr3;
-			orbWord <= orbWord3;
+		else if(WEslow == 1'b1) begin
+			WrAddr <= AddrSlow;
+			orbWord <= orbWord1;
 		end
 		
 		case(state1)
@@ -217,47 +229,50 @@ begin
 					state2 <= IDLE2;
 				end
 			end
-		endcase
+		endcase		
 		
-		case(state3)
-			IDLE3: begin
-				if(syncStr3[1]) begin
-					cntWrd3 <= cntWrd3 + 1'b1;
-					case(cntWrd3)
-						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15: state3 <= WAIT3;
-						16: tmp17 <= iData3;
-						17: begin
-							orbWord3 <= {1'b0, tmp17, iData3[7:6], 1'b0};
-							WrAddr3 <= 5'd31 + (cntAddr3 << 5);
-							cntAddr3 <= cntAddr3 + 1'b1;
-							if(cntAddr3 == 4'd7)
-								cntAddr3 <= 4'd0;
-							state3 <= WESET3;
-						end
-						18: state3 <= WAIT3;
-						19: begin
-							cntWrd3 <= 5'd0;		
-							state3 <= WAIT3;				
-						end
-					endcase					
+		case(cycle)
+			1,2,3,4,5,6,7,8,9,10,16,17,18,19,20,21,22,23,24,25,32,33,34,35,36,37,38,39,40,41,48,49,50,51,52,53,54,55,56,57: begin
+			case(state3)
+				IDLE3: begin
+					if(syncStr3[1])
+						state3 <= CNT3;
 				end
-			end
-			WESET3: begin
-				cntWE3 <= cntWE3 + 1'b1;
-				if(cntWE3 == 5'd13)
-					WE3 <= 1'b1;
-				else if(cntWE3 == 5'd16)
-					WE3 <= 1'b0;
-				else if(cntWE3 == 5'd31) begin
-					cntWE3 <= 5'd0;
-					state3 <= WAIT3;
+				CNT3: begin
+						cntWrd3 <= cntWrd3 + 1'b1;
+						case(cntWrd3)
+							16: tmp17 <= iData3;
+							17: begin
+								orbWord1 <= {1'b0, tmp17, iData1[7:6], 1'b0};
+								AddrSlow <= slowAddr;
+								SlowRcv <= 1;
+								state3 <= WESET3;
+							end
+							19: begin
+								SlowRcv <= 0;
+								cntWrd3 <= 5'd0;		
+								state3 <= WAIT3;				
+							end
+						endcase					
 				end
-			end
-			WAIT3: begin
-				if(~syncStr3[1]) begin
-					state3 <= IDLE3;
+				WESET3: begin
+					cntWE3 <= cntWE3 + 1'b1;
+					if(cntWE3 == 5'd13)
+						WEslow <= 1'b1;
+					else if(cntWE3 == 5'd16)
+						WEslow <= 1'b0;
+					else if(cntWE3 == 5'd31) begin
+						cntWE3 <= 5'd0;
+						state3 <= CNT3;
+					end
 				end
-			end
+				WAIT3: begin
+					if(~syncStr3[1]) begin
+						state3 <= IDLE3;
+					end
+				end
+			endcase	
+		end
 		endcase
 	end
 end

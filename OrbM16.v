@@ -30,7 +30,7 @@ output test4,
 	output UART_dTX5,       // rs485 TX dir controller 
 	output UART_dRX5        // rs485 RX dir controller
 );
-
+wire slowRcv;
 wire rst;
 wire clkOrb;
 wire RqFast, RqSlow;
@@ -56,7 +56,7 @@ wire [11:0] orbWord;
 wire testpin2016, testpin1984;
 wire [7:0] DataFromLCB1, DataFromLCB2, DataFromLCB3, DataFromLCB4, DataFromLCB5;
 wire ValRX1, ValRX2, ValRX3, ValRX4, ValRX5, testVal1, testVal2;
-
+wire [5:0] adrCycle;
 assign doubleOrbData = orbFrame;//дублирование на контакт, который выводит кадр на стенде
 assign test1 = UART_dTX1;//testVal1;
 assign test2 = UART_dTX2;//testVal2;//SW;//0;//WE2;
@@ -67,6 +67,7 @@ reg [1:0] syncRE1;
 reg [1:0] syncRE2;
 reg [1:0] syncWE1;
 reg [1:0] syncWE2;
+wire [10:0] addrRamGr;
 wire [7:0] iUART1, iUART2, iUART3, iUART4, iUART5, oUART1, oUART2, oUART3, oUART4, oUART5;
 wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
@@ -266,43 +267,21 @@ commRdAdr instRdAdr1(
 	.RdAdr4(RAdr4),
 	.RdAdr5(RAdr5)
 );
-/*
-commRdAdr instRdAdr2(
-	.clk(clk80MHz),
-	.rst(rst),
-	.strob(done2),
-	.RD(RD2),
-	.RdAdr(RAdr2)
-);
 
-commRdAdr instRdAdr3(
-	.clk(clk80MHz),
+cycleDelay instDelayCycle(
+	.slowRcv(slowRcv),
+	.cycle(cycle),
 	.rst(rst),
-	.strob(done3),
-	.RD(RD3),
-	.RdAdr(RAdr3)
-);
-
-commRdAdr instRdAdr4(
-	.clk(clk80MHz),
-	.rst(rst),
-	.strob(done4),
-	.RD(RD4),
-	.RdAdr(RAdr4)
-);
-
-commRdAdr instRdAdr5(
-	.clk(clk80MHz),
-	.rst(rst),
-	.strob(done5),
-	.RD(RD5),
-	.RdAdr(RAdr5)
-);*/
-	
+	.adr(adrCycle)
+);	
 
 OrbPacker instPACKER(
 	.clk(clk80MHz),
 	.rst(rst),
+	.cycle(cycle),
+	.done(done1),
+	.slowAddr(addrRamGr),
+	.RqData(LCB_rq_data1),
 	.iData1(oUART1),
 	.strob1(RD1),
 	.iData2(oUART2),
@@ -314,8 +293,8 @@ OrbPacker instPACKER(
 	.iData5(oUART5),
 	.strob5(RD5),
 	.SW(SW),
+	.SlowRcv(slowRcv),
 	.test(test),
-	//.req,
 	.orbWord(orbWord),
 	.WE(WE),
 	.WrAddr(WrAddr),
@@ -423,6 +402,15 @@ UARTTXBIG instTX5(
   .switch(switch)
 );
 defparam instTX5.BYTES = 5'd4;
+
+
+
+romRqAdr instRomAdr1(
+	.address(adrCycle),
+	.inclock(clk80MHz),
+	.outclock(clk80MHz),
+	.q(addrRamGr)
+);
 
 ReqROM instRQ1(
   .address(LCB_rq_addr1),
