@@ -30,7 +30,7 @@ output test4,
 	output UART_dTX5,       // rs485 TX dir controller 
 	output UART_dRX5        // rs485 RX dir controller
 );
-wire slowRcv;
+
 wire rst;
 wire clkOrb;
 wire RqFast, RqSlow;
@@ -58,8 +58,8 @@ wire [7:0] DataFromLCB1, DataFromLCB2, DataFromLCB3, DataFromLCB4, DataFromLCB5;
 wire ValRX1, ValRX2, ValRX3, ValRX4, ValRX5, testVal1, testVal2;
 wire [5:0] adrCycle;
 assign doubleOrbData = orbFrame;//дублирование на контакт, который выводит кадр на стенде
-assign test1 = UART_dTX1;//testVal1;
-assign test2 = UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test1 = ValRX1;//UART_dTX1;//testVal1;
+assign test2 = ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = testpin1984;//WrAddr[1];
 assign test4 = testpin2016;//RE2;//0;//WE2;
 
@@ -272,7 +272,6 @@ OrbPacker instPACKER(
 	.clk(clk80MHz),
 	.rst(rst),
 	.cycle(cycle),
-	.done(done1),
 	.slowAddr(addrRamGr),
 	.RqData(LCB_rq_data1),
 	.iData1(oUART1),
@@ -286,7 +285,6 @@ OrbPacker instPACKER(
 	.iData5(oUART5),
 	.strob5(RD5),
 	.SW(SW),
-	.SlowRcv(slowRcv),
 	.test(test),
 	.orbWord(orbWord),
 	.WE(WE),

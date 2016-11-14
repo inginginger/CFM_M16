@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Fri Nov 11 14:26:39 2016
+File Generation Date & Time: Fri Nov 11 15:30:00 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -183,7 +183,7 @@ GND*                         : 138       :        :                   :         
 VCC_INT                      : 139       : power  :                   : 2.5V    :           :                
 VCC_IO                       : 140       : power  :                   : 3.3V    :           :                
 GND*                         : 141       :        :                   :         :           :                
-GND*                         : 142       :        :                   :         :           :                
+ValRX                        : 142       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 143       :        :                   :         :           :                
 GND*                         : 144       :        :                   :         :           :                
 GND_INT                      : 145       : gnd    :                   :         :           :                
@@ -222,7 +222,7 @@ TDI                          : 177       : input  :                   :         
 nCE                          : 178       : input  :                   :         :           :                
 DCLK                         : 179       : bidir  :                   :         :           :                
 DATA0                        : 180       : input  :                   :         :           :                
-ValRX                        : 181       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 181       :        :                   :         :           :                
 GND*                         : 182       :        :                   :         :           :                
 GND*                         : 183       :        :                   :         :           :                
 GND*                         : 184       :        :                   :         :           :                

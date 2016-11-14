@@ -1,7 +1,6 @@
 module OrbPacker(
 input clk,
 input rst,
-input done,
 input [5:0] cycle,
 input [7:0] RqData,
 input [7:0] iData1,
@@ -17,7 +16,6 @@ input strob4,
 input strob5,
 input req,
 input SW,
-output reg SlowRcv,
 output reg test,
 output reg [11:0] orbWord,
 output WE,
@@ -73,7 +71,6 @@ end
 always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
-		SlowRcv <= 0;
 		orbWordSlow <= 12'd0;
 		orbWord1 <= 12'd0;
 		orbWord2 <= 12'd0;
@@ -158,7 +155,6 @@ begin
 				if(cntWE1 == 5'd30)
 					WE1 <= 1'b1;
 				else if(cntWE1 == 5'd31) begin
-					cntWE1 <= 5'd0;
 					state1 <= WAIT1;
 				end
 			end
