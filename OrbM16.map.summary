@@ -1,9 +1,9 @@
-Analysis & Synthesis Status : Successful - Fri Nov 11 15:29:50 2016
+Analysis & Synthesis Status : Successful - Tue Nov 15 13:47:31 2016
 Quartus II Version : 9.0 Build 184 04/29/2009 SP 1 SJ Web Edition
 Revision Name : OrbM16
 Top-level Entity Name : OrbM16
 Family : FLEX10KE
-Total logic elements : 1,376
+Total logic elements : 1,358
 Total pins : 29
 Total memory bits : 60,608
 Total PLLs : 0

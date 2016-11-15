@@ -32,9 +32,11 @@ begin
 	end
 	else begin
 		case(state)
-			IDLE: begin
-				if(syncStr[1])
+			IDLE: begin				
+				if(syncStr[1]) begin
 					state <= CNTWRD;
+					full <= 1'b0;
+				end
 			end
 			CNTWRD: begin
 				cntWrd <= cntWrd + 1'b1;
@@ -42,30 +44,29 @@ begin
 			end
 			WRSET: begin
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 6'd46)
+				if(cntWE == 6'd42)
 					WE <= 1'b1;
-				else if(cntWE == 6'd50)
+				else if(cntWE == 6'd46)
 					WE <= 1'b0;
 				else if(cntWE == 6'd63) begin
 					cntWE <= 6'd0;
-					if(cntWrd == 5'd20)
+					if(cntWrd == 5'd20) begin
 						state <= PAUSE;
+						full <= 1'b1;
+					end
 					else 
 						state <= WAIT;
 				end
 			end
 			PAUSE: begin
 				pause <= pause + 1'b1;
-				if(pause == 6'd60)
-					full <= 1'b1;
-				else if(pause == 6'd63) begin
+				if(pause == 6'd63) begin
 					cntWrd <= 5'd0;
 					state <= WAIT;
 					pause <= 6'd0;
 				end
 			end
 			WAIT: begin
-				full <= 1'b0;
 				if(~syncStr[1])
 					state <= IDLE;
 			end
