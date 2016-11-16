@@ -106,7 +106,7 @@ begin
 			end
 			WESET1: begin
 				cntWE1 <= cntWE1 + 1'b1;
-				if(cntWE1 == 5'd30)
+				if(cntWE1 == 5'd28)
 					WE1 <= 1'b1;
 				else if(cntWE1 == 5'd31) begin
 					state1 <= WAIT1;
@@ -143,7 +143,7 @@ begin
 			end
 			WESET2: begin
 				cntWE2 <= cntWE2 + 1'b1;
-				if(cntWE2 == 5'd30)
+				if(cntWE2 == 5'd28)
 					WE2 <= 1'b1;
 				else if(cntWE2 == 5'd31) begin
 					cntWE2 <= 5'd0;

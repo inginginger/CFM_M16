@@ -658,9 +658,9 @@ cntmas[ 255 ] =  255 ;
 					nowdata = cntmas[q];
 					@(posedge clk4_8MHz)
 					if(k == 0)
-						UART_RX2 = cntmas[m][p];
+						UART_RX2 = cntmas[m][p]+1;
 					else
-						UART_RX2=data[k][p];
+						UART_RX2=data[k][p]+1;
 					p=p+1;
 				end
 				@(posedge clk4_8MHz);

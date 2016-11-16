@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 12.000 ns
-From           : UART_RX5
-To             : UART_RX:instRX5|sync[0]
+Actual Time    : 11.200 ns
+From           : UART_RX4
+To             : UART_RX:instRX4|sync[0]
 From Clock     : --
 To Clock       : clk80MHz
 Failed Paths   : 0
@@ -15,62 +15,52 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 25.700 ns
-From           : UARTTXBIG:instTX1|tx
-To             : UART_TX1
-From Clock     : clk100MHz
+Actual Time    : 25.400 ns
+From           : UART_RX:instRX5|Valid
+To             : ValRX
+From Clock     : clk80MHz
 To Clock       : --
 Failed Paths   : 0
 
 Type           : Worst-case th
 Slack          : N/A
 Required Time  : None
-Actual Time    : -6.400 ns
-From           : UART_RX4
-To             : UART_RX:instRX4|sync[0]
+Actual Time    : -5.200 ns
+From           : UART_RX1
+To             : UART_RX:instRX1|sync[0]
 From Clock     : --
-To Clock       : clk80MHz
-Failed Paths   : 0
-
-Type           : Clock Setup: 'clk80MHz'
-Slack          : N/A
-Required Time  : None
-Actual Time    : 26.04 MHz ( period = 38.400 ns )
-From           : WrAddr[0]
-To             : ramM16:instRamM16_2|altdpram:altdpram_component|q[4]~reg_wa0
-From Clock     : clk80MHz
 To Clock       : clk80MHz
 Failed Paths   : 0
 
 Type           : Clock Setup: 'clk100MHz'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 61.35 MHz ( period = 16.300 ns )
-From           : UARTTXBIG:instTX2|serialize[2]
-To             : UARTTXBIG:instTX2|delay[1]
+Actual Time    : 52.36 MHz ( period = 19.100 ns )
+From           : M16:instM16|cntBit[0]
+To             : M16:instM16|outWord[11]
 From Clock     : clk100MHz
 To Clock       : clk100MHz
 Failed Paths   : 0
 
-Type           : Clock Hold: 'clk80MHz'
-Slack          : Not operational: Clock Skew > Data Delay
+Type           : Clock Setup: 'clk80MHz'
+Slack          : N/A
 Required Time  : None
-Actual Time    : N/A
-From           : OrbPacker:instPACKER|orbWord1[9]
-To             : orbWord[9]
+Actual Time    : 57.47 MHz ( period = 17.400 ns )
+From           : UART_RX:instRX2|stepcnt[3]
+To             : UART_RX:instRX2|oData[0]
 From Clock     : clk80MHz
 To Clock       : clk80MHz
-Failed Paths   : 90
+Failed Paths   : 0
 
 Type           : Clock Hold: 'clk100MHz'
 Slack          : Not operational: Clock Skew > Data Delay
 Required Time  : None
 Actual Time    : N/A
-From           : M16:instM16|RqFast
-To             : UARTTXBIG:instTX3|rqsync[0]
+From           : M16:instM16|RqSlow
+To             : UARTTXBIG:instTX5|rqsync[0]
 From Clock     : clk100MHz
 To Clock       : clk100MHz
-Failed Paths   : 94
+Failed Paths   : 1
 
 Type           : Total number of failed paths
 Slack          : 
@@ -80,7 +70,7 @@ From           :
 To             : 
 From Clock     : 
 To Clock       : 
-Failed Paths   : 184
+Failed Paths   : 1
 
 --------------------------------------------------------------------------------------
 

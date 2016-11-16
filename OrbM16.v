@@ -40,7 +40,7 @@ wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5;
 wire [7:0] LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5;
 wire [4:0] switch;
 wire [10:0] RdAddr;
-reg [10:0] WrAddr;
+wire [10:0] WrAddr;
 wire [11:0] OrbData;
 wire RE, WE;
 wire SW, test;
@@ -52,7 +52,7 @@ wire RE1, RE2, WE1, WE2, WEfast1, WEfast2, WEslow;
 wire [11:0] MemData1;
 wire [11:0] MemData2;
 //wire [7:0] DataFromLCB;
-reg [11:0] orbWord;
+wire [11:0] orbWord;
 wire [11:0] fastWord1, fastWord2, slowWord;
 wire testpin2016, testpin1984;
 wire [7:0] DataFromLCB1, DataFromLCB2, DataFromLCB3, DataFromLCB4, DataFromLCB5;
@@ -73,29 +73,13 @@ wire done1, done2, done3, done4, done5;
 assign WE = WEfast1 | WEfast2 | WEslow;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = done1;//ValRX1;//UART_dTX1;//testVal1;
-assign test2 = WEslow;//ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test2 = RD1;//ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
-//
-//assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow == 1'b1)?SlowAddr: 11'hZ));
-//assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow == 1'b1)?slowWord: 11'hZ));
+assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow == 1'b1)?SlowAddr: 11'hZ));
+assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow == 1'b1)?slowWord: 12'hZ));
 
-always@(*)
-begin
-	if(WEfast1 == 1'b1) begin
-		WrAddr = FastAddr1;
-		orbWord = fastWord1;
-	end
-	else if(WEfast2 == 1'b1) begin
-		WrAddr = FastAddr2;
-		orbWord = fastWord2;
-	end
-	else if(WEslow == 1'b1) begin
-		WrAddr = SlowAddr;
-		orbWord = slowWord;
-	end
-end
 
 always@(posedge clk80MHz)
 begin

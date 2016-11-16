@@ -19,9 +19,10 @@ reg [1:0] state;
 reg oldSW;
 reg [4:0] cntWE;
 reg [7:0] tmp17;
+reg [1:0] cntpause;
 
 
-localparam IDLE = 2'd0, WESET = 2'd1, WAIT = 2'd2;
+localparam IDLE = 2'd0, PAUSE = 2'd1, WESET = 2'd2, WAIT = 2'd3;
 
 always@(posedge clk)
 begin
@@ -41,6 +42,7 @@ begin
 		test <= 1'b0;
 		cntWE <= 5'd0;
 		tmp17 <= 8'd0;
+		cntpause <= 2'd0;
 	end
 	else begin
 		if(syncSW[1] != oldSW) begin
@@ -54,6 +56,13 @@ begin
 		case(state)
 			IDLE: 
 				if(syncStr[1]) begin
+					cntpause <= cntpause + 1'b1;
+					if(cntpause == 2'd3) begin
+						cntpause <= 2'd0;
+						state <= PAUSE;
+					end
+				end
+			PAUSE: begin
 					cntWrd <= cntWrd + 1'b1;
 					case(cntWrd)
 						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15: begin
@@ -64,9 +73,13 @@ begin
 							state <= WAIT;
 						end
 						17: begin
-							orbWord <= {1'b0, tmp17, iData[7:6], 1'b0};
-							WrAddr <= addrRam;
-							state <= WESET;
+							orbWord <= {1'b0, iData[1:0], tmp17, 1'b0};
+							if(addrRam != 0) begin
+								WrAddr <= addrRam;
+								state <= WESET;
+							end
+							else state <= WAIT;
+							
 						end
 						18: state <= WAIT;
 						19: begin
@@ -78,7 +91,7 @@ begin
 			
 			WESET: begin
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 5'd30)
+				if(cntWE == 5'd28)
 					WE <= 1'b1;
 				else if(cntWE == 5'd31) begin
 					state <= WAIT;
