@@ -37,7 +37,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Wed Nov 16 16:41:50 2016
+File Generation Date & Time: Thu Nov 17 08:25:29 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -156,7 +156,7 @@ RESERVED_INPUT               : 110       :        :                   :         
 RESERVED_INPUT               : 111       :        :                   :         :           :                
 VCC_IO                       : 112       : power  :                   : 3.3V    :           :                
 RESERVED_INPUT               : 113       :        :                   :         :           :                
-RESERVED_INPUT               : 114       :        :                   :         :           :                
+ValRX                        : 114       : output : LVTTL/LVCMOS      :         :           : N              
 RESERVED_INPUT               : 115       :        :                   :         :           :                
 RESERVED_INPUT               : 116       :        :                   :         :           :                
 RESERVED_INPUT               : 117       :        :                   :         :           :                
@@ -196,7 +196,7 @@ VCC_INT                      : 150       : power  :                   : 2.5V    
 RESERVED_INPUT               : 151       :        :                   :         :           :                
 RESERVED_INPUT               : 152       :        :                   :         :           :                
 RESERVED_INPUT               : 153       :        :                   :         :           :                
-ValRX                        : 154       : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 154       :        :                   :         :           :                
 GND_INT                      : 155       : gnd    :                   :         :           :                
 RESERVED_INPUT               : 156       :        :                   :         :           :                
 RESERVED_INPUT               : 157       :        :                   :         :           :                
