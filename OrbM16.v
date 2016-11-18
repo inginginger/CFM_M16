@@ -348,7 +348,7 @@ UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
-  .cycle(cycle + 1'b1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data1),      // data to transmit (from ROM)
   .addr(LCB_rq_addr1),      // address to read (to ROM)
   .tx(UART_TX1),          // serial transmitted data
@@ -362,7 +362,7 @@ UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
-  .cycle(cycle + 1'b1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data2),      // data to transmit (from ROM)
   .addr(LCB_rq_addr2),      // address to read (to ROM)
   .tx(UART_TX2),          // serial transmitted data
@@ -376,7 +376,7 @@ UARTTXBIG instTX3(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
-  .cycle(cycle + 1'b1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data3),      // data to transmit (from ROM)
   .addr(LCB_rq_addr3),      // address to read (to ROM)
   .tx(UART_TX3),          // serial transmitted data
@@ -389,8 +389,8 @@ defparam instTX3.BYTES = 5'd4;
 UARTTXBIG instTX4(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
-  .RQ(RqSlow),
-  .cycle(cycle + 1'b1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .RQ(RqFast),
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data4),      // data to transmit (from ROM)
   .addr(LCB_rq_addr4),      // address to read (to ROM)
   .tx(UART_TX4),          // serial transmitted data
@@ -403,8 +403,8 @@ defparam instTX4.BYTES = 5'd4;
 UARTTXBIG instTX5(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
-  .RQ(RqSlow),
-  .cycle(cycle + 1'b1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .RQ(RqFast),
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data5),      // data to transmit (from ROM)
   .addr(LCB_rq_addr5),      // address to read (to ROM)
   .tx(UART_TX5),          // serial transmitted data
