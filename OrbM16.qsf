@@ -116,3 +116,4 @@ set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_global_assignment -name VERILOG_FILE SlowPacker.v
+set_global_assignment -name VERILOG_FILE addrRam.v
