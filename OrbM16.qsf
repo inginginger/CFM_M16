@@ -77,6 +77,17 @@ set_location_assignment PIN_41 -to UART_dRX1
 set_location_assignment PIN_30 -to UART_dRX2
 set_location_assignment PIN_39 -to UART_dTX1
 set_location_assignment PIN_29 -to UART_dTX2
+set_location_assignment PIN_26 -to UART_RX4
+set_location_assignment PIN_21 -to UART_RX5
+set_location_assignment PIN_23 -to UART_TX4
+set_location_assignment PIN_17 -to UART_TX5
+set_location_assignment PIN_25 -to UART_dRX4
+set_location_assignment PIN_19 -to UART_dRX5
+set_location_assignment PIN_24 -to UART_dTX4
+set_location_assignment PIN_18 -to UART_dTX5
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_global_assignment -name VERILOG_FILE M16.v
 set_global_assignment -name VERILOG_FILE UARTTXBIG.v
 set_global_assignment -name MIF_FILE OrbM16.mif
@@ -94,22 +105,10 @@ set_global_assignment -name VERILOG_FILE orbPacker.v
 set_global_assignment -name MIF_FILE mem2.mif
 set_global_assignment -name MIF_FILE initmem100.mif
 set_global_assignment -name VERILOG_FILE orbPackerPar.v
-set_location_assignment PIN_26 -to UART_RX4
-set_location_assignment PIN_21 -to UART_RX5
-set_location_assignment PIN_23 -to UART_TX4
-set_location_assignment PIN_17 -to UART_TX5
-set_location_assignment PIN_25 -to UART_dRX4
-set_location_assignment PIN_19 -to UART_dRX5
-set_location_assignment PIN_24 -to UART_dTX4
-set_location_assignment PIN_18 -to UART_dTX5
 set_global_assignment -name QIP_FILE ramUART.qip
 set_global_assignment -name VERILOG_FILE commutAdr.v
 set_global_assignment -name VERILOG_FILE commRdAdr.v
 set_global_assignment -name MIF_FILE AdrRq.mif
 set_global_assignment -name QIP_FILE romRqAdr.qip
 set_global_assignment -name VERILOG_FILE cycleDelay.v
-set_global_assignment -name USE_CONFIGURATION_DEVICE ON
-set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
-set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_global_assignment -name VERILOG_FILE SlowPacker.v
-set_global_assignment -name VERILOG_FILE addrRam.v
