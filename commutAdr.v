@@ -15,7 +15,7 @@ reg [5:0] pause;
 
 localparam IDLE = 3'd0, CNTWRD = 3'd1, WRSET = 3'd2, PAUSE = 3'd3, WAIT = 3'd4;
 
-assign wrAdr = (cntWrd > 0 && cntWrd <= 20) ? (cntWrd - 1'b1) : 5'hZ;
+assign wrAdr = (cntWrd > 0 && cntWrd <= 18) ? (cntWrd - 1'b1) : 5'hZ;
 
 always@(posedge clk)
 	syncStr <= {syncStr[0], strob};
@@ -50,7 +50,7 @@ begin
 					WE <= 1'b0;
 				else if(cntWE == 6'd63) begin
 					cntWE <= 6'd0;
-					if(cntWrd == 5'd20) begin
+					if(cntWrd == 5'd18) begin
 						state <= PAUSE;
 						full <= 1'b1;
 					end

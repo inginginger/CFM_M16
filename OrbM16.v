@@ -73,7 +73,7 @@ wire done1, done2, done3, done4, done5;
 assign WE = WEfast1 | WEfast2 | WEslow;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = done1;//ValRX1;//UART_dTX1;//testVal1;
-assign test2 = RD1;//ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test2 = ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
@@ -348,7 +348,7 @@ UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
-  .cycle(cycle+1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data1),      // data to transmit (from ROM)
   .addr(LCB_rq_addr1),      // address to read (to ROM)
   .tx(UART_TX1),          // serial transmitted data
@@ -362,7 +362,7 @@ UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
-  .cycle(cycle+1),  // number of the request (from m8) + shift, to give LCB time to respond
+  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
   .data(LCB_rq_data2),      // data to transmit (from ROM)
   .addr(LCB_rq_addr2),      // address to read (to ROM)
   .tx(UART_TX2),          // serial transmitted data

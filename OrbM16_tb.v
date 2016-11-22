@@ -91,8 +91,6 @@ module OrbM16_tb();
 		data[15] = 150;
 		data[16] = 160;
 		data[17] = 170;
-		data[18] = 180;
-		data[19] = 190;
 	end
 	initial begin
 		//for(k=0; k < 32; k=k+1'b1)
@@ -620,7 +618,7 @@ cntmas[ 255 ] =  255 ;
 			wait(UART_dRX1 == 0);
 
 			repeat (30)@(posedge clk4_8MHz);
-			repeat (20) begin				// 20 bytes
+			repeat (18) begin				// 20 bytes
 				repeat(1)@(posedge clk4_8MHz);
 				UART_RX1 = 0;
 				repeat (8)					// 8 bit
@@ -650,7 +648,7 @@ cntmas[ 255 ] =  255 ;
 			wait(UART_dRX2 == 0);
 
 			repeat (30)@(posedge clk4_8MHz);
-			repeat (20) begin				// 20 bytes
+			repeat (18) begin				// 20 bytes
 				repeat(1)@(posedge clk4_8MHz);
 				UART_RX2 = 0;
 				repeat (8)					// 8 bit
@@ -680,7 +678,7 @@ cntmas[ 255 ] =  255 ;
 			wait(UART_dRX3 == 0);
 
 			repeat (30)@(posedge clk4_8MHz);
-			repeat (20) begin				// 20 bytes
+			repeat (18) begin				// 20 bytes
 				repeat(1)@(posedge clk4_8MHz);
 				UART_RX3 = 0;
 				repeat (8)					// 8 bit
@@ -710,7 +708,7 @@ cntmas[ 255 ] =  255 ;
 			wait(UART_dRX4 == 0);
 
 			repeat (30)@(posedge clk4_8MHz);
-			repeat (20) begin				// 20 bytes
+			repeat (18) begin				// 20 bytes
 				repeat(1)@(posedge clk4_8MHz);
 				UART_RX4 = 0;
 				repeat (8)					// 8 bit

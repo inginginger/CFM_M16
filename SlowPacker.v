@@ -79,12 +79,7 @@ begin
 								state <= WESET;
 							end
 							else state <= WAIT;
-							
-						end
-						18: state <= WAIT;
-						19: begin
-							cntWrd <= 5'd0;		
-							state <= WAIT;				
+							cntWrd <= 5'd0;	
 						end
 					endcase					
 				end

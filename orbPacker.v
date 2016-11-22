@@ -95,8 +95,8 @@ begin
 							cntAddr1 <= cntAddr1 + 1'b1;
 							state1 <= WESET1;
 						end
-						16, 17, 18: state1 <= WAIT1;
-						19: begin
+						16: state1 <= WAIT1;
+						17: begin
 							cntPack1 <= cntPack1 + 1'b1;
 							cntWrd1 <= 5'd0;		
 							state1 <= WAIT1;				
@@ -132,8 +132,8 @@ begin
 								cntAddr2 <= 4'd0;
 							state2 <= WESET2;
 						end
-						15, 16, 17, 18: state2 <= WAIT2;
-						19: begin
+						15, 16: state2 <= WAIT2;
+						17: begin
 							cntPack2 <= cntPack2 + 1'b1;
 							cntWrd2 <= 5'd0;		
 							state2 <= WAIT2;				

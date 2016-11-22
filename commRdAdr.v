@@ -20,7 +20,7 @@ module commRdAdr(
 	
 
 localparam IDLE1 = 0, CNT1 = 1, RDSET1 = 2, WAIT1 = 3;
-localparam IDLE2 = 0, WAITDONE2 = 1, CNT2 = 2, RDSET2 = 3, WAIT2 = 4;
+localparam IDLE2 = 0, WAITDONE2 = 1, CNT2 = 2, RDSET2 = 3, WAIT2 = 4, PAUSE2 = 5;
 localparam IDLE3 = 0, WAITDONE3 = 1, CNT3 = 2, RDSET3 = 3, WAIT3 = 4;
 localparam IDLE4 = 0, WAITDONE4 = 1, CNT4 = 2, RDSET4 = 3, WAIT4 = 4;
 localparam IDLE5 = 0, WAITDONE5 = 1, CNT5 = 2, RDSET5 = 3, WAIT5 = 4;
@@ -31,12 +31,13 @@ reg [1:0] uart1;
 reg [2:0] uart2, uart3, uart4, uart5;
 reg [4:0] cnt1, cnt2, cnt3, cnt4, cnt5;
 reg [5:0] cntRD1, cntRD2, cntRD3, cntRD4, cntRD5;
+reg [5:0] pause;
 
-assign RdAdr1 = (cnt1 < 20)? cnt1 : 5'hZ;
-assign RdAdr2 = (cnt2 < 20)? cnt2 : 5'hZ;
-assign RdAdr3 = (cnt3 < 20)? cnt3 : 5'hZ;
-assign RdAdr4 = (cnt4 < 20)? cnt4 : 5'hZ;
-assign RdAdr5 = (cnt5 < 20)? cnt5 : 5'hZ;
+assign RdAdr1 = (cnt1 < 18)? cnt1 : 5'hZ;
+assign RdAdr2 = (cnt2 < 18)? cnt2 : 5'hZ;
+assign RdAdr3 = (cnt3 < 18)? cnt3 : 5'hZ;
+assign RdAdr4 = (cnt4 < 18)? cnt4 : 5'hZ;
+assign RdAdr5 = (cnt5 < 18)? cnt5 : 5'hZ;
 
 always@(posedge clk)
 begin
@@ -90,7 +91,7 @@ begin
 			end
 			CNT1: begin
 				cnt1 <= cnt1 + 1'b1;
-				if(cnt1 == 5'd19) begin
+				if(cnt1 == 5'd17) begin
 					cnt1 <= 5'd0;
 					done1uart <= 1'b1;
 					uart1 <= WAIT1;
@@ -111,7 +112,14 @@ begin
 			end
 			WAITDONE2: begin
 				if (done1uart == 1)
+					uart2 <= PAUSE2;
+			end
+			PAUSE2 : begin
+				pause <= pause + 1'b1;
+				if(pause == 6'd10) begin
+					pause <= 6'd0;
 					uart2 <= RDSET2;
+				end
 			end
 			RDSET2: begin
 				cntRD2 <= cntRD2 + 1'b1;
@@ -126,7 +134,7 @@ begin
 			end
 			CNT2: begin
 				cnt2 <= cnt2 + 1'b1;
-				if(cnt2 == 5'd19) begin
+				if(cnt2 == 5'd17) begin
 					cnt2 <= 5'd0;
 					done2uart <= 1'b1;
 					uart2 <= WAIT2;
@@ -162,7 +170,7 @@ begin
 			end
 			CNT3: begin
 				cnt3 <= cnt3 + 1'b1;
-				if(cnt3 == 5'd19) begin
+				if(cnt3 == 5'd17) begin
 					cnt3 <= 5'd0;
 					done3uart <= 1'b1;
 					uart3 <= WAIT3;
@@ -198,7 +206,7 @@ begin
 			end
 			CNT4: begin
 				cnt4 <= cnt4 + 1'b1;
-				if(cnt4 == 5'd19) begin
+				if(cnt4 == 5'd17) begin
 					cnt4 <= 5'd0;
 					done4uart <= 1'b1;
 					uart4 <= WAIT4;
@@ -234,7 +242,7 @@ begin
 			end
 			CNT5: begin
 				cnt5 <= cnt5 + 1'b1;
-				if(cnt5 == 5'd19) begin
+				if(cnt5 == 5'd17) begin
 					cnt5 <= 5'd0;
 					uart5 <= WAIT5;
 				end
