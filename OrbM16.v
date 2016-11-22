@@ -48,18 +48,18 @@ wire [10:0] RdAddr1;
 wire [10:0] RdAddr2;
 wire [10:0] WrAddr1;
 wire [10:0] WrAddr2;
-wire RE1, RE2, WE1, WE2, WEfast1, WEfast2, WEslow;
+wire RE1, RE2, WE1, WE2, WEfast1, WEfast2, WEslow1, WEslow2;
 wire [11:0] MemData1;
 wire [11:0] MemData2;
 //wire [7:0] DataFromLCB;
 wire [11:0] orbWord;
-wire [11:0] fastWord1, fastWord2, slowWord;
+wire [11:0] fastWord1, fastWord2, slowWord1, slowWord2;
 wire testpin2016, testpin1984;
 wire [7:0] DataFromLCB1, DataFromLCB2, DataFromLCB3, DataFromLCB4, DataFromLCB5;
 wire ValRX1, ValRX2, ValRX3, ValRX4, ValRX5, testVal1, testVal2;
 wire [5:0] adrCycle;
-wire [10:0] FastAddr1, FastAddr2, SlowAddr;
-wire testSlow;
+wire [10:0] FastAddr1, FastAddr2, SlowAddr1, SlowAddr2;
+wire testSlow1, testSlow2;
 reg [1:0] syncRE1;
 reg [1:0] syncRE2;
 reg [1:0] syncWE1;
@@ -70,15 +70,15 @@ wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
 wire done1, done2, done3, done4, done5;
 
-assign WE = WEfast1 | WEfast2 | WEslow;
+assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = done1;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
-assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow == 1'b1)?SlowAddr: 11'hZ));
-assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow == 1'b1)?slowWord: 12'hZ));
+assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)?SlowAddr1: ((WEslow2 == 1'b1)? SlowAddr2: 11'hZ)));
+assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)?slowWord1: ((WEslow2 == 1'b1)? slowWord2: 12'hZ)));
 
 
 always@(posedge clk80MHz)
@@ -277,17 +277,30 @@ commRdAdr instRdAdr1(
 );	
 
 
-SlowPacker instSlowPACK(
+SlowPacker instSlowPACK1(
 	.clk(clk80MHz),
 	.rst(rst),
 	.iData(oUART1),
 	.addrRam(addrRamGr),
 	.strob(RD1),
 	.SW(SW),
-	.test(testSlow),
-	.orbWord(slowWord),
-	.WE(WEslow),
-	.WrAddr(SlowAddr)
+	.test(testSlow1),
+	.orbWord(slowWord1),
+	.WE(WEslow1),
+	.WrAddr(SlowAddr1)
+);
+
+SlowPacker instSlowPACK2(
+	.clk(clk80MHz),
+	.rst(rst),
+	.iData(oUART2),
+	.addrRam(addrRamGr),
+	.strob(RD2),
+	.SW(SW),
+	.test(testSlow2),
+	.orbWord(slowWord2),
+	.WE(WEslow2),
+	.WrAddr(SlowAddr2)
 );
 
 OrbPacker instPACKER(
