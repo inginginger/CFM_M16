@@ -109,17 +109,12 @@ begin
 			IDLE2: begin
 				if(syncStr2[1])
 					uart2 <= WAITDONE2;
+				else if(syncStr2[1] && ~done1uart)
+					uart2 <= RDSET2;
 			end
 			WAITDONE2: begin
 				if (done1uart == 1)
 					uart2 <= RDSET2;
-			end
-			PAUSE2 : begin
-				if(pause == 6'd10) begin
-					pause <= 6'd0;
-					uart2 <= RDSET2;
-				end
-				else pause <= pause + 1'b1;
 			end
 			RDSET2: begin
 				cntRD2 <= cntRD2 + 1'b1;
