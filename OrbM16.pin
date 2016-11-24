@@ -37,7 +37,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Tue Nov 22 15:08:34 2016
+File Generation Date & Time: Thu Nov 24 10:08:41 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -57,7 +57,7 @@ RESERVED_INPUT               : 11        :        :                   :         
 RESERVED_INPUT               : 12        :        :                   :         :           :                
 RESERVED_INPUT               : 13        :        :                   :         :           :                
 RESERVED_INPUT               : 14        :        :                   :         :           :                
-UART_dRX3                    : 15        : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 15        :        :                   :         :           :                
 VCC_IO                       : 16        : power  :                   : 3.3V    :           :                
 UART_TX5                     : 17        : output : LVTTL/LVCMOS      :         :           : Y              
 UART_dTX5                    : 18        : output : LVTTL/LVCMOS      :         :           : Y              
@@ -88,7 +88,7 @@ GND_INT                      : 42        : gnd    :                   :         
 UART_RX1                     : 43        : input  : LVTTL/LVCMOS      :         :           : Y              
 RESERVED_INPUT               : 44        :        :                   :         :           :                
 RESERVED_INPUT               : 45        :        :                   :         :           :                
-RESERVED_INPUT               : 46        :        :                   :         :           :                
+UART_dRX3                    : 46        : output : LVTTL/LVCMOS      :         :           : N              
 VCC_INT                      : 47        : power  :                   : 2.5V    :           :                
 RESERVED_INPUT               : 48        :        :                   :         :           :                
 RESERVED_INPUT               : 49        :        :                   :         :           :                
@@ -139,7 +139,7 @@ GND_CKLK                     : 93        : gnd    :                   :         
 RESERVED_INPUT               : 94        :        :                   :         :           :                
 RESERVED_INPUT               : 95        :        :                   :         :           :                
 VCC_INT                      : 96        : power  :                   : 2.5V    :           :                
-UART_dTX3                    : 97        : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 97        :        :                   :         :           :                
 RESERVED_INPUT               : 98        :        :                   :         :           :                
 RESERVED_INPUT               : 99        :        :                   :         :           :                
 RESERVED_INPUT               : 100       :        :                   :         :           :                
@@ -157,7 +157,7 @@ RESERVED_INPUT               : 111       :        :                   :         
 VCC_IO                       : 112       : power  :                   : 3.3V    :           :                
 RESERVED_INPUT               : 113       :        :                   :         :           :                
 RESERVED_INPUT               : 114       :        :                   :         :           :                
-ValRX                        : 115       : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 115       :        :                   :         :           :                
 RESERVED_INPUT               : 116       :        :                   :         :           :                
 RESERVED_INPUT               : 117       :        :                   :         :           :                
 RESERVED_INPUT               : 118       :        :                   :         :           :                
@@ -180,7 +180,7 @@ RESERVED_INPUT               : 134       :        :                   :         
 GND_INT                      : 135       : gnd    :                   :         :           :                
 RESERVED_INPUT               : 136       :        :                   :         :           :                
 RESERVED_INPUT               : 137       :        :                   :         :           :                
-RESERVED_INPUT               : 138       :        :                   :         :           :                
+UART_dTX3                    : 138       : output : LVTTL/LVCMOS      :         :           : N              
 VCC_INT                      : 139       : power  :                   : 2.5V    :           :                
 VCC_IO                       : 140       : power  :                   : 3.3V    :           :                
 RESERVED_INPUT               : 141       :        :                   :         :           :                
@@ -244,7 +244,7 @@ RESERVED_INPUT               : 198       :        :                   :         
 RESERVED_INPUT               : 199       :        :                   :         :           :                
 RESERVED_INPUT               : 200       :        :                   :         :           :                
 RESERVED_INPUT               : 201       :        :                   :         :           :                
-UART_TX3                     : 202       : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 202       :        :                   :         :           :                
 RESERVED_INPUT               : 203       :        :                   :         :           :                
 RESERVED_INPUT               : 204       :        :                   :         :           :                
 VCC_IO                       : 205       : power  :                   : 3.3V    :           :                
@@ -276,9 +276,9 @@ RESERVED_INPUT               : 230       :        :                   :         
 RESERVED_INPUT               : 231       :        :                   :         :           :                
 GND_INT                      : 232       : gnd    :                   :         :           :                
 RESERVED_INPUT               : 233       :        :                   :         :           :                
-RESERVED_INPUT               : 234       :        :                   :         :           :                
+UART_TX3                     : 234       : output : LVTTL/LVCMOS      :         :           : N              
 RESERVED_INPUT               : 235       :        :                   :         :           :                
-RESERVED_INPUT               : 236       :        :                   :         :           :                
+ValRX                        : 236       : output : LVTTL/LVCMOS      :         :           : N              
 RESERVED_INPUT               : 237       :        :                   :         :           :                
 RESERVED_INPUT               : 238       :        :                   :         :           :                
 RESERVED_INPUT               : 239       :        :                   :         :           :                

@@ -112,14 +112,14 @@ begin
 			end
 			WAITDONE2: begin
 				if (done1uart == 1)
-					uart2 <= PAUSE2;
+					uart2 <= RDSET2;
 			end
 			PAUSE2 : begin
-				pause <= pause + 1'b1;
 				if(pause == 6'd10) begin
 					pause <= 6'd0;
 					uart2 <= RDSET2;
 				end
+				else pause <= pause + 1'b1;
 			end
 			RDSET2: begin
 				cntRD2 <= cntRD2 + 1'b1;
@@ -139,7 +139,10 @@ begin
 					done2uart <= 1'b1;
 					uart2 <= WAIT2;
 				end
-				else uart2 <= RDSET2;
+				else begin
+					uart2 <= RDSET2;
+					cnt2 <= cnt2 + 1'b1;
+				end
 			end
 			WAIT2: begin
 				done2uart <= 1'b0;

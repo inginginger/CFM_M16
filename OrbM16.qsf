@@ -85,7 +85,6 @@ set_location_assignment PIN_25 -to UART_dRX4
 set_location_assignment PIN_19 -to UART_dRX5
 set_location_assignment PIN_24 -to UART_dTX4
 set_location_assignment PIN_18 -to UART_dTX5
-set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_global_assignment -name VERILOG_FILE M16.v
@@ -112,3 +111,7 @@ set_global_assignment -name MIF_FILE AdrRq.mif
 set_global_assignment -name QIP_FILE romRqAdr.qip
 set_global_assignment -name VERILOG_FILE cycleDelay.v
 set_global_assignment -name VERILOG_FILE SlowPacker.v
+set_global_assignment -name MIF_FILE RQ_LCB2.mif
+set_global_assignment -name MIF_FILE AdrRq2LCB.mif
+set_global_assignment -name QIP_FILE ReqROM2.qip
+set_global_assignment -name QIP_FILE romRqAdr2.qip
