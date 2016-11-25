@@ -11,6 +11,7 @@ module commRdAdr(
 	output reg RD3,
 	output reg RD4,
 	output reg RD5,
+	output reg busy,
 	output [4:0] RdAdr1,
 	output [4:0] RdAdr2,
 	output [4:0] RdAdr3,
@@ -51,6 +52,7 @@ end
 always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
+		busy <= 1'b0;
 		uart1 <= 2'd0;
 		uart2 <= 3'd0;
 		uart3 <= 3'd0;
@@ -75,8 +77,11 @@ begin
 	else begin
 		case(uart1)
 			IDLE1: begin
-				if(syncStr1[1])
+				if(syncStr1[1])begin
 					uart1 <= RDSET1;
+					busy <= 1'b1;
+				end
+				//else busy <= 1'b0;
 			end
 			RDSET1: begin
 				cntRD1 <= cntRD1 + 1'b1;
@@ -93,6 +98,7 @@ begin
 				cnt1 <= cnt1 + 1'b1;
 				if(cnt1 == 5'd17) begin
 					cnt1 <= 5'd0;
+					busy <= 1'b0;
 					done1uart <= 1'b1;
 					uart1 <= WAIT1;
 				end
@@ -109,11 +115,9 @@ begin
 			IDLE2: begin
 				if(syncStr2[1])
 					uart2 <= WAITDONE2;
-				else if(syncStr2[1] && ~done1uart)
-					uart2 <= RDSET2;
 			end
 			WAITDONE2: begin
-				if (done1uart == 1)
+				if (busy <= 1'b0)
 					uart2 <= RDSET2;
 			end
 			RDSET2: begin
@@ -134,10 +138,8 @@ begin
 					done2uart <= 1'b1;
 					uart2 <= WAIT2;
 				end
-				else begin
+				else
 					uart2 <= RDSET2;
-					cnt2 <= cnt2 + 1'b1;
-				end
 			end
 			WAIT2: begin
 				done2uart <= 1'b0;

@@ -68,13 +68,13 @@ wire [10:0] addrRamGr1,addrRamGr2;
 wire [7:0] iUART1, iUART2, iUART3, iUART4, iUART5, oUART1, oUART2, oUART3, oUART4, oUART5;
 wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
-wire done1, done2, done3, done4, done5;
+wire done1, done2, done3, done4, done5, busy;
 
 assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = done2;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
-assign test3 = WE;//testpin1984;//WrAddr[1];
+assign test3 = busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
 assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : 11'hZ)));
@@ -259,6 +259,7 @@ commutAdr instWrAdr5(
 commRdAdr instRdAdr1(
 	.clk(clk80MHz),
 	.rst(rst),
+	.busy(busy),
 	.strob1(done1),
 	.strob2(done2),
 	.strob3(done3),
