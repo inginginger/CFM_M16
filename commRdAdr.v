@@ -81,7 +81,7 @@ begin
 					uart1 <= RDSET1;
 					busy <= 1'b1;
 				end
-				//else busy <= 1'b0;
+				else busy <= 1'b0;
 			end
 			RDSET1: begin
 				cntRD1 <= cntRD1 + 1'b1;

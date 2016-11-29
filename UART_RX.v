@@ -3,6 +3,7 @@ module UART_RX
 		input clk, 
 		input reset,
 		input RX,
+		input rstTx,
 		output reg [7:0]oData,
 		output oValid
 	);
@@ -17,12 +18,15 @@ module UART_RX
 
 	assign oValid = Valid;
 	
-	reg [1:0] sync;
+	reg [1:0] syncRX;
+	reg [1:0] syncRST;
 	wire iRX;
-	assign iRX = sync[1];
+	assign iRX = syncRX[1];
 
-	always @ (posedge clk)
-	sync <= { sync[0], RX };
+	always @ (posedge clk) begin
+		syncRX <= {syncRX[0], RX };
+		syncRST <= {syncRST[0], rstTx};
+	end
 	
 	
 	always@(posedge clk or negedge reset)
@@ -38,11 +42,18 @@ module UART_RX
 		Valid <= 1'b0;
 	end else begin
 		if (Valid) begin
-			if (delay == 4'd15) begin delay <= 4'd0; Valid <= 1'b0; end else begin delay <= delay + 1'b1; end
+			if (delay == 4'd15) begin 
+				delay <= 4'd0; 
+				Valid <= 1'b0; 
+			end 
+			else begin 
+				delay <= delay + 1'b1; 
+			end
 		end
 		
-
-		
+		if(syncRST[1] == 1'b1)
+			rx_act <= 1'b0;
+			
 		if (rx_act) begin
 			if (stepcnt == 5'd15) begin
 				if (place == 4'd8) begin
@@ -70,6 +81,9 @@ module UART_RX
 				end else begin
 					strtcnt <= strtcnt + 1'b1;
 				end
+			end
+			else begin
+				data <= 8'd0;
 			end
 		end
 		

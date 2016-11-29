@@ -31,7 +31,7 @@ output test4,
 	output UART_dRX5        // rs485 RX dir controller
 );
 
-wire rst;
+wire rst,f1,f2,f3,f4,f5;
 wire clkOrb;
 wire RqFast, RqSlow;
 wire clk4_8MHz;
@@ -74,7 +74,7 @@ assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = done2;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
-assign test3 = busy;//WE;//testpin1984;//WrAddr[1];
+assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
 assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : 11'hZ)));
@@ -124,6 +124,7 @@ clkDiv100 instClkDiv100(
 
 UART_RX instRX1(
 	.clk(clk80MHz),
+	.rstTx(f1),
 	.reset(rst),
 	.RX(UART_RX1),
 	.oValid(ValRX1),
@@ -132,6 +133,7 @@ UART_RX instRX1(
 
 UART_RX instRX2(
 	.clk(clk80MHz),
+	.rstTx(f2),
 	.reset(rst),
 	.RX(UART_RX2),
 	.oValid(ValRX2),
@@ -140,6 +142,7 @@ UART_RX instRX2(
 
 UART_RX instRX3(
 	.clk(clk80MHz),
+	.rstTx(f3),
 	.reset(rst),
 	.RX(UART_RX3),
 	.oValid(ValRX3),
@@ -148,6 +151,7 @@ UART_RX instRX3(
 
 UART_RX instRX4(
 	.clk(clk80MHz),
+	.rstTx(f4),
 	.reset(rst),
 	.RX(UART_RX4),
 	.oValid(ValRX4),
@@ -156,6 +160,7 @@ UART_RX instRX4(
 
 UART_RX instRX5(
 	.clk(clk80MHz),
+	.rstTx(f5),
 	.reset(rst),
 	.RX(UART_RX5),
 	.oValid(ValRX5),
@@ -359,6 +364,7 @@ M16 instM16(
 
 UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
+  .full(f1),
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
@@ -373,6 +379,7 @@ defparam instTX1.BYTES = 5'd4;
 
 UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal
+  .full(f2),
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
@@ -387,6 +394,7 @@ defparam instTX2.BYTES = 5'd4;
 
 UARTTXBIG instTX3(
   .reset(rst),          // global reset and enable signal
+  .full(f3),
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
@@ -401,6 +409,7 @@ defparam instTX3.BYTES = 5'd4;
 
 UARTTXBIG instTX4(
   .reset(rst),          // global reset and enable signal
+  .full(f4),
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
@@ -415,6 +424,7 @@ defparam instTX4.BYTES = 5'd4;
 
 UARTTXBIG instTX5(
   .reset(rst),          // global reset and enable signal
+  .full(f5),
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond

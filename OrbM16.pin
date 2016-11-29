@@ -37,7 +37,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Fri Nov 25 14:09:37 2016
+File Generation Date & Time: Tue Nov 29 09:32:42 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -50,10 +50,10 @@ TDO                          : 4         : output :                   :         
 VCC_INT                      : 5         : power  :                   : 2.5V    :           :                
 RESERVED_INPUT               : 6         :        :                   :         :           :                
 RESERVED_INPUT               : 7         :        :                   :         :           :                
-UART_TX3                     : 8         : output : LVTTL/LVCMOS      :         :           : N              
+UART_dRX3                    : 8         : output : LVTTL/LVCMOS      :         :           : N              
 RESERVED_INPUT               : 9         :        :                   :         :           :                
 GND_INT                      : 10        : gnd    :                   :         :           :                
-UART_dTX3                    : 11        : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 11        :        :                   :         :           :                
 RESERVED_INPUT               : 12        :        :                   :         :           :                
 RESERVED_INPUT               : 13        :        :                   :         :           :                
 RESERVED_INPUT               : 14        :        :                   :         :           :                
@@ -114,14 +114,14 @@ RESERVED_INPUT               : 68        :        :                   :         
 GND_INT                      : 69        : gnd    :                   :         :           :                
 RESERVED_INPUT               : 70        :        :                   :         :           :                
 RESERVED_INPUT               : 71        :        :                   :         :           :                
-RESERVED_INPUT               : 72        :        :                   :         :           :                
+ValRX                        : 72        : output : LVTTL/LVCMOS      :         :           : N              
 RESERVED_INPUT               : 73        :        :                   :         :           :                
 RESERVED_INPUT               : 74        :        :                   :         :           :                
 RESERVED_INPUT               : 75        :        :                   :         :           :                
 VCC_INT                      : 76        : power  :                   : 2.5V    :           :                
 VCC_IO                       : 77        : power  :                   : 3.3V    :           :                
 RESERVED_INPUT               : 78        :        :                   :         :           :                
-UART_dRX3                    : 79        : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 79        :        :                   :         :           :                
 RESERVED_INPUT               : 80        :        :                   :         :           :                
 RESERVED_INPUT               : 81        :        :                   :         :           :                
 RESERVED_INPUT               : 82        :        :                   :         :           :                
@@ -213,11 +213,11 @@ RESERVED_INPUT               : 167       :        :                   :         
 RESERVED_INPUT               : 168       :        :                   :         :           :                
 test4                        : 169       : output : LVTTL/LVCMOS      :         :           : Y              
 VCC_INT                      : 170       : power  :                   : 2.5V    :           :                
-ValRX                        : 171       : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 171       :        :                   :         :           :                
 RESERVED_INPUT               : 172       :        :                   :         :           :                
 test3                        : 173       : output : LVTTL/LVCMOS      :         :           : Y              
 RESERVED_INPUT               : 174       :        :                   :         :           :                
-RESERVED_INPUT               : 175       :        :                   :         :           :                
+UART_TX3                     : 175       : output : LVTTL/LVCMOS      :         :           : N              
 GND_INT                      : 176       : gnd    :                   :         :           :                
 TDI                          : 177       : input  :                   :         :           :                
 nCE                          : 178       : input  :                   :         :           :                
@@ -257,7 +257,7 @@ clk80MHz                     : 211       : input  : LVTTL/LVCMOS      :         
 GND+                         : 212       :        :                   :         :           :                
 RESERVED_INPUT               : 213       :        :                   :         :           :                
 RESERVED_INPUT               : 214       :        :                   :         :           :                
-RESERVED_INPUT               : 215       :        :                   :         :           :                
+UART_dTX3                    : 215       : output : LVTTL/LVCMOS      :         :           : N              
 GND_INT                      : 216       : gnd    :                   :         :           :                
 RESERVED_INPUT               : 217       :        :                   :         :           :                
 RESERVED_INPUT               : 218       :        :                   :         :           :                

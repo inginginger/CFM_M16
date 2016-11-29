@@ -9,6 +9,7 @@ module UARTTXBIG
   input [5:0]cycle,
   input [7:0]data,
   output [8:0]addr,
+  output reg full,
   output reg tx,          // serial transmitted data
   output reg dirTX,        // rs485 TX dir controller 
   output reg dirRX,        // rs485 RX dir controller
@@ -47,10 +48,11 @@ if (~reset) begin					// global asyncronous reset, initial values
 	delay <= 1'b0;
 	tx <= 1'b1;
 	switch <= 0;
-
+	full <= 1'b0;
 end else begin						// main circuit
 	case (state)					// state machine
 		WAIT: begin					// waiting for transfer request
+			full <= 1'b0;
 			if (rqsync[1]) state <= DIRON;		// just move on
 		end
 		DIRON: begin 				// set the DIR pins to high level with a tiny delay
@@ -83,7 +85,7 @@ end else begin						// main circuit
 		DIROFF: begin				// set the DIR pins to low level with a tiny delay
 			delay <= delay + 1'b1;	// count while in this state
 			if (delay == 15) begin dirTX <= 0; end
-			if (delay == 30) begin dirRX <= 0; state <= MEGAWAIT; end	// proceed to next state
+			if (delay == 30) begin dirRX <= 0; state <= MEGAWAIT; full <= 1'b1; end	// proceed to next state
 		end
 		MEGAWAIT: begin			// checking the low level of request signal
 			delay <= 0;				// reset previous counter
