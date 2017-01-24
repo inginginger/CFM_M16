@@ -63,20 +63,20 @@ set_location_assignment PIN_91 -to clk100MHz
 set_global_assignment -name MISC_FILE "C:/Projects/Orb_M16/OrbM16.dpf"
 set_location_assignment PIN_51 -to orbFrame
 set_location_assignment PIN_64 -to doubleOrbData
-set_location_assignment PIN_164 -to test1
+set_location_assignment PIN_149 -to test1
 set_location_assignment PIN_147 -to test2
 set_location_assignment PIN_173 -to test3
 set_location_assignment PIN_169 -to test4
 set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT simulation/modelsim/wave.do -section_id eda_simulation
 set_global_assignment -name MISC_FILE "C:/Projects/CFM/OrbM16.dpf"
 set_location_assignment PIN_43 -to UART_RX1
-set_location_assignment PIN_31 -to UART_RX2
+set_location_assignment PIN_36 -to UART_RX2
 set_location_assignment PIN_38 -to UART_TX1
-set_location_assignment PIN_28 -to UART_TX2
+set_location_assignment PIN_33 -to UART_TX2
 set_location_assignment PIN_41 -to UART_dRX1
-set_location_assignment PIN_30 -to UART_dRX2
+set_location_assignment PIN_35 -to UART_dRX2
 set_location_assignment PIN_39 -to UART_dTX1
-set_location_assignment PIN_29 -to UART_dTX2
+set_location_assignment PIN_34 -to UART_dTX2
 set_location_assignment PIN_26 -to UART_RX4
 set_location_assignment PIN_21 -to UART_RX5
 set_location_assignment PIN_23 -to UART_TX4
@@ -115,3 +115,10 @@ set_global_assignment -name MIF_FILE RQ_LCB2.mif
 set_global_assignment -name MIF_FILE AdrRq2LCB.mif
 set_global_assignment -name QIP_FILE ReqROM2.qip
 set_global_assignment -name QIP_FILE romRqAdr2.qip
+set_global_assignment -name MIF_FILE reqTempPar.mif
+set_global_assignment -name QIP_FILE RqROMtemp.qip
+set_location_assignment PIN_31 -to UART_RX3
+set_location_assignment PIN_28 -to UART_TX3
+set_location_assignment PIN_30 -to UART_dRX3
+set_location_assignment PIN_29 -to UART_dTX3
+set_global_assignment -name VERILOG_FILE uartRx.v

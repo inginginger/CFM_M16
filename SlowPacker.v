@@ -50,7 +50,9 @@ begin
 			test <= 1'b1;
 			cntWE <= 5'd0;
 		end
-		else test <= 1'b0;
+		else begin
+			test <= 1'b0;
+		end
 		oldSW <= syncSW[1];
 		
 		case(state)
@@ -78,7 +80,9 @@ begin
 								WrAddr <= addrRam;
 								state <= WESET;
 							end
-							else state <= WAIT;
+							else begin
+								state <= WAIT;
+							end
 							cntWrd <= 5'd0;	
 						end
 					endcase					
@@ -86,8 +90,9 @@ begin
 			
 			WESET: begin
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 5'd28)
+				if(cntWE == 5'd28) begin
 					WE <= 1'b1;
+				end
 				else if(cntWE == 5'd31) begin
 					state <= WAIT;
 				end

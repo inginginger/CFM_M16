@@ -32,9 +32,9 @@ output test4,
 );
 
 wire rst,f1,f2,f3,f4,f5;
-wire clkOrb;
+wire clkOrb, sel;
 wire RqFast, RqSlow;
-wire clk4_8MHz;
+wire clk4_8MHz, clk5MHz;
 wire [5:0]cycle;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5;
 wire [7:0] LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5;
@@ -70,10 +70,12 @@ wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
 wire done1, done2, done3, done4, done5, busy;
 
+assign ValRx = ValRX1;
+
 assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
-assign test1 = done2;//ValRX1;//UART_dTX1;//testVal1;
-assign test2 = ValRX2;//UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
+assign test2 = ValRX1;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
@@ -113,7 +115,9 @@ globalReset instRST(
 clkDiv21 instClkDiv21(
     .rst(rst),
 	.clk100MHz(clk100MHz),
-    .oClk(clk4_8MHz)
+	.clk80MHz(clk80MHz),
+    .oClk4_8(clk4_8MHz),
+    .oClk5(clk5MHz)
     );
 
 clkDiv100 instClkDiv100(
@@ -122,47 +126,48 @@ clkDiv100 instClkDiv100(
 	.Outdiv8(clkOrb)			// divided by 8
 );	
 
-UART_RX instRX1(
+
+uartRx instRX1(
 	.clk(clk80MHz),
 	.rstTx(f1),
-	.reset(rst),
-	.RX(UART_RX1),
+	.rst(rst),
+	.rx(UART_RX1),
 	.oValid(ValRX1),
 	.oData(iUART1)
 );
 
-UART_RX instRX2(
+uartRx instRX2(
 	.clk(clk80MHz),
 	.rstTx(f2),
-	.reset(rst),
-	.RX(UART_RX2),
+	.rst(rst),
+	.rx(UART_RX2),
 	.oValid(ValRX2),
 	.oData(iUART2)
 );
 
-UART_RX instRX3(
+uartRx instRX3(
 	.clk(clk80MHz),
 	.rstTx(f3),
-	.reset(rst),
-	.RX(UART_RX3),
+	.rst(rst),
+	.rx(UART_RX3),
 	.oValid(ValRX3),
 	.oData(iUART3)
 );
 
-UART_RX instRX4(
+uartRx instRX4(
 	.clk(clk80MHz),
 	.rstTx(f4),
-	.reset(rst),
-	.RX(UART_RX4),
+	.rst(rst),
+	.rx(UART_RX4),
 	.oValid(ValRX4),
 	.oData(iUART4)
 );
 
-UART_RX instRX5(
+uartRx instRX5(
 	.clk(clk80MHz),
 	.rstTx(f5),
-	.reset(rst),
-	.RX(UART_RX5),
+	.rst(rst),
+	.rx(UART_RX5),
 	.oValid(ValRX5),
 	.oData(iUART5)
 );
@@ -359,7 +364,8 @@ M16 instM16(
 	.RqSlow(RqSlow),      // start transfer signal
 	.RqFast(RqFast),
 	.cycle(cycle),
-	.oOrbit(orbFrame)
+	.oOrbit(orbFrame),
+	.sel(sel)
 );
 
 UARTTXBIG instTX1(

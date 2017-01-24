@@ -81,14 +81,18 @@ begin
 					uart1 <= RDSET1;
 					busy <= 1'b1;
 				end
-				else busy <= 1'b0;
+				else begin
+					busy <= 1'b0;
+				end
 			end
 			RDSET1: begin
 				cntRD1 <= cntRD1 + 1'b1;
-				if(cntRD1 == 6'd40)
+				if(cntRD1 == 6'd40) begin
 					RD1 <= 1'b1;
-				else if( cntRD1 == 6'd44)
+				end
+				else if( cntRD1 == 6'd44) begin
 					RD1 <= 1'b0;
+				end
 				else if(cntRD1 == 6'd63) begin
 					cntRD1 <= 6'd0;
 					uart1 <= CNT1;
@@ -102,30 +106,37 @@ begin
 					done1uart <= 1'b1;
 					uart1 <= WAIT1;
 				end
-				else uart1 <= RDSET1;
+				else begin 
+					uart1 <= RDSET1;
+				end
 			end
 			WAIT1: begin
 				done1uart <= 1'b0;
-				if(~syncStr1[1])
+				if(~syncStr1[1]) begin
 					uart1 <= IDLE1;
+				end
 			end
 		endcase
 		
 		case(uart2)
 			IDLE2: begin
-				if(syncStr2[1])
+				if(syncStr2[1]) begin
 					uart2 <= WAITDONE2;
+				end
 			end
 			WAITDONE2: begin
-				if (busy <= 1'b0)
+				if (busy <= 1'b0) begin
 					uart2 <= RDSET2;
+				end
 			end
 			RDSET2: begin
 				cntRD2 <= cntRD2 + 1'b1;
-				if(cntRD2 == 6'd40)
+				if(cntRD2 == 6'd40) begin
 					RD2 <= 1'b1;
-				else if( cntRD2 == 6'd44)
+				end
+				else if( cntRD2 == 6'd44) begin
 					RD2 <= 1'b0;
+				end
 				else if(cntRD2 == 6'd63) begin
 					cntRD2 <= 6'd0;
 					uart2 <= CNT2;
@@ -138,31 +149,37 @@ begin
 					done2uart <= 1'b1;
 					uart2 <= WAIT2;
 				end
-				else
+				else begin
 					uart2 <= RDSET2;
+				end
 			end
 			WAIT2: begin
 				done2uart <= 1'b0;
-				if(~syncStr2[1])
+				if(~syncStr2[1]) begin
 					uart2 <= IDLE2;
+				end
 			end
 		endcase
 		
 		case(uart3)
 			IDLE3: begin
-				if(syncStr3[1])
+				if(syncStr3[1]) begin
 					uart3 <= WAITDONE3;
+				end
 			end
 			WAITDONE3: begin
-				if (done2uart == 1)
+				if (done2uart == 1) begin
 					uart3 <= RDSET3;
+				end
 			end
 			RDSET3: begin
 				cntRD3 <= cntRD3 + 1'b1;
-				if(cntRD3 == 6'd40)
+				if(cntRD3 == 6'd40) begin
 					RD3 <= 1'b1;
-				else if( cntRD3 == 6'd44)
+				end
+				else if( cntRD3 == 6'd44) begin
 					RD3 <= 1'b0;
+				end
 				else if(cntRD3 == 6'd63) begin
 					cntRD3 <= 6'd0;
 					uart3 <= CNT3;
@@ -175,30 +192,37 @@ begin
 					done3uart <= 1'b1;
 					uart3 <= WAIT3;
 				end
-				else uart3 <= RDSET3;
+				else  begin 
+					uart3 <= RDSET3;
+				end
 			end
 			WAIT3: begin
 				done3uart <= 1'b0;
-				if(~syncStr3[1])
+				if(~syncStr3[1]) begin
 					uart3 <= IDLE3;
+				end
 			end
 		endcase
 		
 		case(uart4)
 			IDLE4: begin
-				if(syncStr4[1])
+				if(syncStr4[1]) begin
 					uart4 <= WAITDONE3;
+				end
 			end
 			WAITDONE4: begin
-				if (done3uart == 1)
+				if (done3uart == 1) begin
 					uart4 <= RDSET4;
+				end
 			end
 			RDSET4: begin
 				cntRD4 <= cntRD4 + 1'b1;
-				if(cntRD4 == 6'd40)
+				if(cntRD4 == 6'd40) begin
 					RD4 <= 1'b1;
-				else if( cntRD4 == 6'd44)
+				end
+				else if( cntRD4 == 6'd44) begin
 					RD4 <= 1'b0;
+				end
 				else if(cntRD4 == 6'd63) begin
 					cntRD4 <= 6'd0;
 					uart4 <= CNT4;
@@ -211,30 +235,37 @@ begin
 					done4uart <= 1'b1;
 					uart4 <= WAIT4;
 				end
-				else uart4 <= RDSET4;
+				else begin 
+					uart4 <= RDSET4;
+				end
 			end
 			WAIT4: begin
 				done4uart <= 1'b0;
-				if(~syncStr4[1])
+				if(~syncStr4[1]) begin
 					uart4 <= IDLE4;
+				end
 			end
 		endcase
 		
 		case(uart5)
 			IDLE5: begin
-				if(syncStr5[1])
+				if(syncStr5[1]) begin
 					uart5 <= WAITDONE5;
+				end
 			end
 			WAITDONE5: begin
-				if (done4uart == 1)
+				if (done4uart == 1) begin
 					uart5 <= RDSET5;
+				end
 			end
 			RDSET5: begin
 				cntRD5 <= cntRD5 + 1'b1;
-				if(cntRD5 == 6'd40)
+				if(cntRD5 == 6'd40) begin
 					RD5 <= 1'b1;
-				else if( cntRD5 == 6'd44)
+				end
+				else if( cntRD5 == 6'd44) begin
 					RD5 <= 1'b0;
+				end
 				else if(cntRD5 == 6'd63) begin
 					cntRD5 <= 6'd0;
 					uart5 <= CNT5;
@@ -246,11 +277,14 @@ begin
 					cnt5 <= 5'd0;
 					uart5 <= WAIT5;
 				end
-				else uart5 <= RDSET5;
+				else begin
+					uart5 <= RDSET5;
+				end
 			end
 			WAIT5: begin
-				if(~syncStr5[1])
+				if(~syncStr5[1]) begin
 					uart5 <= IDLE5;
+				end
 			end
 		endcase
 	end

@@ -16,10 +16,12 @@ module clkDiv100
 reg [3:0] clk=0;
 
 always @(negedge iClkIN or negedge reset)
-if (~reset)
+if (~reset) begin
 	clk <= 4'b0;
-else 
+end
+else begin
 	clk<=clk+1'b1;				// always count 4-digit binary: 0..15
+end
 
 always @(posedge iClkIN or negedge reset) begin
 	if (~reset) begin

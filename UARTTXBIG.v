@@ -53,13 +53,21 @@ end else begin						// main circuit
 	case (state)					// state machine
 		WAIT: begin					// waiting for transfer request
 			full <= 1'b0;
-			if (rqsync[1]) state <= DIRON;		// just move on
+			if (rqsync[1]) begin 
+				state <= DIRON;		// just move on
+			end
 		end
 		DIRON: begin 				// set the DIR pins to high level with a tiny delay
 			delay <= delay + 1'b1;	// count while in this state
-			if (delay == 0) begin dirRX <= 1; end
-			if (delay == 15) begin dirTX <= 1; end
-			if (delay == 30) begin state <= TX; end	// proceed to next state
+			if (delay == 0) begin 
+				dirRX <= 1; 
+			end
+			if (delay == 15) begin 
+				dirTX <= 1; 
+			end
+			if (delay == 30) begin 
+				state <= TX; 
+			end	// proceed to next state
 		end
 		TX: begin					// the transfer
 			serialize <= serialize + 1'b1;		// count while in this state
@@ -84,12 +92,20 @@ end else begin						// main circuit
 		end
 		DIROFF: begin				// set the DIR pins to low level with a tiny delay
 			delay <= delay + 1'b1;	// count while in this state
-			if (delay == 15) begin dirTX <= 0; end
-			if (delay == 30) begin dirRX <= 0; state <= MEGAWAIT; full <= 1'b1; end	// proceed to next state
+			if (delay == 0) begin 
+				dirTX <= 0; 
+			end
+			if (delay == 4) begin 
+				dirRX <= 0; 
+				state <= MEGAWAIT; 
+				full <= 1'b1; 
+			end	// proceed to next state
 		end
 		MEGAWAIT: begin			// checking the low level of request signal
 			delay <= 0;				// reset previous counter
-			if (~rqsync[1]) state <= WAIT; // just move on
+			if (~rqsync[1]) begin 
+				state <= WAIT; // just move on
+			end
 		end
 	endcase 
 end

@@ -10,7 +10,8 @@ module M16(
 	output reg oVal,
 	output reg [5:0] cycle,
 	output reg RqSlow,
-	output reg RqFast
+	output reg RqFast,
+	output reg sel
 );
 
 reg [3:0]cntBit;
@@ -23,6 +24,7 @@ reg [11:0]outWord;
 reg [2:0]seq;
 reg [11:0] cntRqFast;
 reg [15:0] cntRqSlow;
+reg [2:0] cntTemp;
 
 //assign oSwitch = cntAddr[11];
 
@@ -46,6 +48,8 @@ always@(negedge reset or posedge iClkOrb)begin
 		RqSlow <= 1'd0;
 		cntRqFast <= 12'd0;
 		cntRqSlow <= 16'd0;
+		sel <= 1'b0;
+		cntTemp <= 3'd0;
 	end else begin
 		seq <= seq + 1'b1;
 		case(seq)
@@ -54,14 +58,19 @@ always@(negedge reset or posedge iClkOrb)begin
 				if (cntBit == 4'd0) begin
 					oParallel <= outWord;
 					oVal <= 1'b1;
-				end else oVal <= 1'b0;
+				end 
+				else begin 
+					oVal <= 1'b0;
+				end
 			end
 			1: begin
 				if (cntBit == 4'd11) begin
 					oAddr <= cntWrd+1'b1;
 					outWord <= 12'b0;
-				end else if(cntBit == 4'd0)
+				end 
+				else if(cntBit == 4'd0) begin
 					oRdEn <= 1'b1;
+				end
 				cntBit <= cntBit + 1'b1;
 			end
 			2: begin
@@ -73,12 +82,18 @@ always@(negedge reset or posedge iClkOrb)begin
 					if (cntWrd == 11'd2047) begin
 						oSwitch <= ~oSwitch;
 						cntGrp <= cntGrp + 1'b1;
-						if (cntGrp == 31) cntGrp <= 5'd0;
+						if (cntGrp == 31) begin
+							cntGrp <= 5'd0;
+						end
 						cntFrm <= cntFrm + 1'b1;
-						if (cntFrm == 127) cntFrm <= 7'd0;
+						if (cntFrm == 127) begin
+							cntFrm <= 7'd0;
+						end
 					end
 					cntPhr <= cntPhr + 1'b1;
-					if (cntPhr == 31) cntPhr <= 5'd0;
+					if (cntPhr == 31) begin
+						cntPhr <= 5'd0;
+					end
 				end
 			end
 			3: begin
@@ -114,8 +129,21 @@ always@(negedge reset or posedge iClkOrb)begin
 		case (cntRqFast)
 			0: RqFast <= 1'd1;
 			20: RqFast <= 1'd0;
-			1530: cycle <= cycle + 1'b1;
-			1535: cntRqFast <= 11'd0;
+			1530: begin
+				cycle <= cycle + 1'b1;
+				if(cycle == 6'd63) begin
+					cntTemp <= cntTemp + 1'b1;
+					if(cntTemp == 3'd7) begin
+						sel <= 1'b1;
+					end
+				end
+				else if(cycle == 6'd0) begin
+					sel <= 1'b0;
+				end
+			end
+			1535:  begin 
+				cntRqFast <= 11'd0;
+			end
 		endcase
 		cntRqSlow <= cntRqSlow + 1'b1;
 		case (cntRqSlow)

@@ -44,18 +44,21 @@ begin
 			end
 			WRSET: begin
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 6'd42)
+				if(cntWE == 6'd42) begin
 					WE <= 1'b1;
-				else if(cntWE == 6'd46)
+				end
+				else if(cntWE == 6'd46) begin
 					WE <= 1'b0;
+				end
 				else if(cntWE == 6'd63) begin
 					cntWE <= 6'd0;
 					if(cntWrd == 5'd18) begin
 						state <= PAUSE;
 						full <= 1'b1;
 					end
-					else 
+					else begin
 						state <= WAIT;
+					end
 				end
 			end
 			PAUSE: begin
@@ -67,8 +70,9 @@ begin
 				end
 			end
 			WAIT: begin
-				if(~syncStr[1])
+				if(~syncStr[1]) begin
 					state <= IDLE;
+				end
 			end
 		endcase
 	end

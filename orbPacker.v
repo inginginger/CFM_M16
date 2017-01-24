@@ -81,7 +81,9 @@ begin
 			cntWE1 <= 5'd0;
 			cntWE2 <= 5'd0;
 		end
-		else test <= 1'b0;
+		else  begin
+			test <= 1'b0;
+		end
 		oldSW <= syncSW[1];
 		
 		case(state1)
@@ -106,8 +108,9 @@ begin
 			end
 			WESET1: begin
 				cntWE1 <= cntWE1 + 1'b1;
-				if(cntWE1 == 5'd28)
+				if(cntWE1 == 5'd28) begin
 					WE1 <= 1'b1;
+				end
 				else if(cntWE1 == 5'd31) begin
 					state1 <= WAIT1;
 				end
@@ -128,8 +131,9 @@ begin
 							orbWord2 <= {1'b0, iData2, 3'd0};
 							WrAddr2 <= ((cntAddr2 << 1) + 1'b1) + (cntPack2 << 5);
 							cntAddr2 <= cntAddr2 + 1'b1;
-							if(cntAddr2 == 4'd14)
+							if(cntAddr2 == 4'd14) begin
 								cntAddr2 <= 4'd0;
+							end
 							state2 <= WESET2;
 						end
 						15, 16: state2 <= WAIT2;
@@ -143,8 +147,9 @@ begin
 			end
 			WESET2: begin
 				cntWE2 <= cntWE2 + 1'b1;
-				if(cntWE2 == 5'd28)
+				if(cntWE2 == 5'd28) begin
 					WE2 <= 1'b1;
+				end
 				else if(cntWE2 == 5'd31) begin
 					cntWE2 <= 5'd0;
 					state2 <= WAIT2;
