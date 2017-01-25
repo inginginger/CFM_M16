@@ -4,20 +4,23 @@ module uartRx(
 	input rstTx,
 	input rx,
 	output reg oValid,
-	output reg [7:0] oData);
+	output reg [7:0] oData,
+	output reg test);
 	
 	reg [1:0] syncRx;
 	reg [1:0] syncRstTx;
 	
 	reg rxAct;
 	reg [2:0] cntStrt;
-	reg [3:0] cntStep;
+	reg [4:0] cntStep;
 	reg [3:0] cntPlace;
 	reg[1:0] delay;
 	reg [7:0] data;
 	reg [3:0] state;
 	
 	localparam STARTSEARCH = 0, RECEIVER = 1, STOPSEARCH = 2, VALIDHOLD = 3;
+	
+	
 	
 	always@(posedge clk)
 	begin
@@ -33,7 +36,7 @@ module uartRx(
 			state <= 4'b0;
 			rxAct <= 1'b0;
 			cntStrt <= 3'b0;
-			cntStep <= 4'd0;
+			cntStep <= 5'd0;
 			cntPlace <= 4'd0;
 			data <= 8'd0;
 			delay <= 2'd0;
@@ -58,14 +61,16 @@ module uartRx(
 				RECEIVER: begin
 					if(rxAct == 1'b1) begin//если передача активна
 						cntStep <= cntStep + 1'b1;
-						if(cntStep == 4'd15) begin
+						if(cntStep == 5'd16) begin
 							cntPlace <= cntPlace + 1'b1;
+							cntStep <= 5'd0;
 							if(cntPlace == 4'd8) begin//приняли данные
 								state <= STOPSEARCH;
 								cntPlace <= 4'd0;
 							end
 							else begin
 								data[cntPlace] <= syncRx[1];//записываем входящие данные в буфер
+								test = syncRx[1];
 							end
 						end
 					end

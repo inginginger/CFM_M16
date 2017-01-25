@@ -32,12 +32,13 @@ output test4,
 );
 
 wire rst,f1,f2,f3,f4,f5;
-wire clkOrb, sel;
-wire RqFast, RqSlow;
+wire clkOrb, sel, testIO;
+wire RqFast, RqSlow, RqTemp;
 wire clk4_8MHz, clk5MHz;
 wire [5:0]cycle;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5;
-wire [7:0] LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5;
+wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5, LCBdata, tempData;
+reg [7:0] LCB_rq_data, LCB, temp;
 wire [4:0] switch;
 wire [10:0] RdAddr;
 wire [10:0] WrAddr;
@@ -74,8 +75,8 @@ assign ValRx = ValRX1;
 
 assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
-assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
-assign test2 = ValRX1;//UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test1 = RqSlow;//ValRX1;//UART_dTX1;//testVal1;
+assign test2 = RqTemp;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
@@ -133,7 +134,8 @@ uartRx instRX1(
 	.rst(rst),
 	.rx(UART_RX1),
 	.oValid(ValRX1),
-	.oData(iUART1)
+	.oData(iUART1),
+	.test(testIO)
 );
 
 uartRx instRX2(
@@ -363,6 +365,7 @@ M16 instM16(
 	.oSwitch(SW),
 	.RqSlow(RqSlow),      // start transfer signal
 	.RqFast(RqFast),
+	.Min(RqTemp),
 	.cycle(cycle),
 	.oOrbit(orbFrame),
 	.sel(sel)
@@ -443,7 +446,36 @@ UARTTXBIG instTX5(
 );
 defparam instTX5.BYTES = 5'd4;
 
+reg [7:0] cntSW;
+reg [1:0] cntAddr;
+reg [5:0] cntTemp;
+reg [6:0] tempAddr;
+reg [8:0] fastAddr;
+reg [7:0] inc;
 
+always@(*) begin
+	if (SW != ~SW) begin
+		cntSW = cntSW + 1'b1;
+		if(cntSW == 8'd128 && LCB_rq_addr1 == 8'd184) begin
+			if(cntAddr <= 2'd3 && cntTemp <= 6'd32) begin
+				tempAddr = cntAddr + (inc << 2'd2);
+				LCB_rq_data = temp;
+				cntAddr = cntAddr + 1'b1;
+			end else begin
+				inc = inc + 1'b1;
+				cntSW = 8'd0;
+			end
+		end else begin
+			fastAddr = LCB_rq_addr1;
+			LCB_rq_data = LCB;
+			cntTemp = cntTemp + 1'b1;
+			if(cntTemp == 6'd33) begin
+				inc = 8'd0;
+				cntTemp = 6'd0;
+			end
+		end
+	end
+end
 
 romRqAdr instRomAdr1(
 	.address(cycle),
@@ -462,10 +494,17 @@ ReqROM instRQ1(
   .address(LCB_rq_addr1),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
-  .q(LCB_rq_data1)
+  .q(LCBdata)
 );
 
-ReqROM2 instRQ2(
+tempROM instRQtemp(
+  .address(tempAddr),
+  .inclock(clk80MHz),
+  .outclock(clk80MHz),
+  .q(tempData)
+);
+
+ReqROM instRQ2(
   .address(LCB_rq_addr2),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
