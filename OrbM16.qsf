@@ -125,3 +125,4 @@ set_global_assignment -name VERILOG_FILE uartRx.v
 set_global_assignment -name VERILOG_FILE UART_DIAG.v
 set_global_assignment -name HEX_FILE reqTemp.hex
 set_global_assignment -name QIP_FILE tempROM.qip
+set_global_assignment -name VERILOG_FILE formTempRQ.v

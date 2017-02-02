@@ -55,6 +55,7 @@ end else begin						// main circuit
 			full <= 1'b0;
 			if (rqsync[1]) begin 
 				state <= DIRON;		// just move on
+				
 			end
 		end
 		DIRON: begin 				// set the DIR pins to high level with a tiny delay
@@ -68,6 +69,7 @@ end else begin						// main circuit
 			if (delay == 30) begin 
 				state <= TX; 
 			end	// proceed to next state
+			switch <= 0; 
 		end
 		TX: begin					// the transfer
 			serialize <= serialize + 1'b1;		// count while in this state
@@ -84,7 +86,7 @@ end else begin						// main circuit
 				10: begin
 					serialize <= 0; // reset sequencer
 					if (switch == BYTES) begin 
-						switch <= 0; 
+						
 						state <= DIROFF; 
 					end	// if completed transfer proceed to next state 
 				end	

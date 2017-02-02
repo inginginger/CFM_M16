@@ -357,7 +357,7 @@ cntmas[ 255 ] =  255 ;
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
 		UART_RX1 = 1;
-		repeat (8192) begin					// 5 times
+		repeat (32768) begin					// 5 times
 			j=0;
 			wait(UART_dRX1 == 1);
 			wait(UART_dRX1 == 0);
@@ -387,7 +387,7 @@ cntmas[ 255 ] =  255 ;
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
 		UART_RX2 = 1;
-		repeat (8192) begin					// 5 times
+		repeat (32768) begin					// 5 times
 			k=0;
 			wait(UART_dRX2 == 1);
 			wait(UART_dRX2 == 0);
@@ -417,7 +417,7 @@ cntmas[ 255 ] =  255 ;
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
 		UART_RX3 = 1;
-		repeat (8192) begin					// 5 times
+		repeat (32768) begin					// 5 times
 			n=0;
 			wait(UART_dRX3 == 1);
 			wait(UART_dRX3 == 0);
@@ -447,7 +447,7 @@ cntmas[ 255 ] =  255 ;
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
 		UART_RX4 = 1;
-		repeat (8192) begin					// 5 times
+		repeat (32768) begin					// 5 times
 			y=0;
 			wait(UART_dRX4 == 1);
 			wait(UART_dRX4 == 0);
@@ -477,7 +477,7 @@ cntmas[ 255 ] =  255 ;
 	initial begin						// Main
 		repeat (30)@(posedge clk80MHz);
 		UART_RX5 = 1;
-		repeat (8192) begin					// 5 times
+		repeat (32768) begin					// 5 times
 			b=0;
 			wait(UART_dRX5 == 1);
 			wait(UART_dRX5 == 0);

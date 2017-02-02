@@ -28,7 +28,7 @@ module uartRx(
 		syncRstTx <= {syncRstTx[0], rstTx};
 	end
 		
-	always@(posedge clk)
+	always@(posedge clk or negedge rst)
 	begin
 		if(~rst) begin
 			oValid <= 1'b0;
