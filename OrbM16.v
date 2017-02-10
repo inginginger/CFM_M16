@@ -39,12 +39,12 @@ wire [5:0]cycle;
 wire [6:0] tempAddr;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5, fastAddr;
 wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5, LCBdata, tempData;
-wire [7:0] LCB_rq_data, LCB, temp;
-wire [4:0] switch;
+wire [7:0] txData;
+wire [1:0] switch;
 wire [10:0] RdAddr;
 wire [10:0] WrAddr;
 wire [11:0] OrbData;
-wire RE, WE;
+wire RE, WE, ack, rqRom;
 wire SW, test;
 wire [10:0] RdAddr1;
 wire [10:0] RdAddr2;
@@ -71,18 +71,15 @@ wire [7:0] iUART1, iUART2, iUART3, iUART4, iUART5, oUART1, oUART2, oUART3, oUART
 wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
 wire done1, done2, done3, done4, done5, busy;
-wire tempFull;
 
-assign ValRx = ValRX1;
+//assign ValRx = ValRX1;
 
 assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
-assign test1 = tempFull;//ValRX1;//UART_dTX1;//testVal1;
-assign test2 = RqTemp;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
+assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
-
-assign LCB_rq_data1 = LCB_rq_data;
 
 assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : 11'hZ)));
 assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : 12'hZ)));
@@ -376,7 +373,24 @@ M16 instM16(
 	.RqSlow1Hz(RqSlow1Hz)
 );
 
-UARTTXBIG instTX1(
+newUart instTX1(
+	.reset(rst),
+	.clk(clk80MHz),
+	.edgeTx(clk4_8MHz),
+	.RQ(RqFast),
+	.ack(ack),
+	.cycle(cycle),
+	.data(txData),
+	.rqRom(rqRom),
+	.addr(LCB_rq_addr1),
+	.full(f1),
+	.tx(UART_TX1),
+	.dirTX(UART_dTX1),
+	.dirRX(UART_dRX1),
+	.switch(switch));
+defparam instTX1.BYTES = 5'd4;
+
+/*UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
   .full(f1),
   .clk(clk4_8MHz),            // actual needed baudrate
@@ -389,7 +403,7 @@ UARTTXBIG instTX1(
   .dirRX(UART_dRX1),        // rs485 RX dir controller
   .switch(switch)
 );
-defparam instTX1.BYTES = 5'd4;
+defparam instTX1.BYTES = 5'd4;*/
 
 UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal
@@ -451,7 +465,7 @@ UARTTXBIG instTX5(
 );
 defparam instTX5.BYTES = 5'd4;
 
-formTempRQ instTempRQ(
+/*formTempRQ instTempRQ(
 	.clk(clk80MHz),
 	.rst(rst),
 	.SW(SW),
@@ -461,7 +475,22 @@ formTempRQ instTempRQ(
 	.tempAddr(tempAddr),
 	.LCB_rq_data(LCB_rq_data),
 	.LCB_rq_addr1(LCB_rq_addr1),
-	.tempFull(tempFull)
+	.tempFull(tempFull),
+	.test(tempTest)
+);*/
+
+answerLCS instTempRQ(
+	.clk(clk80MHz),
+	.edgeTx(clk4_8MHz),
+	.rst(rst),
+	.req(rqRom),
+	.addrLCS(LCB_rq_addr1),
+	.dataLCS(LCBdata),
+	.dataTemp(tempData),
+	.SW(SW),
+	.dataTx(txData),
+	.ack(ack),
+	.addrTemp(tempAddr)
 );
 
 romRqAdr instRomAdr1(

@@ -96,7 +96,7 @@ endmodule
 // Retrieval info: GEN_FILE: TYPE_NORMAL tempROM.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL tempROM.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL tempROM.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL tempROM.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL tempROM.bsf TRUE FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL tempROM_inst.v FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL tempROM_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

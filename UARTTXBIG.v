@@ -8,7 +8,7 @@ module UARTTXBIG
   input RQ,            // start transfer signal
   input [5:0]cycle,
   input [7:0]data,
-  output [8:0]addr,
+  output reg [8:0]addr,
   output reg full,
   output reg tx,          // serial transmitted data
   output reg dirTX,        // rs485 TX dir controller 
@@ -21,7 +21,7 @@ module UARTTXBIG
 //  wire [8:0]addr;
   //reg unsigned [4:0]cycle;
 
-  assign addr = (switch + (cycle << 2));
+  
   
 //dROM innerMEM(
 //  .aclr(!reset),
@@ -50,6 +50,7 @@ if (~reset) begin					// global asyncronous reset, initial values
 	switch <= 0;
 	full <= 1'b0;
 end else begin						// main circuit
+	addr <= (switch + (cycle << 2));
 	case (state)					// state machine
 		WAIT: begin					// waiting for transfer request
 			full <= 1'b0;
