@@ -57,18 +57,23 @@ module answerLCS(
 					if(syncSW[1] && (addrLCS == 184 || addrLCS == 185	//если переключились пам€ти дл€ записи кадра
 						|| addrLCS == 186 || addrLCS == 187)) begin	//и все быстрые параметры уже в кадре
 						enTemp <= 1'b1;
+						state <= DELAY;
+						ack <= 1'b0;
 						cntTemp <= cntTemp + 1'b1;
 						if(cntTemp == 2'd3) begin
+							ack <= 1'b0;
 							shiftByte <= shiftByte + 1'b1;
-							state <= DELAY;
+							
 						/*end else begin
 							state <= WAITEDGE;*/
 						end
 						//state <= IDLE;
 					end else begin
+						ack <= 1'b0;
 						enTemp <= 1'b0;									//отдаем данные €лк
 						state <= DELAY;
 					end	
+					
 								
 				end
 				DELAY: begin
@@ -86,7 +91,7 @@ module answerLCS(
 				WAIT: begin
 					if(~syncReq[1]) begin
 						state <= IDLE;
-						ack <= 1'b0;
+						
 					end
 				end
 			endcase

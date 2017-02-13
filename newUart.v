@@ -71,19 +71,21 @@ end else begin						// main circuit
 		WAIT: begin					// waiting for transfer request
 			full <= 1'b0;
 			if (rqsync[1]) begin 
-				state <= RQROM;
+				state <= DIRON;
 			end
 		end
 		RQROM: begin
 			rqRom <= 1'b1;
 			bufTemp <= data;
-			state <= ACK;		// just move on
-		end
-		ACK: begin
 			if(syncAck[1]) begin
-				state <= DIRON;
+				rqRom <= 1'b0;
+				state <= TX;
 			end
+			//state <= ACK;		// just move on
 		end
+		/*ACK: begin
+			
+		end*/
 		/*EDGE: begin
 			if(syncEdge[1]) begin
 				if(txOn == 1'b1) begin
@@ -106,8 +108,7 @@ end else begin						// main circuit
 				
 			end
 			if (delay == 30) begin 
-				state <= TX; 
-				rqRom <= 1'b0;
+				state <= RQROM; 
 				txOn <= 1'b1;
 				
 			end	// proceed to next state
@@ -132,8 +133,9 @@ end else begin						// main circuit
 					serialize <= 0; // reset sequencer
 					if (switch == BYTES-1) begin 
 						state <= DIROFF; 
-						
-					end	
+					end	else begin
+						state <= RQROM;
+					end
 				end
 				//10: begin
 					// if completed transfer proceed to next state 
