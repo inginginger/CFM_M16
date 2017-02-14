@@ -37,7 +37,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Mon Feb 13 08:09:34 2017
+File Generation Date & Time: Mon Feb 13 16:21:42 2017
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "OrbM16"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -55,7 +55,7 @@ RESERVED_INPUT               : 9         :        :                   :         
 GND_INT                      : 10        : gnd    :                   :         :           :                
 RESERVED_INPUT               : 11        :        :                   :         :           :                
 RESERVED_INPUT               : 12        :        :                   :         :           :                
-ValRX                        : 13        : output : LVTTL/LVCMOS      :         :           : N              
+RESERVED_INPUT               : 13        :        :                   :         :           :                
 RESERVED_INPUT               : 14        :        :                   :         :           :                
 RESERVED_INPUT               : 15        :        :                   :         :           :                
 VCC_IO                       : 16        : power  :                   : 3.3V    :           :                
@@ -209,7 +209,7 @@ RESERVED_INPUT               : 163       :        :                   :         
 RESERVED_INPUT               : 164       :        :                   :         :           :                
 GND_INT                      : 165       : gnd    :                   :         :           :                
 RESERVED_INPUT               : 166       :        :                   :         :           :                
-RESERVED_INPUT               : 167       :        :                   :         :           :                
+ValRX                        : 167       : output : LVTTL/LVCMOS      :         :           : N              
 RESERVED_INPUT               : 168       :        :                   :         :           :                
 test4                        : 169       : output : LVTTL/LVCMOS      :         :           : Y              
 VCC_INT                      : 170       : power  :                   : 2.5V    :           :                

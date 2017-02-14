@@ -77,7 +77,7 @@ end else begin						// main circuit
 		RQROM: begin
 			rqRom <= 1'b1;
 			bufTemp <= data;
-			if(syncAck[1]) begin
+			if(ack) begin
 				rqRom <= 1'b0;
 				state <= TX;
 			end
