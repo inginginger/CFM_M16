@@ -10,13 +10,13 @@ module newUart
   input edgeTx,
   input [5:0]cycle,
   input [7:0]data,
-  output [8:0]addr,
+  output reg [8:0]addr,
   output reg full,
   output reg rqRom,
   output reg tx,          // serial transmitted data
   output reg dirTX,        // rs485 TX dir controller 
   output reg dirRX,        // rs485 RX dir controller
-  output reg [1:0]switch  // memory switcher
+  output reg [4:0]switch  // memory switcher
 );
 
 //  wire [7:0]data;        // 8bits data
@@ -41,9 +41,9 @@ reg [1:0] rqsync;
 reg [1:0] syncEdge;
 reg [1:0] syncAck;
 reg [7:0] bufTemp;
-reg txOn;
+//reg txOn;
 
-assign addr = (switch + (cycle << 2));
+//assign addr = (switch + (cycle << 2));
 
 always@(posedge edgeTx) begin			// double d-flipflop to avoid metastability
 	rqsync <= {rqsync[0],  RQ};	// start signal from other clock domain
@@ -58,13 +58,14 @@ if (~reset) begin					// global asyncronous reset, initial values
 	serialize <= 0;
 	delay <= 1'b0;
 	tx <= 1'b1;
-	switch <= 2'd0;
+	switch <= 5'd0;
 	full <= 1'b0;
 	rqRom <= 1'b0;
 	bufTemp <= 8'd0;
 	dirRX <= 1'b0;
 	dirTX <= 1'b0;
-	txOn <= 1'b0;
+	//txOn <= 1'b0;
+	addr <= 9'd0;
 end else begin						// main circuit
 	
 	case (state)					// state machine
@@ -76,9 +77,10 @@ end else begin						// main circuit
 		end
 		RQROM: begin
 			rqRom <= 1'b1;
-			bufTemp <= data;
+			//bufTemp <= data;
 			if(ack) begin
 				rqRom <= 1'b0;
+				addr <= (switch + (cycle << 2));
 				state <= TX;
 			end
 			//state <= ACK;		// just move on
@@ -109,13 +111,13 @@ end else begin						// main circuit
 			end
 			if (delay == 30) begin 
 				state <= RQROM; 
-				txOn <= 1'b1;
-				
-			end	// proceed to next state
-			//switch <= 0; 
+				switch <= 0; 
+				//txOn <= 1'b1;
+			end	//proceed to next state
+			
 			
 		end
-		TX: begin					// the transfer
+		TX: begin								// the transfer
 			serialize <= serialize + 1'b1;		// count while in this state
 			//state <= EDGE;
 			case (serialize)					// make a sequence while here
@@ -128,27 +130,23 @@ end else begin						// main circuit
 					tx <= data[(serialize - 1)];	// transmit every bit of data
 				end
 				9: begin 
-					tx <= 1;		// stopbit
+					tx <= 1;					// stopbit
 					switch <= switch + 1'b1;	// switch memory
+				end
+				10: begin
 					serialize <= 0; // reset sequencer
-					if (switch == BYTES-1) begin 
+					if (switch == BYTES) begin 
 						state <= DIROFF; 
 					end	else begin
 						state <= RQROM;
 					end
-				end
-				//10: begin
-					// if completed transfer proceed to next state 
-					/*else begin
-						state <= RQROM;
-					end*/
-				//end	
+				end	
 			endcase
 			
 			
 		end
 		DIROFF: begin				// set the DIR pins to low level with a tiny delay
-			txOn <= 1'b0;
+			//txOn <= 1'b0;
 			delay <= delay + 1'b1;	// count while in this state
 			if (delay == 0) begin 
 				dirTX <= 0; 
@@ -156,6 +154,7 @@ end else begin						// main circuit
 				dirRX <= 0; 
 				state <= MEGAWAIT; 
 				full <= 1'b1; 
+				bufTemp <= 8'd0;
 			end	// proceed to next state
 			//state <= EDGE;
 		end

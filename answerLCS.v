@@ -21,8 +21,8 @@ module answerLCS(
 	reg enTemp;
 	reg [3:0] cnt;
 	
-	assign addrTemp = ((cntTemp == 0) && (shiftByte == 0))? 7'd127 :((cntTemp-1)  + (shiftByte << 2));
-	assign dataTx = /*(enTemp == 1'b1) ? dataTemp : */dataLCS;
+	assign addrTemp = (enTemp == 1'b0)? 7'd127 :((cntTemp-1'b1)  + (shiftByte << 2'd2));
+	assign dataTx = (enTemp == 1'b0) ? dataLCS : dataTemp;
 	
 	localparam IDLE = 0, EDGE = 1, CHECK = 2, WAIT = 3, DELAY = 4;
 
@@ -41,7 +41,6 @@ module answerLCS(
 			enTemp <= 1'b0;
 			cnt <= 4'd0;
 		end else begin
-			
 			case(state)
 				IDLE: begin
 					if(req) begin	//если приняли запрос на данные
@@ -54,17 +53,18 @@ module answerLCS(
 					if(syncSW[1] && (addrLCS == 184 || addrLCS == 185
 						|| addrLCS == 186 || addrLCS == 187)) begin	
 						enTemp <= 1'b1;
-						state <= DELAY;
-						ack <= 1'b0;
 						cntTemp <= cntTemp + 1'b1;
 						if(cntTemp == 2'd3) begin
 							shiftByte <= shiftByte + 1'b1;	
 						end
-					end else begin
+						state <= DELAY;
 						ack <= 1'b0;
+					end else begin
 						enTemp <= 1'b0;									//отдаем данные ялк
 						state <= DELAY;
-					end								
+						ack <= 1'b0;
+					end	
+												
 				end
 				
 				DELAY: begin

@@ -27,7 +27,7 @@ localparam IDLE4 = 0, WAITDONE4 = 1, CNT4 = 2, RDSET4 = 3, WAIT4 = 4;
 localparam IDLE5 = 0, WAITDONE5 = 1, CNT5 = 2, RDSET5 = 3, WAIT5 = 4;
 	
 reg [1:0] syncStr1, syncStr2, syncStr3, syncStr4, syncStr5;
-reg done1uart, done2uart, done3uart, done4uart;
+reg done2uart, done3uart, done4uart;
 reg [1:0] uart1;
 reg [2:0] uart2, uart3, uart4, uart5;
 reg [4:0] cnt1, cnt2, cnt3, cnt4, cnt5;
@@ -73,6 +73,9 @@ begin
 		RD3 <= 1'b0;
 		RD4 <= 1'b0;
 		RD5 <= 1'b0;
+		done2uart <= 1'b0;
+		done3uart <= 1'b0;
+		done4uart <= 1'b0;
 	end
 	else begin
 		case(uart1)
@@ -103,7 +106,6 @@ begin
 				if(cnt1 == 5'd17) begin
 					cnt1 <= 5'd0;
 					busy <= 1'b0;
-					done1uart <= 1'b1;
 					uart1 <= WAIT1;
 				end
 				else begin 
@@ -111,7 +113,6 @@ begin
 				end
 			end
 			WAIT1: begin
-				done1uart <= 1'b0;
 				if(~syncStr1[1]) begin
 					uart1 <= IDLE1;
 				end

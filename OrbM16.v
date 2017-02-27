@@ -40,7 +40,7 @@ wire [6:0] tempAddr;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5, fastAddr;
 wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5, LCBdata, tempData;
 wire [7:0] txData;
-wire [1:0] switch;
+wire [4:0] switch;
 wire [10:0] RdAddr;
 wire [10:0] WrAddr;
 wire [11:0] OrbData;
@@ -396,7 +396,7 @@ defparam instTX1.BYTES = 5'd4;
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
-  .data(LCB_rq_data),      // data to transmit (from ROM)
+  .data(LCB_rq_data1),      // data to transmit (from ROM)
   .addr(LCB_rq_addr1),      // address to read (to ROM)
   .tx(UART_TX1),          // serial transmitted data
   .dirTX(UART_dTX1),        // rs485 TX dir controller 
@@ -485,7 +485,7 @@ answerLCS instTempRQ(
 	.rst(rst),
 	.req(rqRom),
 	.addrLCS(LCB_rq_addr1),
-	.dataLCS(LCBdata),
+	.dataLCS(LCB_rq_data1),
 	.dataTemp(tempData),
 	.SW(SW),
 	.dataTx(txData),
@@ -510,7 +510,7 @@ ReqROM instRQ1(
   .address(LCB_rq_addr1),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
-  .q(LCBdata)
+  .q(LCB_rq_data1)
 );
 
 tempROM instRQtemp(
