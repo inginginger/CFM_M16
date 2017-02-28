@@ -40,7 +40,7 @@ wire [6:0] tempAddr;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5, fastAddr;
 wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5, LCBdata, tempData;
 wire [7:0] txData;
-wire [4:0] switch;
+wire [2:0] switch;
 wire [10:0] RdAddr;
 wire [10:0] WrAddr;
 wire [11:0] OrbData;

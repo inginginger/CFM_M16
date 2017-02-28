@@ -96,7 +96,7 @@ endmodule
 // Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr.bsf TRUE FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr_inst.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL romRqAdr_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

@@ -16,21 +16,9 @@ module newUart
   output reg tx,          // serial transmitted data
   output reg dirTX,        // rs485 TX dir controller 
   output reg dirRX,        // rs485 RX dir controller
-  output reg [4:0]switch  // memory switcher
+  output reg [2:0]switch  // memory switcher
 );
 
-//  wire [7:0]data;        // 8bits data
-  
-//  wire [8:0]addr;
-  //reg unsigned [4:0]cycle;
-
-  
-  
-//dROM innerMEM(
-//  .aclr(!reset),
-//  .address(addr),
-//  .clock(clk),
-//  .q(data));
 
 localparam WAIT=0, RQROM = 1, ACK = 2, MEGAWAIT=3, DIRON=4, TX=5, DIROFF=6, EDGE = 7;
 
@@ -58,7 +46,7 @@ if (~reset) begin					// global asyncronous reset, initial values
 	serialize <= 0;
 	delay <= 1'b0;
 	tx <= 1'b1;
-	switch <= 5'd0;
+	switch <= 3'd0;
 	full <= 1'b0;
 	rqRom <= 1'b0;
 	bufTemp <= 8'd0;

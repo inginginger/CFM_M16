@@ -21,7 +21,7 @@ module answerLCS(
 	reg enTemp;
 	reg [3:0] cnt;
 	
-	assign addrTemp = (enTemp == 1'b0)? 7'd127 :((cntTemp-1'b1)  + (shiftByte << 2'd2));
+	assign addrTemp = (enTemp == 1'b0)? 7'd0 :(cntTemp  + (shiftByte << 2'd2));
 	assign dataTx = (enTemp == 1'b0) ? dataLCS : dataTemp;
 	
 	localparam IDLE = 0, EDGE = 1, CHECK = 2, WAIT = 3, DELAY = 4;

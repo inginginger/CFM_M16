@@ -13,7 +13,7 @@ module UARTTXBIG
   output reg tx,          // serial transmitted data
   output reg dirTX,        // rs485 TX dir controller 
   output reg dirRX,        // rs485 RX dir controller
-  output reg [4:0]switch  // memory switcher
+  output reg [2:0]switch  // memory switcher
 );
 
 //  wire [7:0]data;        // 8bits data

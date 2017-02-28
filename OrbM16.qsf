@@ -87,6 +87,10 @@ set_location_assignment PIN_24 -to UART_dTX4
 set_location_assignment PIN_18 -to UART_dTX5
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+set_location_assignment PIN_31 -to UART_RX3
+set_location_assignment PIN_28 -to UART_TX3
+set_location_assignment PIN_30 -to UART_dRX3
+set_location_assignment PIN_29 -to UART_dTX3
 set_global_assignment -name VERILOG_FILE M16.v
 set_global_assignment -name VERILOG_FILE UARTTXBIG.v
 set_global_assignment -name MIF_FILE OrbM16.mif
@@ -117,13 +121,11 @@ set_global_assignment -name QIP_FILE ReqROM2.qip
 set_global_assignment -name QIP_FILE romRqAdr2.qip
 set_global_assignment -name MIF_FILE reqTempPar.mif
 set_global_assignment -name QIP_FILE RqROMtemp.qip
-set_location_assignment PIN_31 -to UART_RX3
-set_location_assignment PIN_28 -to UART_TX3
-set_location_assignment PIN_30 -to UART_dRX3
-set_location_assignment PIN_29 -to UART_dTX3
 set_global_assignment -name VERILOG_FILE uartRx.v
 set_global_assignment -name VERILOG_FILE UART_DIAG.v
 set_global_assignment -name HEX_FILE reqTemp.hex
 set_global_assignment -name QIP_FILE tempROM.qip
 set_global_assignment -name VERILOG_FILE formTempRQ.v
 set_global_assignment -name VERILOG_FILE answerLCS.v
+set_global_assignment -name HEX_FILE reqLCS.hex
+set_global_assignment -name HEX_FILE AdrRqTemp.hex
