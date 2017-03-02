@@ -71,18 +71,23 @@ wire [7:0] iUART1, iUART2, iUART3, iUART4, iUART5, oUART1, oUART2, oUART3, oUART
 wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
 wire done1, done2, done3, done4, done5, busy;
+wire [10:0] iTempAddr, oTempAddr;
+wire [6:0] swTemp;
+wire [11:0] tempWord;
+wire WEtemp;
 
+assign iTempAddr  = (swTemp == 7'd110) ? 11'd479 : 11'd0;
 //assign ValRx = ValRX1;
 
-assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
+assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2 | WEtemp;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
-assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : 11'hZ)));
-assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : 12'hZ)));
+assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
+assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : ((WEtemp == 1'b1) ? tempWord :12'hZ))));
 
 
 always@(posedge clk80MHz)
@@ -103,8 +108,8 @@ assign RdAddr1= (SW == 1'b0)?(RdAddr+1'b1):11'hx;
 assign WrAddr2 = (SW == 1'b0)?WrAddr:11'hx;
 assign RE1 = (SW == 1'b0)?RE:1'hx;
 assign WE2 = (SW == 1'b0)?WE:1'hx;
-assign RdAddr2= (SW == 1'b1)?(RdAddr+1'b1):11'hx;
-assign WrAddr1 = (SW == 1'b1)?WrAddr:11'hx;
+assign RdAddr2 = (SW == 1'b1)?(RdAddr+1'b1):11'hx;
+assign WrAddr1 = (SW == 1'b1)? WrAddr:11'hx;
 assign RE2 = (SW == 1'b1)?RE:1'hx;
 assign WE1 = (SW == 1'b1)?WE:1'hx;
 assign ValRX = ValRX1 | ValRX2 | ValRX3 | ValRX4 | ValRX5;
@@ -316,6 +321,21 @@ SlowPacker instSlowPACK2(
 	.WrAddr(SlowAddr2)
 );
 
+
+
+tempPacker instTempPack(
+	.clk(clk80MHz),
+	.rst(rst),
+	.iData(oUART1),
+	.addrRam(iTempAddr),
+	.strob(RD1),
+	.SW(SW),
+	.test(testTemp),
+	.orbWord(tempWord),
+	.WE(WEtemp),
+	.WrAddr(oTempAddr)
+);
+
 OrbPacker instPACKER(
 	.clk(clk80MHz),
 	.rst(rst),
@@ -370,7 +390,7 @@ M16 instM16(
 	.cycle(cycle),
 	.oOrbit(orbFrame),
 	.sel(sel),
-	.RqSlow1Hz(RqSlow1Hz)
+	.swTemp(swTemp)
 );
 
 newUart instTX1(

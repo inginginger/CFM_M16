@@ -13,7 +13,7 @@ module M16(
 	output reg RqFast,
 	output reg sel,
 	output reg Min,
-	output reg RqSlow1Hz
+	output [6:0] swTemp
 );
 
 reg [3:0]cntBit;
@@ -29,7 +29,7 @@ reg [15:0] cntRqSlow;
 reg [2:0] cntTemp;
 reg [8:0] cntMin;
 
-//assign oSwitch = cntAddr[11];
+assign swTemp = (cntTemp << 6) + cycle;
 
 always@(negedge reset or posedge iClkOrb)begin
 	if(~reset)begin
@@ -55,7 +55,6 @@ always@(negedge reset or posedge iClkOrb)begin
 		cntTemp <= 3'd0;
 		Min <= 1'b0;
 		cntMin <= 9'd0;
-		RqSlow1Hz <= 1'b0;
 	end else begin
 		seq <= seq + 1'b1;
 		case(seq)
@@ -146,8 +145,6 @@ always@(negedge reset or posedge iClkOrb)begin
 				else if(cycle == 6'd0) begin
 					sel <= 1'b0;
 				end
-				else if(cycle == 6'd45)
-					RqSlow1Hz <= 1'b1;
 			end
 			1535:  begin 
 				cntRqFast <= 11'd0;
@@ -157,7 +154,6 @@ always@(negedge reset or posedge iClkOrb)begin
 		case (cntRqSlow)
 			0: begin 
 				RqSlow <= 1'd1;
-				RqSlow1Hz <= 1'b0;
 			end
 			1970: begin
 				

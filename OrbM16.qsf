@@ -129,3 +129,4 @@ set_global_assignment -name VERILOG_FILE formTempRQ.v
 set_global_assignment -name VERILOG_FILE answerLCS.v
 set_global_assignment -name HEX_FILE reqLCS.hex
 set_global_assignment -name HEX_FILE AdrRqTemp.hex
+set_global_assignment -name VERILOG_FILE tempPacker.v
