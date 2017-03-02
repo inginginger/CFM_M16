@@ -36,7 +36,7 @@ wire clkOrb, sel, testIO;
 wire RqFast, RqSlow, RqTemp, RqSlow1Hz;
 wire clk4_8MHz, clk5MHz;
 wire [5:0]cycle;
-wire [6:0] tempAddr;
+wire [6:0] tempAddr, swAddrM16;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5, fastAddr;
 wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5, LCBdata, tempData;
 wire [7:0] txData;
@@ -49,19 +49,19 @@ wire SW, test;
 wire [10:0] RdAddr1;
 wire [10:0] RdAddr2;
 wire [10:0] WrAddr1;
-wire [10:0] WrAddr2;
-wire RE1, RE2, WE1, WE2, WEfast1, WEfast2, WEslow1, WEslow2;
+wire [10:0] WrAddr2, tempFrameAddr;
+wire RE1, RE2, WE1, WE2, WEfast1, WEfast2, WEslow1, WEslow2, WEtemp;
 wire [11:0] MemData1;
 wire [11:0] MemData2;
 //wire [7:0] DataFromLCB;
 wire [11:0] orbWord;
-wire [11:0] fastWord1, fastWord2, slowWord1, slowWord2;
+wire [11:0] fastWord1, fastWord2, slowWord1, slowWord2, tempWord;
 wire testpin2016, testpin1984;
 wire [7:0] DataFromLCB1, DataFromLCB2, DataFromLCB3, DataFromLCB4, DataFromLCB5;
 wire ValRX1, ValRX2, ValRX3, ValRX4, ValRX5, testVal1, testVal2;
 wire [5:0] adrCycle;
-wire [10:0] FastAddr1, FastAddr2, SlowAddr1, SlowAddr2;
-wire testSlow1, testSlow2;
+wire [10:0] FastAddr1, FastAddr2, SlowAddr1, SlowAddr2, oTempFrameAddr;
+wire testSlow1, testSlow2, testTemp;
 reg [1:0] syncRE1;
 reg [1:0] syncRE2;
 reg [1:0] syncWE1;
@@ -74,15 +74,15 @@ wire done1, done2, done3, done4, done5, busy;
 
 //assign ValRx = ValRX1;
 
-assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2;
+assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2 | WEtemp;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
-assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : 11'hZ)));
-assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : 12'hZ)));
+assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempFrameAddr : 11'hZ))));
+assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : ((WEtemp == 1'b1) ? tempWord : 12'hZ))));
 
 
 always@(posedge clk80MHz)
@@ -315,6 +315,19 @@ SlowPacker instSlowPACK2(
 	.WE(WEslow2),
 	.WrAddr(SlowAddr2)
 );
+tempPacker instTempPack(
+	.clk(clk80MHz),
+	.rst(rst),
+	.iData(oUART1),
+	.iAddrRam(tempFrameAddr),//считывается из памяти номер 479 - адрес в кадре, куда будет вставляться температурный параметр
+	.strob(RD1),
+	.SW(SW),
+	.test(testTemp),
+	.orbWord(tempWord),
+	.WE(WEtemp),
+	.oWrAddr(oTempFrameAddr)
+
+);
 
 OrbPacker instPACKER(
 	.clk(clk80MHz),
@@ -370,7 +383,7 @@ M16 instM16(
 	.cycle(cycle),
 	.oOrbit(orbFrame),
 	.sel(sel),
-	.RqSlow1Hz(RqSlow1Hz)
+	.swAddrM16(swAddrM16)
 );
 
 newUart instTX1(
@@ -505,6 +518,16 @@ romRqAdr2 instRomAdr2(
 	.outclock(clk80MHz),
 	.q(addrRamGr2)
 );
+/*tempFrameAddr instRomTemp(
+	.address(swAddrM16),
+	.inclock(clk80MHz),
+	.outclock(clk80MHz),
+	.q(tempFrameAddr)
+);*/
+
+assign tempFrameAddr = (swAddrM16 == 7'd110) ? 11'd479 : 11'd0;
+
+
 
 ReqROM instRQ1(
   .address(LCB_rq_addr1),
