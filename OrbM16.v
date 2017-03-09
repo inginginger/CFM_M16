@@ -114,6 +114,44 @@ assign RE2 = (SW == 1'b1)?RE:1'hx;
 assign WE1 = (SW == 1'b1)?WE:1'hx;
 assign ValRX = ValRX1 | ValRX2 | ValRX3 | ValRX4 | ValRX5;
 
+/*inFrame instInFrame(
+	.clk(clk80MHz),
+	.rst(rst),
+	.fAddr1(FastAddr1),
+	.fAddr2(FastAddr2),
+	.fWord1(fastWord1),
+	.fWord2(fastWord2),
+	.fWE1(WEfast1),
+	.fWE2(WEfast2),
+	.sAddr1(SlowAddr1),
+	.sAddr2(SlowAddr2),
+	.sWord1(slowWord1),
+	.sWord2(slowWord2),
+	.sWE1(WEslow1),
+	.sWE2(WEslow2),
+	.tAddr(oTempAddr),
+	.tWord(tempWord),
+	.tWE(WEtemp),
+	.SW(SW),
+	.RE(RE),
+	.rAddr(RdAddr),
+	.memDat1(MemData1),
+	.memDat2(MemData2),
+	.val1(ValRX1),
+	.val2(ValRX2),
+	.valRx(ValRX),
+	.RE1(RE1),
+	.RE2(RE2),
+	.WE1(WE1),
+	.WE2(WE2),
+	.orbData(OrbData),
+	.orbWord(orbWord),
+	.wAddr1(WrAddr1),
+	.wAddr2(WrAddr2),
+	.rAddr1(RdAddr1),
+	.rAddr2(RdAddr2)
+);*/
+
 globalReset instRST(
 	.clk(clk80MHz),				// 40 MHz
 	.rst(rst)			// global enable
@@ -343,12 +381,13 @@ OrbPacker instPACKER(
 	.strob1(RD1),
 	.iData2(oUART2),
 	.strob2(RD2),
+	/*
 	.iData3(oUART3),
 	.strob3(RD3),
 	.iData4(oUART4),
 	.strob4(RD4),
 	.iData5(oUART5),
-	.strob5(RD5),
+	.strob5(RD5),*/
 	.SW(SW),
 	.test(test),
 	.orbWord1(fastWord1),

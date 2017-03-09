@@ -3,14 +3,14 @@ input clk,
 input rst,
 input [7:0] iData1,
 input [7:0] iData2,
-input [7:0] iData3,
+/*input [7:0] iData3,
 input [7:0] iData4,
-input [7:0] iData5,
+input [7:0] iData5,*/
 input strob1,
 input strob2,
-input strob3,
+/*input strob3,
 input strob4,
-input strob5,
+input strob5,*/
 input SW,
 output reg test,
 output reg [11:0] orbWord1,
@@ -122,6 +122,7 @@ begin
 				end
 			end
 		endcase
+		
 		case(state2)
 			IDLE2: begin
 				if(syncStr2[1]) begin
