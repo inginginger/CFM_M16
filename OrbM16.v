@@ -42,19 +42,20 @@ wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5
 wire [7:0] txData;
 wire [2:0] switch;
 wire [10:0] RdAddr;
-wire [10:0] WrAddr;
-wire [11:0] OrbData;
+reg [10:0] WrAddr;
+reg [11:0] OrbData;
 wire RE, WE, ack, rqRom;
 wire SW, test;
-wire [10:0] RdAddr1;
-wire [10:0] RdAddr2;
-wire [10:0] WrAddr1;
-wire [10:0] WrAddr2;
-wire RE1, RE2, WE1, WE2, WEfast1, WEfast2, WEslow1, WEslow2;
+reg [10:0] RdAddr1;
+reg [10:0] RdAddr2;
+reg [10:0] WrAddr1;
+reg [10:0] WrAddr2;
+reg RE1, RE2, WE1, WE2;
+wire WEfast1, WEfast2, WEslow1, WEslow2;
 wire [11:0] MemData1;
 wire [11:0] MemData2;
 //wire [7:0] DataFromLCB;
-wire [11:0] orbWord;
+reg [11:0] orbWord;
 wire [11:0] fastWord1, fastWord2, slowWord1, slowWord2;
 wire testpin2016, testpin1984;
 wire [7:0] DataFromLCB1, DataFromLCB2, DataFromLCB3, DataFromLCB4, DataFromLCB5;
@@ -86,9 +87,9 @@ assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
-assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
+/*assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
 assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : ((WEtemp == 1'b1) ? tempWord :12'hZ))));
-
+*/
 
 always@(posedge clk80MHz)
 begin
@@ -102,6 +103,53 @@ begin
 	syncRE2 <= {syncRE2[0], RE2};
 end
 
+always@(posedge clk80MHz) begin
+	if(WEfast1 == 1'b1) begin
+		WrAddr <= FastAddr1;
+		orbWord <= fastWord1;
+	end
+	if(WEfast2 == 1'b1) begin
+		WrAddr <= FastAddr2;
+		orbWord <= fastWord2;
+	end
+	if(WEslow1 == 1'b1) begin
+		WrAddr <= SlowAddr1;
+		orbWord <= slowWord1;
+	end
+	if(WEslow2 == 1'b1) begin
+		WrAddr <= SlowAddr2;
+		orbWord <= slowWord2;
+	end
+	if(WEtemp == 1'b1) begin
+		WrAddr <= oTempAddr;
+		orbWord <= tempWord;
+	end
+end
+
+always@(*) begin
+	if(~SW) begin
+		OrbData = MemData1;
+		RdAddr1 = RdAddr + 1'b1;
+		WrAddr2 = WrAddr;
+		RE1 = RE;
+		WE2 = WE;
+		RdAddr2 = 11'hx;
+		WrAddr1 = 11'hx;
+		RE2 = 1'hx;
+		WE1 = 1'hx;
+	end else begin
+		OrbData = MemData2;
+		RdAddr2 = RdAddr + 1'b1;
+		WrAddr1 = WrAddr;
+		RE2 = RE;
+		WE1 = WE;
+		RdAddr1 = 11'hx;
+		WrAddr2 = 11'hx;
+		RE1 = 1'hx;
+		WE2 = 1'hx;
+	end
+end
+/*
 assign OrbData = (SW == 1'b0)?MemData1:MemData2;
 //assign DataFromLCB = (SW == 1'b0)?DataFromLCB2:DataFromLCB1;
 assign RdAddr1= (SW == 1'b0)?(RdAddr+1'b1):11'hx;
@@ -111,7 +159,7 @@ assign WE2 = (SW == 1'b0)?WE:1'hx;
 assign RdAddr2 = (SW == 1'b1)?(RdAddr+1'b1):11'hx;
 assign WrAddr1 = (SW == 1'b1)? WrAddr:11'hx;
 assign RE2 = (SW == 1'b1)?RE:1'hx;
-assign WE1 = (SW == 1'b1)?WE:1'hx;
+assign WE1 = (SW == 1'b1)?WE:1'hx;*/
 assign ValRX = ValRX1 | ValRX2 | ValRX3 | ValRX4 | ValRX5;
 
 globalReset instRST(
