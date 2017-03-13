@@ -82,8 +82,6 @@ set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-
 set_global_assignment -name VERILOG_FILE M16.v
 set_global_assignment -name VERILOG_FILE UARTTXBIG.v
 set_global_assignment -name MIF_FILE OrbM16.mif
-set_global_assignment -name QIP_FILE ReqROM.qip
-set_global_assignment -name MIF_FILE reqLCB.mif
 set_global_assignment -name VERILOG_FILE clkDiv21.v
 set_global_assignment -name VERILOG_FILE clkDiv100.v
 set_global_assignment -name VERILOG_FILE globalReset.v
@@ -105,9 +103,7 @@ set_global_assignment -name VERILOG_FILE cycleDelay.v
 set_global_assignment -name VERILOG_FILE SlowPacker.v
 set_global_assignment -name MIF_FILE RQ_LCB2.mif
 set_global_assignment -name MIF_FILE AdrRq2LCB.mif
-set_global_assignment -name QIP_FILE ReqROM2.qip
 set_global_assignment -name QIP_FILE romRqAdr2.qip
-set_global_assignment -name MIF_FILE reqTempPar.mif
 set_global_assignment -name QIP_FILE RqROMtemp.qip
 set_global_assignment -name VERILOG_FILE uartRx.v
 set_global_assignment -name VERILOG_FILE UART_DIAG.v
@@ -115,6 +111,7 @@ set_global_assignment -name HEX_FILE reqTemp.hex
 set_global_assignment -name QIP_FILE tempROM.qip
 set_global_assignment -name VERILOG_FILE formTempRQ.v
 set_global_assignment -name VERILOG_FILE answerLCS.v
-set_global_assignment -name HEX_FILE reqLCS.hex
 set_global_assignment -name HEX_FILE AdrRqTemp.hex
 set_global_assignment -name VERILOG_FILE tempPacker.v
+set_global_assignment -name HEX_FILE reqMem.hex
+set_global_assignment -name QIP_FILE reqMem.qip

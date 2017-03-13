@@ -5,7 +5,6 @@ input [7:0] iData,
 input [10:0] addrRam,
 input strob,
 input SW,
-output reg test,
 output reg [11:0] orbWord,
 output reg WE,
 output reg [10:0] WrAddr
@@ -20,6 +19,7 @@ reg oldSW;
 reg [4:0] cntWE;
 reg [7:0] tmp17;
 reg [1:0] cntpause;
+reg test;
 
 
 localparam IDLE = 2'd0, PAUSE = 2'd1, WESET = 2'd2, WAIT = 2'd3;

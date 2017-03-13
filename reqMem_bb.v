@@ -4,7 +4,7 @@
 // MODULE: lpm_rom 
 
 // ============================================================
-// File Name: ReqROM.v
+// File Name: reqMem.v
 // Megafunction Name(s):
 // 			lpm_rom
 //
@@ -31,7 +31,7 @@
 //Altera or its authorized distributors.  Please refer to the 
 //applicable agreement for further details.
 
-module ReqROM (
+module reqMem (
 	address,
 	inclock,
 	outclock,
@@ -40,7 +40,7 @@ module ReqROM (
 	input	[7:0]  address;
 	input	  inclock;
 	input	  outclock;
-	output	[7:0]  q;
+	output	[10:0]  q;
 
 endmodule
 
@@ -64,7 +64,7 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "req_LCS.mif"
+// Retrieval info: PRIVATE: MIFfilename STRING "reqMem.hex"
 // Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "256"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
@@ -75,28 +75,28 @@ endmodule
 // Retrieval info: PRIVATE: SingleClock NUMERIC "0"
 // Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
 // Retrieval info: PRIVATE: WidthAddr NUMERIC "8"
-// Retrieval info: PRIVATE: WidthData NUMERIC "8"
+// Retrieval info: PRIVATE: WidthData NUMERIC "11"
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
-// Retrieval info: CONSTANT: LPM_FILE STRING "req_LCS.mif"
+// Retrieval info: CONSTANT: LPM_FILE STRING "reqMem.hex"
 // Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
-// Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "8"
+// Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "11"
 // Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "8"
 // Retrieval info: USED_PORT: address 0 0 8 0 INPUT NODEFVAL address[7..0]
 // Retrieval info: USED_PORT: inclock 0 0 0 0 INPUT NODEFVAL inclock
 // Retrieval info: USED_PORT: outclock 0 0 0 0 INPUT NODEFVAL outclock
-// Retrieval info: USED_PORT: q 0 0 8 0 OUTPUT NODEFVAL q[7..0]
+// Retrieval info: USED_PORT: q 0 0 11 0 OUTPUT NODEFVAL q[10..0]
 // Retrieval info: CONNECT: @address 0 0 8 0 address 0 0 8 0
-// Retrieval info: CONNECT: q 0 0 8 0 @q 0 0 8 0
+// Retrieval info: CONNECT: q 0 0 11 0 @q 0 0 11 0
 // Retrieval info: CONNECT: @inclock 0 0 0 0 inclock 0 0 0 0
 // Retrieval info: CONNECT: @outclock 0 0 0 0 outclock 0 0 0 0
 // Retrieval info: LIBRARY: lpm lpm.lpm_components.all
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.v TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.inc FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.bsf TRUE FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM_inst.v TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM_bb.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.inc FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.cmp TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem_inst.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

@@ -28,7 +28,6 @@ reg [4:0] delay;
 reg [1:0] rqsync;
 reg [1:0] syncEdge;
 reg [1:0] syncAck;
-reg [7:0] bufTemp;
 //reg txOn;
 
 //assign addr = (switch + (cycle << 2));
@@ -49,7 +48,6 @@ if (~reset) begin					// global asyncronous reset, initial values
 	switch <= 3'd0;
 	full <= 1'b0;
 	rqRom <= 1'b0;
-	bufTemp <= 8'd0;
 	dirRX <= 1'b0;
 	dirTX <= 1'b0;
 	//txOn <= 1'b0;
@@ -142,7 +140,6 @@ end else begin						// main circuit
 				dirRX <= 0; 
 				state <= MEGAWAIT; 
 				full <= 1'b1; 
-				bufTemp <= 8'd0;
 			end	// proceed to next state
 			//state <= EDGE;
 		end

@@ -59,12 +59,7 @@ module ReqROM (
 	defparam
 		lpm_rom_component.intended_device_family = "FLEX10KE",
 		lpm_rom_component.lpm_address_control = "REGISTERED",
-`ifdef NO_PLI
-		lpm_rom_component.lpm_file = "reqLCS.rif"
-`else
-		lpm_rom_component.lpm_file = "reqLCS.hex"
-`endif
-,
+		lpm_rom_component.lpm_file = "req_LCS.mif",
 		lpm_rom_component.lpm_outdata = "REGISTERED",
 		lpm_rom_component.lpm_type = "LPM_ROM",
 		lpm_rom_component.lpm_width = 8,
@@ -93,7 +88,7 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "reqLCS.hex"
+// Retrieval info: PRIVATE: MIFfilename STRING "req_LCS.mif"
 // Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "256"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
@@ -108,7 +103,7 @@ endmodule
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
-// Retrieval info: CONSTANT: LPM_FILE STRING "reqLCS.hex"
+// Retrieval info: CONSTANT: LPM_FILE STRING "req_LCS.mif"
 // Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
 // Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "8"

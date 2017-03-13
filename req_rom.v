@@ -1,10 +1,10 @@
-// megafunction wizard: %ROM: 1-PORT%VBB%
+// megafunction wizard: %ROM: 1-PORT%
 // GENERATION: STANDARD
 // VERSION: WM1.0
 // MODULE: lpm_rom 
 
 // ============================================================
-// File Name: ReqROM.v
+// File Name: req_rom.v
 // Megafunction Name(s):
 // 			lpm_rom
 //
@@ -16,6 +16,7 @@
 //
 // 9.0 Build 184 04/29/2009 SP 1 SJ Web Edition
 // ************************************************************
+
 
 //Copyright (C) 1991-2009 Altera Corporation
 //Your use of Altera Corporation's design tools, logic functions 
@@ -31,7 +32,11 @@
 //Altera or its authorized distributors.  Please refer to the 
 //applicable agreement for further details.
 
-module ReqROM (
+
+// synopsys translate_off
+`timescale 1 ps / 1 ps
+// synopsys translate_on
+module req_rom (
 	address,
 	inclock,
 	outclock,
@@ -40,7 +45,31 @@ module ReqROM (
 	input	[7:0]  address;
 	input	  inclock;
 	input	  outclock;
-	output	[7:0]  q;
+	output	[10:0]  q;
+
+	wire [10:0] sub_wire0;
+	wire [10:0] q = sub_wire0[10:0];
+
+	lpm_rom	lpm_rom_component (
+				.outclock (outclock),
+				.address (address),
+				.inclock (inclock),
+				.q (sub_wire0),
+				.memenab (1'b1));
+	defparam
+		lpm_rom_component.intended_device_family = "FLEX10KE",
+		lpm_rom_component.lpm_address_control = "REGISTERED",
+`ifdef NO_PLI
+		lpm_rom_component.lpm_file = "reqLCS.rif"
+`else
+		lpm_rom_component.lpm_file = "reqLCS.hex"
+`endif
+,
+		lpm_rom_component.lpm_outdata = "REGISTERED",
+		lpm_rom_component.lpm_type = "LPM_ROM",
+		lpm_rom_component.lpm_width = 11,
+		lpm_rom_component.lpm_widthad = 8;
+
 
 endmodule
 
@@ -64,7 +93,7 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "req_LCS.mif"
+// Retrieval info: PRIVATE: MIFfilename STRING "reqLCS.hex"
 // Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "256"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
@@ -75,28 +104,28 @@ endmodule
 // Retrieval info: PRIVATE: SingleClock NUMERIC "0"
 // Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
 // Retrieval info: PRIVATE: WidthAddr NUMERIC "8"
-// Retrieval info: PRIVATE: WidthData NUMERIC "8"
+// Retrieval info: PRIVATE: WidthData NUMERIC "11"
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
-// Retrieval info: CONSTANT: LPM_FILE STRING "req_LCS.mif"
+// Retrieval info: CONSTANT: LPM_FILE STRING "reqLCS.hex"
 // Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
-// Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "8"
+// Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "11"
 // Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "8"
 // Retrieval info: USED_PORT: address 0 0 8 0 INPUT NODEFVAL address[7..0]
 // Retrieval info: USED_PORT: inclock 0 0 0 0 INPUT NODEFVAL inclock
 // Retrieval info: USED_PORT: outclock 0 0 0 0 INPUT NODEFVAL outclock
-// Retrieval info: USED_PORT: q 0 0 8 0 OUTPUT NODEFVAL q[7..0]
+// Retrieval info: USED_PORT: q 0 0 11 0 OUTPUT NODEFVAL q[10..0]
 // Retrieval info: CONNECT: @address 0 0 8 0 address 0 0 8 0
-// Retrieval info: CONNECT: q 0 0 8 0 @q 0 0 8 0
+// Retrieval info: CONNECT: q 0 0 11 0 @q 0 0 11 0
 // Retrieval info: CONNECT: @inclock 0 0 0 0 inclock 0 0 0 0
 // Retrieval info: CONNECT: @outclock 0 0 0 0 outclock 0 0 0 0
 // Retrieval info: LIBRARY: lpm lpm.lpm_components.all
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.v TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.inc FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM.bsf TRUE FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM_inst.v TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ReqROM_bb.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL req_rom.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL req_rom.inc FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL req_rom.cmp TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL req_rom.bsf TRUE FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL req_rom_inst.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL req_rom_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

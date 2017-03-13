@@ -9,6 +9,7 @@ output test1,
 output test2,
 output test3,
 output test4,
+
 	input UART_RX1,
 	output UART_TX1,        // serial transmitted data
 	output UART_dTX1,       // rs485 TX dir controller 
@@ -378,7 +379,6 @@ tempPacker instTempPack(
 	.addrRam(iTempAddr),
 	.strob(RD1),
 	.SW(SW),
-	.test(testTemp),
 	.orbWord(tempWord),
 	.WE(WEtemp),
 	.WrAddr(oTempAddr)
@@ -574,7 +574,7 @@ romRqAdr2 instRomAdr2(
 	.q(addrRamGr2)
 );
 
-ReqROM instRQ1(
+reqMem instRqMem1(
   .address(LCB_rq_addr1),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
@@ -588,28 +588,28 @@ tempROM instRQtemp(
   .q(tempData)
 );
 
-ReqROM instRQ2(
+reqMem instRqMem2(
   .address(LCB_rq_addr2),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
   .q(LCB_rq_data2)
 );
 
-ReqROM instRQ3(
+reqMem instRqMem3(
   .address(LCB_rq_addr3),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
   .q(LCB_rq_data3)
 );
 
-ReqROM instRQ4(
+reqMem instRqMem4(
   .address(LCB_rq_addr4),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
   .q(LCB_rq_data4)
 );
 
-ReqROM instRQ5(
+reqMem instRqMem5(
   .address(LCB_rq_addr5),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
