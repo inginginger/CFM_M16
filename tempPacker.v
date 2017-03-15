@@ -71,13 +71,13 @@ begin
 							state <= WAIT;
 						end
 						16: begin
-							if(addrRam == 479) begin
+							if(addrRam == 11'd831) begin
 								tmp17 <= iData;
 							end
 							state <= WAIT;
 						end
 						17: begin
-							if(addrRam == 9'd479) begin	
+							if(addrRam == 11'd831) begin	
 								orbWord <= {1'd0, iData[1:0], tmp17, 1'b0};
 								WrAddr <= addrRam;
 								state <= WESET;

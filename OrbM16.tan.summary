@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 9.900 ns
-From           : UART_RX1
-To             : uartRx:instRX1|syncRx[0]
+Actual Time    : 9.300 ns
+From           : UART_RX2
+To             : uartRx:instRX2|syncRx[0]
 From Clock     : --
 To Clock       : clk80MHz
 Failed Paths   : 0
@@ -15,9 +15,9 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 25.200 ns
-From           : UARTTXBIG:instTX5|tx
-To             : UART_TX5
+Actual Time    : 23.900 ns
+From           : UARTTXBIG:instTX2|dirTX
+To             : UART_dTX2
 From Clock     : clk100MHz
 To Clock       : --
 Failed Paths   : 0
@@ -25,9 +25,9 @@ Failed Paths   : 0
 Type           : Worst-case th
 Slack          : N/A
 Required Time  : None
-Actual Time    : 0.300 ns
-From           : UART_RX3
-To             : uartRx:instRX3|syncRx[0]
+Actual Time    : 0.400 ns
+From           : UART_RX5
+To             : uartRx:instRX5|syncRx[0]
 From Clock     : --
 To Clock       : clk80MHz
 Failed Paths   : 0
@@ -35,9 +35,9 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk80MHz'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 56.50 MHz ( period = 17.700 ns )
-From           : romRqAdr:instRomAdr1|lpm_rom:lpm_rom_component|altrom:srom|q[1]
-To             : SlowPacker:instSlowPACK1|WrAddr[8]
+Actual Time    : 53.76 MHz ( period = 18.600 ns )
+From           : uartRx:instRX1|cntStep[2]
+To             : uartRx:instRX1|data[1]
 From Clock     : clk80MHz
 To Clock       : clk80MHz
 Failed Paths   : 0
@@ -45,9 +45,9 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk100MHz'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 57.14 MHz ( period = 17.500 ns )
-From           : answerLCS:instTempRQ|enTemp
-To             : newUart:instTX1|tx
+Actual Time    : 56.18 MHz ( period = 17.800 ns )
+From           : UARTTXBIG:instTX4|delay[1]
+To             : UARTTXBIG:instTX4|dirTX
 From Clock     : clk100MHz
 To Clock       : clk100MHz
 Failed Paths   : 0
@@ -56,11 +56,11 @@ Type           : Clock Hold: 'clk100MHz'
 Slack          : Not operational: Clock Skew > Data Delay
 Required Time  : None
 Actual Time    : N/A
-From           : M16:instM16|lpm_counter:cycle_rtl_5|alt_counter_f10ke:wysi_counter|counter_cell[5]
-To             : newUart:instTX1|addr[8]
+From           : newUart:instTX1|state.RQROM
+To             : newUart:instTX1|rqRom
 From Clock     : clk100MHz
 To Clock       : clk100MHz
-Failed Paths   : 222
+Failed Paths   : 152
 
 Type           : Total number of failed paths
 Slack          : 
@@ -70,7 +70,7 @@ From           :
 To             : 
 From Clock     : 
 To Clock       : 
-Failed Paths   : 222
+Failed Paths   : 152
 
 --------------------------------------------------------------------------------------
 

@@ -78,7 +78,7 @@ wire [6:0] swTemp;
 wire [11:0] tempWord;
 wire WEtemp;
 
-assign iTempAddr  = (swTemp == 7'd110) ? 11'd479 : 11'd0;
+assign iTempAddr  = (swTemp == 7'd110) ? 11'd831 : 11'd0;
 //assign ValRx = ValRX1;
 
 assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2 | WEtemp;
