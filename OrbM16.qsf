@@ -63,10 +63,9 @@ set_location_assignment PIN_91 -to clk100MHz
 set_global_assignment -name MISC_FILE "C:/Projects/Orb_M16/OrbM16.dpf"
 set_location_assignment PIN_51 -to orbFrame
 set_location_assignment PIN_64 -to doubleOrbData
-set_location_assignment PIN_149 -to test1
-set_location_assignment PIN_147 -to test2
-set_location_assignment PIN_173 -to test3
-set_location_assignment PIN_169 -to test4
+set_location_assignment PIN_63 -to test1
+set_location_assignment PIN_66 -to test2
+set_location_assignment PIN_65 -to test3
 set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT simulation/modelsim/wave.do -section_id eda_simulation
 set_global_assignment -name MISC_FILE "C:/Projects/CFM/OrbM16.dpf"
 set_location_assignment PIN_43 -to UART_RX1

@@ -85,7 +85,7 @@ assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2 | WEtemp;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
-assign test3 = f1;//busy;//WE;//testpin1984;//WrAddr[1];
+assign test3 = WR1;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
 
 /*assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
