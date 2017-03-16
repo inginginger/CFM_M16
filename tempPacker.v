@@ -19,7 +19,7 @@ reg oldSW;
 reg [4:0] cntWE;
 reg [7:0] tmp17;
 reg [1:0] cntpause;
-reg test;
+//reg test;
 
 
 localparam IDLE = 2'd0, PAUSE = 2'd1, WESET = 2'd2, WAIT = 2'd3;
@@ -39,7 +39,7 @@ begin
 		cntWrd <= 5'd0;
 		state <= 2'd0;
 		oldSW <= 1'b0;
-		test <= 1'b0;
+		//test <= 1'b0;
 		cntWE <= 5'd0;
 		tmp17 <= 8'd0;
 		cntpause <= 2'd0;
@@ -47,12 +47,12 @@ begin
 	else begin
 		if(syncSW[1] != oldSW) begin
 			cntWrd <= 5'd0;
-			test <= 1'b1;
+			//test <= 1'b1;
 			cntWE <= 5'd0;
 		end
-		else begin
+		/*else begin
 			test <= 1'b0;
-		end
+		end*/
 		oldSW <= syncSW[1];
 		
 		case(state)
@@ -92,7 +92,7 @@ begin
 			
 			WESET: begin
 				cntWE <= cntWE + 1'b1;
-				if(cntWE == 5'd28) begin
+				if(cntWE == 5'd27) begin
 					WE <= 1'b1;
 				end
 				else if(cntWE == 5'd31) begin

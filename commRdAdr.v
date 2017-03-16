@@ -33,6 +33,8 @@ reg [2:0] uart2, uart3, uart4, uart5;
 reg [4:0] cnt1, cnt2, cnt3, cnt4, cnt5;
 reg [5:0] cntRD1, cntRD2, cntRD3, cntRD4, cntRD5;
 reg [5:0] pause;
+reg [4:0] clkRd1, clkRd2;
+reg rd1rom, rd2rom;
 
 assign RdAdr1 = (cnt1 < 18)? cnt1 : 5'hZ;
 assign RdAdr2 = (cnt2 < 18)? cnt2 : 5'hZ;
@@ -76,12 +78,31 @@ begin
 		done2uart <= 1'b0;
 		done3uart <= 1'b0;
 		done4uart <= 1'b0;
+		rd1rom <= 1'b0;
+		rd2rom <= 1'b1;
+		clkRd1 <= 5'd0;
+		clkRd2 <= 5'd0;
 	end
 	else begin
+		if(cntRD1 == 6'd40) begin
+			clkRd1 <= clkRd1 + 1'b1;
+		end
+		if(clkRd1 == 5'd18) begin
+			clkRd1 <= 5'd0;
+			rd1rom <= 1'd1;
+		end
+		if(cntRD2 == 6'd40)begin
+			clkRd2 <= clkRd2 + 1'b1;
+		end
+		if(clkRd2 == 5'd18) begin
+			clkRd2 <= 5'd0;
+			rd2rom <= 1'd1;
+		end
 		case(uart1)
 			IDLE1: begin
-				if(syncStr1[1])begin
+				if(syncStr1[1] && rd2rom == 1'b1)begin
 					uart1 <= RDSET1;
+					rd2rom <= 1'b0;
 					busy <= 1'b1;
 				end
 				else begin
@@ -121,8 +142,9 @@ begin
 		
 		case(uart2)
 			IDLE2: begin
-				if(syncStr2[1]) begin
+				if(syncStr2[1] && rd1rom) begin
 					uart2 <= WAITDONE2;
+					rd1rom <= 1'b0;
 				end
 			end
 			WAITDONE2: begin
