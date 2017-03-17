@@ -142,7 +142,7 @@ begin
 		
 		case(uart2)
 			IDLE2: begin
-				if(syncStr2[1] && rd1rom) begin
+				if(syncStr2[1] && (rd1rom || ~syncStr1[1])) begin
 					uart2 <= WAITDONE2;
 					rd1rom <= 1'b0;
 				end

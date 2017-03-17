@@ -189,8 +189,7 @@ uartRx instRX1(
 	.rst(rst),
 	.rx(UART_RX1),
 	.oValid(ValRX1),
-	.oData(iUART1),
-	.test(testIO)
+	.oData(iUART1)
 );
 
 uartRx instRX2(
