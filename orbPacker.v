@@ -24,14 +24,17 @@ output reg [10:0] WrAddr2
 reg [1:0] syncStr1;
 reg [1:0] syncStr2;
 reg [1:0] syncSW;
+reg cntShift1;
+reg cntShift2;
 reg [4:0] cntWrd1;
 reg [4:0] cntWrd2;
 reg [5:0] cntPack1;
 reg [5:0] cntPack2;
 reg [1:0] state1;
 reg [1:0] state2;
-reg [3:0] cntAddr1;
-reg [3:0] cntAddr2;
+reg [2:0] cntAddr1;
+reg [2:0] cntAddr2_6;
+reg [2:0] cntAddr2_7;
 reg oldSW;
 reg [4:0] cntWE1;
 reg [4:0] cntWE2;
@@ -62,17 +65,21 @@ begin
 		cntPack2 <= 6'd0;
 		state1 <= 2'd0;
 		state2 <= 2'd0;
-		cntAddr1 <= 4'd0;
-		cntAddr2 <= 4'd0;
+		cntAddr1 <= 3'd0;
+		cntAddr2_6 <= 3'd0;
+		cntAddr2_7 <= 3'd0;
 		oldSW <= 1'b0;
 		test <= 1'b0;
 		cntWE1 <= 5'd0;
 		cntWE2 <= 5'd0;
+		cntShift1 <= 1'b0;
+		cntShift2 <= 1'b0;
 	end
 	else begin
 		if(syncSW[1] != oldSW) begin
-			cntAddr1 <= 4'd0;
-			cntAddr2 <= 4'd0;
+			cntAddr1 <= 3'd0;
+			cntAddr2_6 <= 3'd0;
+			cntAddr2_7 <= 3'd0;
 			cntPack1 <= 6'd0;
 			cntPack2 <= 6'd0;
 			cntWrd1 <= 5'd0;
@@ -80,6 +87,8 @@ begin
 			test <= 1'b1;
 			cntWE1 <= 5'd0;
 			cntWE2 <= 5'd0;
+			cntShift1 <= 1'b0;
+			cntShift2 <= 1'b0;
 		end
 		else  begin
 			test <= 1'b0;
@@ -93,8 +102,13 @@ begin
 					case(cntWrd1)
 						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15: begin
 							orbWord1 <= {1'b0, iData1, 3'd0};
-							WrAddr1 <= (cntAddr1 << 1) + (cntPack1 << 5);
+							if(cntShift1 == 1'd0)
+								WrAddr1 <= (cntAddr1 << 2) + (cntPack1 << 5);
+							else 
+								WrAddr1 <= (cntAddr1 << 1) + ((cntAddr1 + 1'b1) << 1) + (cntPack1 << 5);
 							cntAddr1 <= cntAddr1 + 1'b1;
+							if(cntAddr1 == 3'd7)
+								cntShift1 <= cntShift1 + 1'b1;
 							state1 <= WESET1;
 						end
 						16: state1 <= WAIT1;
@@ -129,11 +143,20 @@ begin
 					case(cntWrd2)
 						0,1,2,3,4,5,6,7,8,9,10,11,12,13,14: begin
 							orbWord2 <= {1'b0, iData2, 3'd0};
-							WrAddr2 <= ((cntAddr2 << 1) + 1'b1) + (cntPack2 << 5);
-							cntAddr2 <= cntAddr2 + 1'b1;
-							if(cntAddr2 == 4'd14) begin
-								cntAddr2 <= 4'd0;
+							if(cntShift2 == 1'b0) begin
+								WrAddr2 <= (cntAddr2_7 << 2) + (cntPack2 << 5) + 1'b1;
+								cntAddr2_7 <= cntAddr2_7 + 1'b1;
+								if(cntAddr2_7 == 3'd7)
+									cntShift2 <= 1'b1;
+							end else begin
+								WrAddr2 <= (cntAddr2_6 << 1) + ((cntAddr2_6 + 1'b1) << 1) + (cntPack2 << 5) + 1'b1;
+								cntAddr2_6 <= cntAddr2_6 + 1'b1;
+								if(cntAddr2_6 == 3'd6) begin
+									cntShift2 <= 1'b0;
+									cntAddr2_6 <= 3'd0;
+								end
 							end
+							
 							state2 <= WESET2;
 						end
 						15, 16: state2 <= WAIT2;
