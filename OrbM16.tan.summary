@@ -5,7 +5,7 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 10.500 ns
+Actual Time    : 9.100 ns
 From           : UART_RX2
 To             : uartRx:instRX2|syncRx[0]
 From Clock     : --
@@ -15,10 +15,10 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 25.300 ns
-From           : UARTTXBIG:instTX2|dirRX
-To             : UART_dRX2
-From Clock     : clk100MHz
+Actual Time    : 24.000 ns
+From           : uartRx:instRX4|oValid
+To             : test2
+From Clock     : clk80MHz
 To Clock       : --
 Failed Paths   : 0
 
@@ -35,9 +35,9 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk100MHz'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 46.73 MHz ( period = 21.400 ns )
-From           : M16:instM16|cntBit[1]
-To             : M16:instM16|oOrbit~4
+Actual Time    : 53.48 MHz ( period = 18.700 ns )
+From           : UARTTXBIG:instTX4|serialize[0]
+To             : UARTTXBIG:instTX4|state.DIROFF
 From Clock     : clk100MHz
 To Clock       : clk100MHz
 Failed Paths   : 0
@@ -45,9 +45,9 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk80MHz'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 59.17 MHz ( period = 16.900 ns )
-From           : uartRx:instRX2|cntStep[4]
-To             : uartRx:instRX2|data[2]
+Actual Time    : 55.87 MHz ( period = 17.900 ns )
+From           : romRqAdr:instRomAdr1|lpm_rom:lpm_rom_component|altrom:srom|q[7]
+To             : SlowPacker:instSlowPACK1|WrAddr[6]
 From Clock     : clk80MHz
 To Clock       : clk80MHz
 Failed Paths   : 0
@@ -60,7 +60,7 @@ From           : answerLCS:instTempRQ|state.DELAY
 To             : answerLCS:instTempRQ|cnt[3]
 From Clock     : clk100MHz
 To Clock       : clk100MHz
-Failed Paths   : 176
+Failed Paths   : 167
 
 Type           : Total number of failed paths
 Slack          : 
@@ -70,7 +70,7 @@ From           :
 To             : 
 From Clock     : 
 To Clock       : 
-Failed Paths   : 176
+Failed Paths   : 167
 
 --------------------------------------------------------------------------------------
 

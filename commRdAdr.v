@@ -20,7 +20,7 @@ module commRdAdr(
 	);
 	
 
-localparam IDLE1 = 0, CNT1 = 1, RDSET1 = 2, WAIT1 = 3;
+localparam IDLE1 = 0,  CNT1 = 1, RDSET1 = 2, WAIT1 = 3;
 localparam IDLE2 = 0, WAITDONE2 = 1, CNT2 = 2, RDSET2 = 3, WAIT2 = 4, PAUSE2 = 5;
 localparam IDLE3 = 0, WAITDONE3 = 1, CNT3 = 2, RDSET3 = 3, WAIT3 = 4;
 localparam IDLE4 = 0, WAITDONE4 = 1, CNT4 = 2, RDSET4 = 3, WAIT4 = 4;
@@ -28,7 +28,7 @@ localparam IDLE5 = 0, WAITDONE5 = 1, CNT5 = 2, RDSET5 = 3, WAIT5 = 4;
 	
 reg [1:0] syncStr1, syncStr2, syncStr3, syncStr4, syncStr5;
 reg done2uart, done3uart, done4uart;
-reg [1:0] uart1;
+reg [2:0] uart1;
 reg [2:0] uart2, uart3, uart4, uart5;
 reg [4:0] cnt1, cnt2, cnt3, cnt4, cnt5;
 reg [5:0] cntRD1, cntRD2, cntRD3, cntRD4, cntRD5;
@@ -55,7 +55,7 @@ always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
 		busy <= 1'b0;
-		uart1 <= 2'd0;
+		uart1 <= 3'd0;
 		uart2 <= 3'd0;
 		uart3 <= 3'd0;
 		uart4 <= 3'd0;
@@ -98,15 +98,14 @@ begin
 			clkRd2 <= 5'd0;
 			rd2rom <= 1'd1;
 		end
+		//if((cnt1 == 5'd18) || (cnt2 == 5'd18))
+			
 		case(uart1)
 			IDLE1: begin
-				if(syncStr1[1] && rd2rom == 1'b1)begin
+				if(syncStr1[1] && busy == 1'b0)begin
 					uart1 <= RDSET1;
 					rd2rom <= 1'b0;
 					busy <= 1'b1;
-				end
-				else begin
-					busy <= 1'b0;
 				end
 			end
 			RDSET1: begin
@@ -142,15 +141,11 @@ begin
 		
 		case(uart2)
 			IDLE2: begin
-				if(syncStr2[1] && (rd1rom || ~syncStr1[1])) begin
-					uart2 <= WAITDONE2;
-					rd1rom <= 1'b0;
-				end
-			end
-			WAITDONE2: begin
-				if (busy <= 1'b0) begin
+				if(syncStr2[1] && busy == 1'b0) begin
 					uart2 <= RDSET2;
-				end
+					busy <= 1'b1;
+					rd1rom <= 1'b0;
+				end 
 			end
 			RDSET2: begin
 				cntRD2 <= cntRD2 + 1'b1;
@@ -169,7 +164,7 @@ begin
 				cnt2 <= cnt2 + 1'b1;
 				if(cnt2 == 5'd17) begin
 					cnt2 <= 5'd0;
-					done2uart <= 1'b1;
+					busy <= 1'b0;
 					uart2 <= WAIT2;
 				end
 				else begin
@@ -177,7 +172,7 @@ begin
 				end
 			end
 			WAIT2: begin
-				done2uart <= 1'b0;
+				
 				if(~syncStr2[1]) begin
 					uart2 <= IDLE2;
 				end
@@ -191,10 +186,9 @@ begin
 				end
 			end
 			WAITDONE3: begin
-				if (done2uart == 1) begin
+				
 					uart3 <= RDSET3;
 				end
-			end
 			RDSET3: begin
 				cntRD3 <= cntRD3 + 1'b1;
 				if(cntRD3 == 6'd40) begin

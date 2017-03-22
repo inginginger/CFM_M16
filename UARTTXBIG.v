@@ -49,6 +49,8 @@ if (~reset) begin					// global asyncronous reset, initial values
 	tx <= 1'b1;
 	switch <= 0;
 	full <= 1'b0;
+	dirTX <= 1'b0;
+	dirRX <= 1'b0;
 end else begin						// main circuit
 	addr <= (switch + (cycle << 2));
 	case (state)					// state machine
