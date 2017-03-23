@@ -45,7 +45,8 @@ wire [2:0] switch;
 wire [10:0] RdAddr;
 reg [10:0] WrAddr;
 reg [11:0] OrbData;
-wire RE, WE, ack, rqRom;
+wire RE, ack, rqRom;
+wire WE;
 wire SW, test;
 reg [10:0] RdAddr1;
 reg [10:0] RdAddr2;
@@ -78,7 +79,7 @@ wire [6:0] swTemp;
 wire [11:0] tempWord;
 wire WEtemp;
 
-assign iTempAddr  = (swTemp == 7'd110) ? 11'd831 : 11'd0;
+assign iTempAddr  = (swTemp == 7'd110) ? 11'd1215 : 11'd0;
 //assign ValRx = ValRX1;
 
 assign WE = WEfast1 | WEfast2 | WEslow1 | WEslow2 | WEtemp;
@@ -108,23 +109,29 @@ always@(posedge clk80MHz) begin
 	if(WEfast1 == 1'b1) begin
 		WrAddr <= FastAddr1;
 		orbWord <= fastWord1;
-	end
+	end else
 	if(WEfast2 == 1'b1) begin
 		WrAddr <= FastAddr2;
 		orbWord <= fastWord2;
-	end
+	end else
 	if(WEslow1 == 1'b1) begin
 		WrAddr <= SlowAddr1;
 		orbWord <= slowWord1;
-	end
+	end else
 	if(WEslow2 == 1'b1) begin
 		WrAddr <= SlowAddr2;
 		orbWord <= slowWord2;
+	end else begin
+		WrAddr <= 0;
+		orbWord <= 0;
 	end
-	if(WEtemp == 1'b1) begin
+	/*if(WEtemp == 1'b1) begin
 		WrAddr <= oTempAddr;
 		orbWord <= tempWord;
-	end
+	end*/
+	//WE <= WEfast1 | WEfast2 | WEslow1 | WEslow2;// | WEtemp;
+	//ValRX <= ValRX1 | ValRX2 | ValRX3 | ValRX4 | ValRX5;
+
 end
 
 always@(*) begin
@@ -149,6 +156,7 @@ always@(*) begin
 		RE1 = 1'hx;
 		WE2 = 1'hx;
 	end
+
 end
 /*
 assign OrbData = (SW == 1'b0)?MemData1:MemData2;
