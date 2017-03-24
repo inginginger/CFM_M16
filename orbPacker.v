@@ -105,7 +105,7 @@ begin
 								WrAddr1 <= (cntAddr1 << 1) + ((cntAddr1 + 1'b1) << 1) + (cntPack1 << 5);
 							cntAddr1 <= cntAddr1 + 1'b1;
 							if(cntAddr1 == 3'd7)
-								shift1 <= 1'b1;
+								shift1 <= shift1 + 1'b1;
 							state1 <= WESET1;
 						end
 						16: state1 <= WAIT1;
@@ -146,7 +146,7 @@ begin
 								WrAddr2 <= (cntAddr2 << 1) + ((cntAddr2 + 1'b1) << 1) + (cntPack2 << 5) + 1'b1;
 							cntAddr2 <= cntAddr2 + 1'b1;
 							if(cntAddr2 == 3'd7)
-								shift2 <= 1'b1;
+								shift2 <= shift2 + 1'b1;
 							if(cntAddr2 == 3'd6 && shift2 == 1'b1) begin
 								shift2 <= 1'b0;
 								cntAddr2 <= 3'd0;
