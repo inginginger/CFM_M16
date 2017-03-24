@@ -78,6 +78,8 @@ set_location_assignment PIN_35 -to UART_dTX1
 set_location_assignment PIN_39 -to UART_dTX2
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+set_global_assignment -name VERILOG_FILE fastAddr2.v
+set_global_assignment -name VERILOG_FILE fastAddr1.v
 set_global_assignment -name VERILOG_FILE M16.v
 set_global_assignment -name VERILOG_FILE UARTTXBIG.v
 set_global_assignment -name MIF_FILE OrbM16.mif

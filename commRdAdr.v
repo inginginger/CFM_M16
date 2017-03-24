@@ -16,25 +16,23 @@ module commRdAdr(
 	output [4:0] RdAdr2,
 	output [4:0] RdAdr3,
 	output [4:0] RdAdr4,
-	output [4:0] RdAdr5
+	output [4:0] RdAdr5,
+	output reg rstWr1,
+	output reg rstWr2
 	);
 	
 
-localparam IDLE1 = 0,  CNT1 = 1, RDSET1 = 2, WAIT1 = 3;
-localparam IDLE2 = 0, WAITDONE2 = 1, CNT2 = 2, RDSET2 = 3, WAIT2 = 4, PAUSE2 = 5;
-localparam IDLE3 = 0, WAITDONE3 = 1, CNT3 = 2, RDSET3 = 3, WAIT3 = 4;
-localparam IDLE4 = 0, WAITDONE4 = 1, CNT4 = 2, RDSET4 = 3, WAIT4 = 4;
-localparam IDLE5 = 0, WAITDONE5 = 1, CNT5 = 2, RDSET5 = 3, WAIT5 = 4;
+localparam IDLE1 = 0, CNT1 = 1, RDSET1 = 2, WAIT1 = 3;
+localparam IDLE2 = 0, CNT2 = 1, RDSET2 = 2, WAIT2 = 3;
+localparam IDLE3 = 0, CNT3 = 1, RDSET3 = 2, WAIT3 = 3;
+localparam IDLE4 = 0, CNT4 = 1, RDSET4 = 2, WAIT4 = 3;
+localparam IDLE5 = 0, CNT5 = 1, RDSET5 = 2, WAIT5 = 3;
 	
 reg [1:0] syncStr1, syncStr2, syncStr3, syncStr4, syncStr5;
-reg done2uart, done3uart, done4uart;
-reg [2:0] uart1;
-reg [2:0] uart2, uart3, uart4, uart5;
+reg [1:0] uart1;
+reg [1:0] uart2, uart3, uart4, uart5;
 reg [4:0] cnt1, cnt2, cnt3, cnt4, cnt5;
 reg [5:0] cntRD1, cntRD2, cntRD3, cntRD4, cntRD5;
-reg [5:0] pause;
-reg [4:0] clkRd1, clkRd2;
-reg rd1rom, rd2rom;
 
 assign RdAdr1 = (cnt1 < 18)? cnt1 : 5'hZ;
 assign RdAdr2 = (cnt2 < 18)? cnt2 : 5'hZ;
@@ -42,24 +40,33 @@ assign RdAdr3 = (cnt3 < 18)? cnt3 : 5'hZ;
 assign RdAdr4 = (cnt4 < 18)? cnt4 : 5'hZ;
 assign RdAdr5 = (cnt5 < 18)? cnt5 : 5'hZ;
 
-always@(posedge clk)
+always@(posedge clk or negedge rst)
 begin
-	syncStr1 <= {syncStr1[0], strob1};
-	syncStr2 <= {syncStr2[0], strob2};
-	syncStr3 <= {syncStr3[0], strob3};
-	syncStr4 <= {syncStr4[0], strob4};
-	syncStr5 <= {syncStr5[0], strob5};
+	if(~rst) begin
+		syncStr1 <= 0;
+		syncStr2 <= 0;
+		syncStr3 <= 0;
+		syncStr4 <= 0;
+		syncStr5 <= 0;
+	end else begin
+		syncStr1 <= {syncStr1[0], strob1};
+		syncStr2 <= {syncStr2[0], strob2};
+		syncStr3 <= {syncStr3[0], strob3};
+		syncStr4 <= {syncStr4[0], strob4};
+		syncStr5 <= {syncStr5[0], strob5};
+	end
 end
+
 
 always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
 		busy <= 1'b0;
-		uart1 <= 3'd0;
-		uart2 <= 3'd0;
-		uart3 <= 3'd0;
-		uart4 <= 3'd0;
-		uart5 <= 3'd0;
+		uart1 <= 2'd0;
+		uart2 <= 2'd0;
+		uart3 <= 2'd0;
+		uart4 <= 2'd0;
+		uart5 <= 2'd0;
 		cnt1 <= 5'd0;
 		cnt2 <= 5'd0;
 		cnt3 <= 5'd0;
@@ -75,36 +82,16 @@ begin
 		RD3 <= 1'b0;
 		RD4 <= 1'b0;
 		RD5 <= 1'b0;
-		done2uart <= 1'b0;
-		done3uart <= 1'b0;
-		done4uart <= 1'b0;
-		rd1rom <= 1'b0;
-		rd2rom <= 1'b1;
-		clkRd1 <= 5'd0;
-		clkRd2 <= 5'd0;
+		rstWr1 <= 1'b0;
+		rstWr2 <= 1'b0;
 	end
 	else begin
-		if(cntRD1 == 6'd40) begin
-			clkRd1 <= clkRd1 + 1'b1;
-		end
-		if(clkRd1 == 5'd18) begin
-			clkRd1 <= 5'd0;
-			rd1rom <= 1'd1;
-		end
-		if(cntRD2 == 6'd40)begin
-			clkRd2 <= clkRd2 + 1'b1;
-		end
-		if(clkRd2 == 5'd18) begin
-			clkRd2 <= 5'd0;
-			rd2rom <= 1'd1;
-		end
-		//if((cnt1 == 5'd18) || (cnt2 == 5'd18))
 			
 		case(uart1)
 			IDLE1: begin
+				rstWr1 <= 1'b0;
 				if(syncStr1[1] && busy == 1'b0)begin
 					uart1 <= RDSET1;
-					rd2rom <= 1'b0;
 					busy <= 1'b1;
 				end
 			end
@@ -126,6 +113,7 @@ begin
 				if(cnt1 == 5'd17) begin
 					cnt1 <= 5'd0;
 					busy <= 1'b0;
+					rstWr1 <= 1'b1;
 					uart1 <= WAIT1;
 				end
 				else begin 
@@ -141,10 +129,10 @@ begin
 		
 		case(uart2)
 			IDLE2: begin
+				rstWr2 <= 1'b0;
 				if(syncStr2[1] && busy == 1'b0) begin
 					uart2 <= RDSET2;
 					busy <= 1'b1;
-					rd1rom <= 1'b0;
 				end 
 			end
 			RDSET2: begin
@@ -165,6 +153,7 @@ begin
 				if(cnt2 == 5'd17) begin
 					cnt2 <= 5'd0;
 					busy <= 1'b0;
+					rstWr2 <= 1'b1;
 					uart2 <= WAIT2;
 				end
 				else begin
@@ -181,14 +170,11 @@ begin
 		
 		case(uart3)
 			IDLE3: begin
-				if(syncStr3[1]) begin
-					uart3 <= WAITDONE3;
-				end
-			end
-			WAITDONE3: begin
-				
+				if(syncStr3[1] && busy == 1'b0) begin
 					uart3 <= RDSET3;
-				end
+					busy <= 1'b1;
+				end 
+			end
 			RDSET3: begin
 				cntRD3 <= cntRD3 + 1'b1;
 				if(cntRD3 == 6'd40) begin
@@ -206,7 +192,7 @@ begin
 				cnt3 <= cnt3 + 1'b1;
 				if(cnt3 == 5'd17) begin
 					cnt3 <= 5'd0;
-					done3uart <= 1'b1;
+					busy <= 1'b0;
 					uart3 <= WAIT3;
 				end
 				else  begin 
@@ -214,7 +200,6 @@ begin
 				end
 			end
 			WAIT3: begin
-				done3uart <= 1'b0;
 				if(~syncStr3[1]) begin
 					uart3 <= IDLE3;
 				end
@@ -223,14 +208,10 @@ begin
 		
 		case(uart4)
 			IDLE4: begin
-				if(syncStr4[1]) begin
-					uart4 <= WAITDONE3;
-				end
-			end
-			WAITDONE4: begin
-				if (done3uart == 1) begin
+				if(syncStr4[1] && busy == 1'b0) begin
 					uart4 <= RDSET4;
-				end
+					busy <= 1'b1;
+				end 
 			end
 			RDSET4: begin
 				cntRD4 <= cntRD4 + 1'b1;
@@ -249,7 +230,7 @@ begin
 				cnt4 <= cnt4 + 1'b1;
 				if(cnt4 == 5'd17) begin
 					cnt4 <= 5'd0;
-					done4uart <= 1'b1;
+					busy <= 1'b0;
 					uart4 <= WAIT4;
 				end
 				else begin 
@@ -257,7 +238,6 @@ begin
 				end
 			end
 			WAIT4: begin
-				done4uart <= 1'b0;
 				if(~syncStr4[1]) begin
 					uart4 <= IDLE4;
 				end
@@ -266,14 +246,10 @@ begin
 		
 		case(uart5)
 			IDLE5: begin
-				if(syncStr5[1]) begin
-					uart5 <= WAITDONE5;
-				end
-			end
-			WAITDONE5: begin
-				if (done4uart == 1) begin
+				if(syncStr5[1] && busy == 1'b0) begin
 					uart5 <= RDSET5;
-				end
+					busy <= 1'b1;
+				end 
 			end
 			RDSET5: begin
 				cntRD5 <= cntRD5 + 1'b1;
@@ -292,6 +268,7 @@ begin
 				cnt5 <= cnt5 + 1'b1;
 				if(cnt5 == 5'd17) begin
 					cnt5 <= 5'd0;
+					busy <= 1'b0;
 					uart5 <= WAIT5;
 				end
 				else begin

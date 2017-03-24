@@ -24,10 +24,15 @@ reg [1:0] cntpause;
 
 localparam IDLE = 2'd0, PAUSE = 2'd1, WESET = 2'd2, WAIT = 2'd3;
 
-always@(posedge clk)
+always@(posedge clk or negedge rst)
 begin
-syncStr <= {syncStr[0], strob};
-syncSW <= {syncSW[0], SW};
+	if(~rst) begin
+		syncStr <= 2'd0;
+		syncSW <= 2'd0;
+	end else begin
+		syncStr <= {syncStr[0], strob};
+		syncSW <= {syncSW[0], SW};
+	end
 end
 
 always@(posedge clk or negedge rst)

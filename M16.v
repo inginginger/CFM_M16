@@ -9,10 +9,7 @@ module M16(
 	output reg [11:0]oParallel,
 	output reg oVal,
 	output reg [5:0] cycle,
-	output reg RqSlow,
 	output reg RqFast,
-	output reg sel,
-	output reg Min,
 	output [6:0] swTemp
 );
 
@@ -25,9 +22,8 @@ reg cntMem;
 reg [11:0]outWord;
 reg [2:0]seq;
 reg [11:0] cntRqFast;
-reg [15:0] cntRqSlow;
 reg [2:0] cntTemp;
-reg [8:0] cntMin;
+reg sel;
 
 assign swTemp = (cntTemp << 6) + cycle;
 
@@ -48,13 +44,9 @@ always@(negedge reset or posedge iClkOrb)begin
 		seq <= 3'd0;
 		cycle <= 6'd0;
 		RqFast <= 1'd0;
-		RqSlow <= 1'd0;
 		cntRqFast <= 12'd0;
-		cntRqSlow <= 16'd0;
-		sel <= 1'b0;
 		cntTemp <= 3'd0;
-		Min <= 1'b0;
-		cntMin <= 9'd0;
+		sel <= 1'b0;
 	end else begin
 		seq <= seq + 1'b1;
 		case(seq)
@@ -149,25 +141,6 @@ always@(negedge reset or posedge iClkOrb)begin
 			1535:  begin 
 				cntRqFast <= 11'd0;
 			end
-		endcase
-		cntRqSlow <= cntRqSlow + 1'b1;
-		case (cntRqSlow)
-			0: begin 
-				RqSlow <= 1'd1;
-			end
-			1970: begin
-				
-				cntMin <= cntMin + 1'b1;
-				if(cntMin == 9'd511)
-					Min <= 1'b1;
-			end
-			2000: begin
-				Min <= 1'b0;
-			end
-			2048: begin
-				RqSlow <= 1'd0;
-			end
-			24575: cntRqSlow <= 16'd0;
 		endcase
 	end
 end
