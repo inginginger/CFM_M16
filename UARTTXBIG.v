@@ -36,8 +36,11 @@ reg [3:0] serialize;
 reg [4:0] delay;
 reg [1:0] rqsync;
 
-always@(posedge clk) begin			// double d-flipflop to avoid metastability
-	rqsync <= { rqsync[0],  RQ };	// start signal from other clock domain
+always@(posedge clk or negedge reset) begin			// double d-flipflop to avoid metastability
+	if(~reset)
+		rqsync <= 2'd0;
+	else
+		rqsync <= { rqsync[0],  RQ };	// start signal from other clock domain
 end
 
 always@(posedge clk or negedge reset)

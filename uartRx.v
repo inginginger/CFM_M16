@@ -22,10 +22,15 @@ module uartRx(
 	
 	
 	
-	always@(posedge clk)
+	always@(posedge clk or negedge rst)
 	begin
-		syncRx <= {syncRx[0], rx};
-		syncRstTx <= {syncRstTx[0], rstTx};
+		if(~rst) begin
+			syncRx <= 2'd0;
+			syncRstTx <= 2'd0;
+		end else begin
+			syncRx <= {syncRx[0], rx};
+			syncRstTx <= {syncRstTx[0], rstTx};
+		end
 	end
 		
 	always@(posedge clk or negedge rst)
