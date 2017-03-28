@@ -58,6 +58,7 @@ begin
 end
 
 
+
 always@(posedge clk or negedge rst)
 begin
 	if(~rst) begin
@@ -90,7 +91,7 @@ begin
 		case(uart1)
 			IDLE1: begin
 				rstWr1 <= 1'b0;
-				if(syncStr1[1] && busy == 1'b0)begin
+				if(syncStr1[1] && busy == 1'b0 && rstWr2 == 1'b0)begin
 					uart1 <= RDSET1;
 					busy <= 1'b1;
 				end
@@ -130,7 +131,7 @@ begin
 		case(uart2)
 			IDLE2: begin
 				rstWr2 <= 1'b0;
-				if(syncStr2[1] && busy == 1'b0) begin
+				if(syncStr2[1] && busy == 1'b0 && rstWr1 == 1'b0) begin
 					uart2 <= RDSET2;
 					busy <= 1'b1;
 				end 

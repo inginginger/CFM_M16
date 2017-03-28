@@ -81,12 +81,12 @@ wire WEtemp;
 assign iTempAddr  = (swTemp == 7'd110) ? 11'd1215 : 11'd0;
 //assign ValRx = ValRX1;
 
-assign WE = /*WEfast1 |*/ WEfast2/* | WEslow1 | WEslow2;// | WEtemp*/;
+assign WE = WEfast1 | WEfast2/* | WEslow1 | WEslow2;// | WEtemp*/;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
-assign test1 = WR1;//ValRX1;//UART_dTX1;//testVal1;
+assign test1 = RD2;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
-assign test3 = WR1;//busy;//WE;//testpin1984;//WrAddr[1];
-assign test4 = RD2;//testpin2016;//RE2;//0;//WE2;
+assign test3 = RD1;//busy;//WE;//testpin1984;//WrAddr[1];
+assign test4 = WR1;//testpin2016;//RE2;//0;//WE2;
 
 /*assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
 assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : ((WEtemp == 1'b1) ? tempWord :12'hZ))));
@@ -105,10 +105,10 @@ begin
 end
 
 always@(posedge clk80MHz) begin
-	/*if(WEfast1 == 1'b1) begin
+	if(WEfast1 == 1'b1) begin
 		WrAddr <= FastAddr1;
 		orbWord <= fastWord1;
-	end else*/
+	end else
 	if(WEfast2 == 1'b1) begin
 		WrAddr <= FastAddr2;
 		orbWord <= fastWord2;
@@ -158,7 +158,7 @@ always@(*) begin
 
 end
 
-assign ValRX = /*ValRX1 | */ValRX2/* | ValRX3 | ValRX4 | ValRX5*/;
+assign ValRX = ValRX1 | ValRX2/* | ValRX3 | ValRX4 | ValRX5*/;
 
 globalReset instRST(
 	.clk(clk80MHz),				// 40 MHz
@@ -180,14 +180,14 @@ clkDiv100 instClkDiv100(
 );	
 
 
-/*uartRx instRX1(
+uartRx instRX1(
 	.clk(clk80MHz),
 	.rstTx(f1),
 	.rst(rst),
 	.rx(UART_RX1),
 	.oValid(ValRX1),
 	.oData(iUART1)
-);*/
+);
 
 uartRx instRX2(
 	.clk(clk80MHz),
@@ -223,7 +223,7 @@ uartRx instRX5(
 	.rx(UART_RX5),
 	.oValid(ValRX5),
 	.oData(iUART5)
-);
+);*/
 
 ramUART instRam1(
 	.clock(clk80MHz),
@@ -233,7 +233,7 @@ ramUART instRam1(
 	.wraddress(WAdr1),
 	.wren(WR1),
 	.q(oUART1)
-);*/
+);
 
 ramUART instRam2(
 	.clock(clk80MHz),
@@ -277,7 +277,7 @@ ramUART instRam5(
 
 wire rstWr1, rstWr2;
 
-/*commutAdr instWrAdr1(
+commutAdr instWrAdr1(
 	.clk(clk80MHz),
 	.rst(rst),
 	.rstWr(rstWr1),
@@ -285,7 +285,7 @@ wire rstWr1, rstWr2;
 	.wrAdr(WAdr1),
 	.full(done1),
 	.WE(WR1)
-);*/
+);
 
 commutAdr instWrAdr2(
 	.clk(clk80MHz),
@@ -441,7 +441,7 @@ M16 instM16(
 	.swTemp(swTemp)
 );
 
-/*newUart instTX1(
+newUart instTX1(
 	.reset(rst),
 	.clk(clk80MHz),
 	.edgeTx(clk4_8MHz),
@@ -456,7 +456,7 @@ M16 instM16(
 	.dirTX(UART_dTX1),
 	.dirRX(UART_dRX1),
 	.switch(switch));
-defparam instTX1.BYTES = 5'd4;*/
+defparam instTX1.BYTES = 5'd4;
 
 /*UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
@@ -547,7 +547,7 @@ defparam instTX5.BYTES = 5'd4;*/
 	.test(tempTest)
 );*/
 
-/*answerLCS instTempRQ(
+answerLCS instTempRQ(
 	.clk(clk80MHz),
 	.edgeTx(clk4_8MHz),
 	.rst(rst),
@@ -566,21 +566,21 @@ romRqAdr instRomAdr1(
 	.inclock(clk80MHz),
 	.outclock(clk80MHz),
 	.q(addrRamGr1)
-);*/
+);
 romRqAdr2 instRomAdr2(
 	.address(cycle),
 	.inclock(clk80MHz),
 	.outclock(clk80MHz),
 	.q(addrRamGr2)
 );
-/*
+
 reqMem instRqMem1(
   .address(LCB_rq_addr1),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
   .q(LCB_rq_data1)
 );
-
+/*
 tempROM instRQtemp(
   .address(tempAddr),
   .inclock(clk80MHz),

@@ -46,7 +46,7 @@ begin
 			IDLE: begin				
 				if(syncStr[1]) begin
 					state <= CNTWRD;
-					full <= 1'b0;
+					//full <= 1'b0;
 				end
 			end
 			CNTWRD: begin

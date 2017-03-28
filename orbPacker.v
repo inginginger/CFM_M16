@@ -139,6 +139,8 @@ begin
 							orbWord1 <= {1'b0, iData1, 3'd0};
 							WrAddr1 <= rom1[fast1] + (cntPack1 << 5);
 							fast1 <= fast1 + 1'b1;
+							if(fast1 == 4'd15)
+								fast1 <= 4'd0;
 							state1 <= WESET1;
 						end
 						16: state1 <= WAIT1;
