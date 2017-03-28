@@ -97,6 +97,14 @@ always@(negedge reset or posedge iClkOrb)begin
 				
 				seq <= 0;
 				if (cntBit == 4'd0) begin
+					case(cntWrd)
+						16, 48: outWord <= outWord | 12'b000000000000;
+						80: outWord <= outWord | {cntGrp[4], 11'b00000000000};
+						112: outWord <= outWord | {cntGrp[3], 11'b00000000000};
+						144: outWord <= outWord | {cntGrp[2], 11'b00000000000};
+						176: outWord <= outWord | {cntGrp[1], 11'b00000000000};
+						208: outWord <= outWord | {cntGrp[0], 11'b00000000000};
+					endcase
 					case (cntPhr)
 						2,4,6,8,18,24,26,30: outWord <= outWord | 12'b100000000000;
 					endcase
