@@ -114,3 +114,7 @@ set_global_assignment -name HEX_FILE AdrRqTemp.hex
 set_global_assignment -name VERILOG_FILE tempPacker.v
 set_global_assignment -name HEX_FILE reqMem.hex
 set_global_assignment -name QIP_FILE reqMem.qip
+set_global_assignment -name QIP_FILE fifoF1.qip
+set_global_assignment -name QIP_FILE fifoS.qip
+set_global_assignment -name VERILOG_FILE writer.v
+set_global_assignment -name VERILOG_FILE fullPacker.v

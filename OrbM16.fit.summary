@@ -1,11 +1,11 @@
-Fitter Status : Successful - Tue Mar 28 11:58:03 2017
+Fitter Status : Successful - Wed Mar 29 16:16:25 2017
 Quartus II Version : 9.0 Build 184 04/29/2009 SP 1 SJ Web Edition
 Revision Name : OrbM16
 Top-level Entity Name : OrbM16
 Family : FLEX10KE
 Device : EPF10K200SRC240-3
 Timing Models : Final
-Total logic elements : 1,038 / 9,984 ( 10 % )
+Total logic elements : 1,159 / 9,984 ( 12 % )
 Total pins : 29 / 182 ( 16 % )
-Total memory bits : 53,760 / 98,304 ( 55 % )
+Total memory bits : 53,536 / 98,304 ( 54 % )
 Total PLLs : 0
