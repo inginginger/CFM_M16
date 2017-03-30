@@ -80,7 +80,7 @@ wire WEtemp;
 wire [7:0] fData1, fData2, sData1, sData2, oFastData1, oFastData2, oSlowData1, oSlowData2;
 wire fVal1, fVal2, sVal1, sVal2;
 wire oTestS1, oTestS2, rqF1, rqF2, rqS1, rqS2, fDone1, fDone2, sDone1, sDone2;
-wire [3:0] oTestF1, oTestF2;
+wire [4:0] oTestF1, oTestF2;
 
 assign iTempAddr  = (swTemp == 7'd110) ? 11'd1215 : 11'd0;
 //assign ValRx = ValRX1;
@@ -212,6 +212,7 @@ writer instWrUart1(
 	.fVal(fVal1),
 	.sVal(sVal1)
 );
+defparam instWrUart1.BYTES = 5'd16;
 
 writer instWrUart2(
 	.clk(clk80MHz),
@@ -223,12 +224,14 @@ writer instWrUart2(
 	.fVal(fVal2),
 	.sVal(sVal2)
 );
+defparam instWrUart2.BYTES = 5'd15;
+
 wire fempty1, fempty2, sempty1, sempty2;
 fifoF1 instFastFifo1(
 	.clock(clk80MHz),
 	.data(fData1),
 	.rdreq(rqF1),
-	.sclr(f1),
+	.sclr(1'b0),
 	.full(fDone1),
 	.empty(fempty1),
 	.wrreq(fVal1),
@@ -250,7 +253,7 @@ fifoF1 instFastFifo2(
 	.clock(clk80MHz),
 	.data(fData2),
 	.rdreq(rqF2),
-	.sclr(f2),
+	.sclr(1'b0),
 	.full(fDone2),
 	.empty(fempty2),
 	.wrreq(fVal2),
@@ -279,6 +282,8 @@ fullPacker instPackerFull(
 	.emptyF2(fempty2),
 	.emptyS1(sempty1),
 	.emptyS2(sempty2),
+	.usedwF1(oTestF1),
+	.usedwF2(oTestF2),
 	.fData1(oFastData1),
 	.fData2(oFastData2),
 	.sData1(oSlowData1),
@@ -370,7 +375,7 @@ ramUART instRam5(
 
 wire rstWr1, rstWr2;
 
-commutAdr instWrAdr1(
+/*commutAdr instWrAdr1(
 	.clk(clk80MHz),
 	.rst(rst),
 	.rstWr(rstWr1),
@@ -388,7 +393,7 @@ commutAdr instWrAdr2(
 	.wrAdr(WAdr2),
 	.full(done2),
 	.WE(WR2)
-);
+);*/
 /*commutAdr instWrAdr3(
 	.clk(clk80MHz),
 	.rst(rst),
@@ -416,7 +421,7 @@ commutAdr instWrAdr5(
 	.WE(WR5)
 );*/
 
-commRdAdr instRdAdr1(
+/*commRdAdr instRdAdr1(
 	.clk(clk80MHz),
 	.rst(rst),
 	.busy(busy),
@@ -437,7 +442,7 @@ commRdAdr instRdAdr1(
 	.RdAdr5(RAdr5),
 	.rstWr1(rstWr1),
 	.rstWr2(rstWr2)
-);	
+);	*/
 
 
 /*SlowPacker instSlowPACK1(
@@ -480,7 +485,7 @@ tempPacker instTempPack(
 );
 
 */
-OrbPacker instPACKER(
+/*OrbPacker instPACKER(
 	.clk(clk80MHz),
 	.rst(rst),
 	.iData1(oUART1),
@@ -501,7 +506,7 @@ OrbPacker instPACKER(
 	.WE2(WEfast2),
 	.WrAddr1(FastAddr1),
 	.WrAddr2(FastAddr2)
-);
+);*/
 
 ramM16 instRamM16_1(
 	.clock(clk80MHz),
@@ -534,7 +539,7 @@ M16 instM16(
 	.swTemp(swTemp)
 );
 
-newUart instTX1(
+/*newUart instTX1(
 	.reset(rst),
 	.clk(clk80MHz),
 	.edgeTx(clk4_8MHz),
@@ -549,9 +554,9 @@ newUart instTX1(
 	.dirTX(UART_dTX1),
 	.dirRX(UART_dRX1),
 	.switch(switch));
-defparam instTX1.BYTES = 5'd4;
+defparam instTX1.BYTES = 5'd4;*/
 
-/*UARTTXBIG instTX1(
+UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
   .full(f1),
   .clk(clk4_8MHz),            // actual needed baudrate
@@ -564,7 +569,7 @@ defparam instTX1.BYTES = 5'd4;
   .dirRX(UART_dRX1),        // rs485 RX dir controller
   .switch(switch)
 );
-defparam instTX1.BYTES = 5'd4;*/
+defparam instTX1.BYTES = 5'd4;
 
 UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal

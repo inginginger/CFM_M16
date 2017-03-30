@@ -9,6 +9,8 @@ module fullPacker(
 	input emptyF2,
 	input emptyS1,
 	input emptyS2,
+	input[4:0] usedwF1,
+	input[3:0] usedwF2,
 	input[7:0] fData1,
 	input[7:0] fData2,
 	input[7:0] sData1,
@@ -40,8 +42,8 @@ reg[5:0] cntPack1;
 reg[5:0] cntPack2;
 
 
-assign doneBus[0] = doneF1;
-assign doneBus[1] = doneF2;
+assign doneBus[0] = (usedwF1 == 16) ? 1 : 0;
+assign doneBus[1] = (usedwF2 == 15) ? 1 : 0;
 assign doneBus[2] = doneS1;
 assign doneBus[3] = doneS2;
 
@@ -130,26 +132,29 @@ always@(posedge clk or negedge rst) begin
 		rAckF2 <= 1'b0;
 		rAckS1 <= 1'b0;
 		rAckS2 <= 1'b0;
+		wAddr <= 11'd0;
+		orbWord <= 12'd0;
+		WE <= 1'b0;
 	end else begin
 		case(state)
 			IDLE: //if(doneBus != 4'd0) begin
 				case(doneBus)
 					1: state <= STARTF1;
 					2: state <= STARTF2;
-					4: state <= STARTS1;
-					8: state <= STARTS2;
 					default: state <= IDLE;
 				endcase
 			//end
 			STARTF1: begin
 				orbWordF1 <= {1'b0, fData1, 3'd0};
 				wAddrF1 <= rom1[cntWord1] + (cntPack1 << 5);
-				cntWord1 <= cntWord1 + 1'b1;
-				if(cntWord1 == 4'd15)
-					cntPack1 <= cntPack1 + 1'b1;
 				state <= SETF1;
 			end
 			SETF1: begin
+				cntWord1 <= cntWord1 + 1'b1;
+				if(cntWord1 == 4'd15) begin
+					cntPack1 <= cntPack1 + 1'b1;
+					cntWord1 <= 4'b0;
+				end
 				wAddr <= wAddrF1;
 				orbWord <= orbWordF1;
 				WE <= 1'b1;
@@ -162,23 +167,23 @@ always@(posedge clk or negedge rst) begin
 			end
 			CLRACKF1: begin
 				rAckF1 <= 1'b0;
-				if(emptyF1 == 1'b1) begin
-					//doneBus[0] <= 1'b0;
+				if(usedwF1 == 1) begin//emptyF2 == 1'b1) begin
 					state <= IDLE;
+					//doneBus[1] <= 1'b0;
 				end else
 					state <= STARTF1;
 			end
 			STARTF2: begin
 				orbWordF2 <= {1'b0, fData2, 3'd0};
 				wAddrF2 <= rom2[cntWord2] + (cntPack2 << 5);
+				state <= SETF2;
+			end
+			SETF2: begin
 				cntWord2 <= cntWord2 + 1'b1;
 				if(cntWord2 == 4'd14) begin
 					cntPack2 <= cntPack2 + 1'b1;
 					cntWord2 <= 4'b0;
 				end
-				state <= SETF2;
-			end
-			SETF2: begin
 				wAddr <= wAddrF2;
 				orbWord <= orbWordF2;
 				WE <= 1'b1;
@@ -191,59 +196,11 @@ always@(posedge clk or negedge rst) begin
 			end
 			CLRACKF2: begin
 				rAckF2 <= 1'b0;
-				if(emptyF2 == 1'b1) begin
+				if(usedwF2 == 1) begin//emptyF2 == 1'b1) begin
 					state <= IDLE;
 					//doneBus[1] <= 1'b0;
 				end else
 					state <= STARTF2;
-			end
-			STARTS1: begin
-				orbWordS1 <= {1'b0, sData1, 3'd0};
-				wAddrS1 <= 0;
-				state <= SETS1;
-			end
-			SETS1: begin
-				wAddr <= wAddrS1;
-				orbWord <= orbWordS1;
-				WE <= 1'b1;
-				state <= RACKS1;
-			end
-			RACKS1: begin
-				WE <= 1'b0;
-				rAckS1 <= 1'b1;
-				state <= CLRACKS1;
-			end
-			CLRACKS1: begin 
-				rAckS1 <= 1'b0;
-				if(emptyS1 == 1'b1) begin
-					//doneBus[2] <= 1'b0;
-					state <= IDLE;
-				end else
-					state <= STARTS1;
-			end
-			STARTS2: begin
-				orbWordS2 <= {1'b0, sData2, 3'd0};
-				wAddrS2 <= 0;
-				state <= SETS2;
-			end
-			SETS2: begin
-				wAddr <= wAddrS2;
-				orbWord <= orbWordS2;
-				WE <= 1'b1;
-				state <= RACKS2;
-			end
-			RACKS2: begin
-				WE <= 1'b0;
-				rAckS2 <= 1'b1;
-				state <= CLRACKS2;
-			end
-			CLRACKS2: begin
-				rAckS2 <= 1'b0;
-				if(emptyS2 == 1'b1) begin
-					state <= IDLE;
-					//doneBus[3] <= 1'b0;
-				end else
-					state <= STARTS2;
 			end
 		endcase
 	end

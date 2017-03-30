@@ -50,7 +50,7 @@ module fifoF1 (
 	output	  empty;
 	output	  full;
 	output	[7:0]  q;
-	output	[3:0]  usedw;
+	output	[4:0]  usedw;
 
 endmodule
 
@@ -63,7 +63,7 @@ endmodule
 // Retrieval info: PRIVATE: AlmostFullThr NUMERIC "-1"
 // Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "0"
 // Retrieval info: PRIVATE: Clock NUMERIC "0"
-// Retrieval info: PRIVATE: Depth NUMERIC "16"
+// Retrieval info: PRIVATE: Depth NUMERIC "32"
 // Retrieval info: PRIVATE: Empty NUMERIC "1"
 // Retrieval info: PRIVATE: Full NUMERIC "1"
 // Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
@@ -91,11 +91,11 @@ endmodule
 // Retrieval info: PRIVATE: wsUsedW NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: CONSTANT: LPM_HINT STRING "MAXIMIZE_SPEED=7"
-// Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "16"
+// Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "32"
 // Retrieval info: CONSTANT: LPM_SHOWAHEAD STRING "ON"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "scfifo"
 // Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "8"
-// Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "4"
+// Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "5"
 // Retrieval info: CONSTANT: OVERFLOW_CHECKING STRING "ON"
 // Retrieval info: CONSTANT: UNDERFLOW_CHECKING STRING "ON"
 // Retrieval info: CONSTANT: USE_EAB STRING "ON"
@@ -106,7 +106,7 @@ endmodule
 // Retrieval info: USED_PORT: q 0 0 8 0 OUTPUT NODEFVAL q[7..0]
 // Retrieval info: USED_PORT: rdreq 0 0 0 0 INPUT NODEFVAL rdreq
 // Retrieval info: USED_PORT: sclr 0 0 0 0 INPUT NODEFVAL sclr
-// Retrieval info: USED_PORT: usedw 0 0 4 0 OUTPUT NODEFVAL usedw[3..0]
+// Retrieval info: USED_PORT: usedw 0 0 5 0 OUTPUT NODEFVAL usedw[4..0]
 // Retrieval info: USED_PORT: wrreq 0 0 0 0 INPUT NODEFVAL wrreq
 // Retrieval info: CONNECT: @data 0 0 8 0 data 0 0 8 0
 // Retrieval info: CONNECT: q 0 0 8 0 @q 0 0 8 0
@@ -115,7 +115,7 @@ endmodule
 // Retrieval info: CONNECT: @clock 0 0 0 0 clock 0 0 0 0
 // Retrieval info: CONNECT: full 0 0 0 0 @full 0 0 0 0
 // Retrieval info: CONNECT: empty 0 0 0 0 @empty 0 0 0 0
-// Retrieval info: CONNECT: usedw 0 0 4 0 @usedw 0 0 4 0
+// Retrieval info: CONNECT: usedw 0 0 5 0 @usedw 0 0 5 0
 // Retrieval info: CONNECT: @sclr 0 0 0 0 sclr 0 0 0 0
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: GEN_FILE: TYPE_NORMAL fifoF1.v TRUE

@@ -1,4 +1,8 @@
-module writer(
+module writer
+#(
+  parameter BYTES = 5'd16
+)
+(
 	input clk,
 	input rst,
 	input[7:0] iData,
@@ -36,7 +40,7 @@ always@(posedge clk or negedge rst) begin
 	end else begin
 		if(dtctStrob == 1)begin
 			cntWord <= cntWord + 1'b1;
-			if(cntWord < 16) begin
+			if(cntWord < BYTES) begin
 				fBuf <= iData;
 				fVal <= 1'b1;
 			end else if(cntWord == 5'd16) begin
