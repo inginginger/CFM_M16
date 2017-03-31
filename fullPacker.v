@@ -9,12 +9,16 @@ module fullPacker(
 	input emptyF2,
 	input emptyS1,
 	input emptyS2,
+	input [10:0] sAddr1,
+	input [10:0] sAddr2,
 	input[4:0] usedwF1,
-	input[3:0] usedwF2,
-	input[7:0] fData1,
-	input[7:0] fData2,
-	input[7:0] sData1,
-	input[7:0] sData2,
+	input[4:0] usedwF2,
+	input usedwS1,
+	input usedwS2,
+	input[11:0] fData1,
+	input[11:0] fData2,
+	input[11:0] sData1,
+	input[11:0] sData2,
 	output reg rAckF1,
 	output reg rAckS1,
 	output reg rAckF2,
@@ -32,25 +36,18 @@ reg[3:0] cntWord2;
 reg[4:0] state;
 reg[10:0] wAddrF1;
 reg[10:0] wAddrF2;
-reg[10:0] wAddrS1;
-reg[10:0] wAddrS2;
-reg[11:0] orbWordF1;
-reg[11:0] orbWordF2;
-reg[11:0] orbWordS1;
-reg[11:0] orbWordS2;
 reg[5:0] cntPack1;
 reg[5:0] cntPack2;
+reg [2:0] cntS1, cntS2, cntF1, cntF2;
+reg [4:0] pause;
 
 
-assign doneBus[0] = (usedwF1 == 16) ? 1 : 0;
-assign doneBus[1] = (usedwF2 == 15) ? 1 : 0;
-assign doneBus[2] = doneS1;
-assign doneBus[3] = doneS2;
+assign doneBus[0] = (usedwF1 == 5'd16) ? 1'b1 : 1'b0;
+assign doneBus[1] = (usedwF2 == 5'd15) ? 1'b1 : 1'b0;
+assign doneBus[2] = (usedwS1 == 1'b1) ? 1'b1 : 1'b0;
+assign doneBus[3] = (usedwS2 == 1'b1) ? 1'b1 : 1'b0;
 
-localparam IDLE = 0, SETF1 = 1, RACKF1 = 2, CLRACKF1 = 3, 
-SETF2 = 4, RACKF2 = 5, CLRACKF2 = 6, SETS1 = 7, RACKS1 = 8, 
-CLRACKS1 = 9, SETS2 = 10, RACKS2 = 11, CLRACKS2 = 12,
-STARTF1 = 13, STARTS1 = 14, STARTF2 = 15, STARTS2 = 16; 
+localparam IDLE = 0, STARTF1 = 1, STARTS1 = 3, STARTF2 = 2, STARTS2 = 4, WAIT = 5; 
 
 always@(posedge clk) begin
 	rom1[0] <= 0;
@@ -120,14 +117,8 @@ always@(posedge clk or negedge rst) begin
 		cntPack1 <= 6'd0;
 		cntPack2 <= 6'd0;
 		state <= 5'd0;
-		orbWordF1 <= 12'd0;
-		orbWordF2 <= 12'd0;
-		orbWordS1 <= 12'd0;
-		orbWordS2 <= 12'd0;
 		wAddrF1 <= 11'd0;
 		wAddrF2 <= 11'd0;
-		wAddrS1 <= 11'd0;
-		wAddrS2 <= 11'd0;
 		rAckF1 <= 1'b0;
 		rAckF2 <= 1'b0;
 		rAckS1 <= 1'b0;
@@ -135,73 +126,169 @@ always@(posedge clk or negedge rst) begin
 		wAddr <= 11'd0;
 		orbWord <= 12'd0;
 		WE <= 1'b0;
+		cntS1 <= 3'd0;
+		cntS2 <= 3'd0;
+		cntF1 <= 3'd0;
+		cntF2 <= 3'd0;
+		pause <= 5'd0;
 	end else begin
 		case(state)
-			IDLE: //if(doneBus != 4'd0) begin
-				case(doneBus)
-					1: state <= STARTF1;
-					2: state <= STARTF2;
-					default: state <= IDLE;
-				endcase
-			//end
-			STARTF1: begin
-				orbWordF1 <= {1'b0, fData1, 3'd0};
-				wAddrF1 <= rom1[cntWord1] + (cntPack1 << 5);
-				state <= SETF1;
-			end
-			SETF1: begin
-				cntWord1 <= cntWord1 + 1'b1;
-				if(cntWord1 == 4'd15) begin
-					cntPack1 <= cntPack1 + 1'b1;
-					cntWord1 <= 4'b0;
-				end
-				wAddr <= wAddrF1;
-				orbWord <= orbWordF1;
-				WE <= 1'b1;
-				state <= RACKF1;
-			end
-			RACKF1: begin
-				WE <= 1'b0;
-				rAckF1 <= 1'b1;
-				state <= CLRACKF1;
-			end
-			CLRACKF1: begin
-				rAckF1 <= 1'b0;
-				if(usedwF1 == 1) begin//emptyF2 == 1'b1) begin
+			IDLE: 
+				if(doneBus[0] == 1)
+					state<= STARTF1;
+				/*else if(doneBus[1] == 1)
+					state <= STARTF2;*/
+				else if(doneBus[2] == 1)
+					state <= STARTS1;
+				/*else if(doneBus[3] == 1)
+					state <= STARTS2;*/
+				else
 					state <= IDLE;
-					//doneBus[1] <= 1'b0;
-				end else
-					state <= STARTF1;
+			STARTF1: begin
+				cntF1 <= cntF1 + 1'b1;
+				case(cntF1)
+					0: begin
+						wAddrF1 <= rom1[cntWord1] + (cntPack1 << 5);
+					end
+					1: begin
+						cntWord1 <= cntWord1 + 1'b1;
+						if(cntWord1 == 4'd15) begin
+							cntPack1 <= cntPack1 + 1'b1;
+							cntWord1 <= 4'd0;
+						end
+					end
+					2: begin
+						wAddr <= wAddrF1;
+						orbWord <= fData1;
+						rAckF1 <= 1'b1;
+						
+					end
+					3: begin
+						WE <= 1'b1;
+						rAckF1 <= 1'b0;
+					end
+					4: begin						
+						WE <= 1'b0;
+						if(usedwF1 == 0) begin
+							state <= WAIT;
+						end else
+							state <= STARTF1;
+						cntF1 <= 3'd0;
+					end
+				endcase
 			end
 			STARTF2: begin
-				orbWordF2 <= {1'b0, fData2, 3'd0};
-				wAddrF2 <= rom2[cntWord2] + (cntPack2 << 5);
-				state <= SETF2;
+				cntF2 <= cntF2 + 1'b1;
+				case(cntF2)
+					0: begin
+						wAddrF2 <= rom2[cntWord2] + (cntPack2 << 5);
+					end
+					1: begin
+						cntWord2 <= cntWord2 + 1'b1;
+						if(cntWord2 == 4'd14) begin
+							cntPack2 <= cntPack2 + 1'b1;
+							cntWord2 <= 4'd0;
+						end
+					end
+					2: begin
+						wAddr <= wAddrF2;
+						orbWord <= fData2;
+						rAckF2 <= 1'b1;
+					end
+					3: begin
+						WE <= 1'b1;
+						rAckF2 <= 1'b0;
+					end
+					4: begin
+						WE <= 1'b0;
+						if(usedwF2 == 0) begin
+							state <= WAIT;
+						end else
+							state <= STARTF2;
+						cntF2 <= 3'd0;
+					end
+				endcase
 			end
-			SETF2: begin
-				cntWord2 <= cntWord2 + 1'b1;
-				if(cntWord2 == 4'd14) begin
-					cntPack2 <= cntPack2 + 1'b1;
-					cntWord2 <= 4'b0;
-				end
-				wAddr <= wAddrF2;
-				orbWord <= orbWordF2;
-				WE <= 1'b1;
-				state <= RACKF2;
-			end
-			RACKF2: begin
-				WE <= 1'b0;
-				rAckF2 <= 1'b1;
-				state <= CLRACKF2;
-			end
-			CLRACKF2: begin
-				rAckF2 <= 1'b0;
-				if(usedwF2 == 1) begin//emptyF2 == 1'b1) begin
+			WAIT: begin
+				pause <= pause + 1'b1;
+				if(pause == 5'd31) begin
 					state <= IDLE;
-					//doneBus[1] <= 1'b0;
-				end else
-					state <= STARTF2;
+					wAddr <= 11'd0;
+					orbWord <= 12'd0;
+				end
 			end
+			STARTS1: begin
+				cntS1 <= cntS1 + 1'b1;
+				case(cntS1)
+					0: begin
+						if(sAddr1 != 11'd0) begin
+							wAddr <= sAddr1;
+							orbWord <= sData1;
+							rAckS1 <= 1'b1;
+						end else begin
+							cntS1 <= 0;
+							wAddr <= 11'd0;
+							state <= IDLE;
+							/*wAddrS1 <= 11'd0;
+							orbWordS1 <= 12'd0;
+							orbWord <= 12'd0;
+							wAddr <= 11'd0;*/
+						end
+					end
+					1: begin
+						rAckS1 <= 1'b0;
+						WE <= 1'b1;
+					end
+					3: begin 
+						WE <= 1'b0;
+						
+					end
+					7: begin
+						cntS1 <= 0;
+						/*wAddrS1 <= 11'd0;
+						orbWordS1 <= 12'd0;
+						orbWord <= 12'd0;
+						wAddr <= 11'd0;*/
+						state <= WAIT;
+					end
+				endcase
+			end
+			/*STARTS2: begin
+				cntS2 <= cntS2 + 1'b1;
+				case(cntS1)
+					0: begin
+						if(sAddr2 != 11'd0) begin
+							wAddr <= sAddr2;
+							orbWord <= sData2;
+							rAckS2 <= 1'b1;
+						end else begin
+							cntS2 <= 0;
+							wAddr <= 11'd0;
+							state <= IDLE;*/
+							/*wAddrS1 <= 11'd0;
+							orbWordS1 <= 12'd0;
+							orbWord <= 12'd0;
+							wAddr <= 11'd0;*/
+						/*end
+					end
+					1: begin
+						rAckS2 <= 1'b0;
+						WE <= 1'b1;
+					end
+					3: begin 
+						WE <= 1'b0;
+						
+					end
+					7: begin
+						cntS2 <= 0;*/
+						/*wAddrS1 <= 11'd0;
+						orbWordS1 <= 12'd0;
+						orbWord <= 12'd0;
+						wAddr <= 11'd0;*/
+						/*state <= WAIT;
+					end
+				endcase
+			end*/
 		endcase
 	end
 end

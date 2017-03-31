@@ -77,19 +77,21 @@ wire [10:0] iTempAddr, oTempAddr;
 wire [6:0] swTemp;
 wire [11:0] tempWord;
 wire WEtemp;
-wire [7:0] fData1, fData2, sData1, sData2, oFastData1, oFastData2, oSlowData1, oSlowData2;
+wire [11:0] fData1, fData2, oFastData1, oFastData2;
+wire [11:0] sData1, sData2,oSlowData1, oSlowData2;
 wire fVal1, fVal2, sVal1, sVal2;
-wire oTestS1, oTestS2, rqF1, rqF2, rqS1, rqS2, fDone1, fDone2, sDone1, sDone2;
+wire rqF1, rqF2, rqS1, rqS2, fDone1, fDone2, sDone1, sDone2;
 wire [4:0] oTestF1, oTestF2;
+wire oTestS1, oTestS2;
 
 assign iTempAddr  = (swTemp == 7'd110) ? 11'd1215 : 11'd0;
 //assign ValRx = ValRX1;
 
 //assign WE = WEfast1 | WEfast2/* | WEslow1 | WEslow2;// | WEtemp*/;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
-assign test1 = RD2;//ValRX1;//UART_dTX1;//testVal1;
+assign test1 = WE;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
-assign test3 = RD1;//busy;//WE;//testpin1984;//WrAddr[1];
+assign test3 = WE;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = WR1;//testpin2016;//RE2;//0;//WE2;
 
 /*assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
@@ -207,6 +209,7 @@ writer instWrUart1(
 	.rst(rst),
 	.iData(iUART1),
 	.strob(ValRX1),
+	.sAddr(addrRamGr1),
 	.fData(fData1),
 	.sData(sData1),
 	.fVal(fVal1),
@@ -219,6 +222,7 @@ writer instWrUart2(
 	.rst(rst),
 	.iData(iUART2),
 	.strob(ValRX2),
+	.sAddr(addrRamGr2),
 	.fData(fData2),
 	.sData(sData2),
 	.fVal(fVal2),
@@ -284,6 +288,10 @@ fullPacker instPackerFull(
 	.emptyS2(sempty2),
 	.usedwF1(oTestF1),
 	.usedwF2(oTestF2),
+	.usedwS1(oTestS1),
+	.usedwS2(oTestS2),
+	.sAddr1(addrRamGr1),
+	.sAddr2(addrRamGr2),
 	.fData1(oFastData1),
 	.fData2(oFastData2),
 	.sData1(oSlowData1),

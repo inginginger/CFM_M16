@@ -7,23 +7,25 @@ module writer
 	input rst,
 	input[7:0] iData,
 	input strob,
-	output[7:0] fData,
-	output[7:0] sData,
+	input [10:0] sAddr,
+	output[11:0] fData,
+	output[11:0] sData,
 	output reg fVal,
 	output reg sVal
 );
 
 reg[1:0] syncStrob;
 reg[4:0] cntWord;
-reg[7:0] fBuf;
-reg[7:0] sBuf;
+reg[11:0] fBuf;
+reg[11:0] sBuf;
+reg[7:0] tmp;
 
 assign fData = fBuf;
 assign sData = sBuf;
 
 always@(posedge clk or negedge rst) begin
 	if(~rst)
-		syncStrob <= 3'd0;
+		syncStrob <= 2'd0;
 	else
 		syncStrob <= {syncStrob[0], strob};
 end
@@ -34,25 +36,29 @@ always@(posedge clk or negedge rst) begin
 	if(~rst) begin
 		cntWord <= 5'd0;
 		fBuf <= 8'd0;
-		sBuf <= 8'd0;
+		sBuf <= 12'd0;
 		fVal <= 1'b0;
 		sVal <= 1'b0;
+		tmp <= 8'd0;
 	end else begin
 		if(dtctStrob == 1)begin
 			cntWord <= cntWord + 1'b1;
 			if(cntWord < BYTES) begin
-				fBuf <= iData;
+				fBuf <= {1'b0, iData, 3'd0};
 				fVal <= 1'b1;
 			end else if(cntWord == 5'd16) begin
-				sBuf <= iData;
-				sVal <= 1'b1;
+				if(sAddr!= 11'd0)
+					tmp <= iData;
 			end else if(cntWord == 5'd17)begin
-				sBuf <= iData;
-				sVal <= 1'b1;
+				if(sAddr!= 11'd0) begin
+					sBuf <= {1'b0, iData[1:0], tmp, 1'b0};
+					sVal <= 1'b1;
+				end
 				cntWord <= 5'd0;
 			end else begin
-				sBuf <= 8'd0;
-				fBuf <= 8'd0;
+				tmp <= 8'd0;
+				sBuf <= 12'd0;
+				fBuf <= 12'd0;
 			end
 		end else begin
 			sVal <= 1'b0;
