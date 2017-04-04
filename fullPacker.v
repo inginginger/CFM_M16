@@ -194,12 +194,13 @@ always@(posedge clk or negedge rst) begin
 						wAddr <= wAddrF2;
 						orbWord <= fData2;
 						rAckF2 <= 1'b1;
+						
 					end
 					3: begin
 						WE <= 1'b1;
 						rAckF2 <= 1'b0;
 					end
-					4: begin
+					4: begin						
 						WE <= 1'b0;
 						if(usedwF2 == 0) begin
 							state <= WAIT;

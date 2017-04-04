@@ -35,7 +35,7 @@ wire dtctStrob = !syncStrob[1] & syncStrob[0];
 always@(posedge clk or negedge rst) begin
 	if(~rst) begin
 		cntWord <= 5'd0;
-		fBuf <= 8'd0;
+		fBuf <= 12'd0;
 		sBuf <= 12'd0;
 		fVal <= 1'b0;
 		sVal <= 1'b0;
