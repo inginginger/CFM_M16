@@ -136,8 +136,8 @@ always@(posedge clk or negedge rst) begin
 			IDLE: 
 				if(doneBus[0] == 1)
 					state<= STARTF1;
-				/*else if(doneBus[1] == 1)
-					state <= STARTF2;*/
+				else if(doneBus[1] == 1)
+					state <= STARTF2;
 				else if(doneBus[2] == 1)
 					state <= STARTS1;
 				/*else if(doneBus[3] == 1)
@@ -221,7 +221,7 @@ always@(posedge clk or negedge rst) begin
 			STARTS1: begin
 				cntS1 <= cntS1 + 1'b1;
 				case(cntS1)
-					0: begin
+					3: begin
 						if(sAddr1 != 11'd0) begin
 							wAddr <= sAddr1;
 							orbWord <= sData1;
@@ -236,11 +236,11 @@ always@(posedge clk or negedge rst) begin
 							wAddr <= 11'd0;*/
 						end
 					end
-					1: begin
+					4: begin
 						rAckS1 <= 1'b0;
 						WE <= 1'b1;
 					end
-					3: begin 
+					6: begin 
 						WE <= 1'b0;
 						
 					end

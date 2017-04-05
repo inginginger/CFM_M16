@@ -68,13 +68,13 @@ set_location_assignment PIN_66 -to test2
 set_location_assignment PIN_65 -to test3
 set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT simulation/modelsim/wave.do -section_id eda_simulation
 set_global_assignment -name MISC_FILE "C:/Projects/CFM/OrbM16.dpf"
-set_location_assignment PIN_33 -to UART_RX1
+set_location_assignment PIN_36 -to UART_RX1
 set_location_assignment PIN_43 -to UART_RX2
-set_location_assignment PIN_36 -to UART_TX1
+set_location_assignment PIN_33 -to UART_TX1
 set_location_assignment PIN_38 -to UART_TX2
-set_location_assignment PIN_34 -to UART_dRX1
+set_location_assignment PIN_35 -to UART_dRX1
 set_location_assignment PIN_41 -to UART_dRX2
-set_location_assignment PIN_35 -to UART_dTX1
+set_location_assignment PIN_34 -to UART_dTX1
 set_location_assignment PIN_39 -to UART_dTX2
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
