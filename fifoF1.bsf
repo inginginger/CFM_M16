@@ -68,23 +68,9 @@ applicable agreement for further details.
 	(port
 		(pt 160 56)
 		(output)
-		(text "full" (rect 0 0 16 14)(font "Arial" (font_size 8)))
-		(text "full" (rect 127 50 142 63)(font "Arial" (font_size 8)))
-		(line (pt 160 56)(pt 144 56)(line_width 1))
-	)
-	(port
-		(pt 160 72)
-		(output)
-		(text "empty" (rect 0 0 34 14)(font "Arial" (font_size 8)))
-		(text "empty" (rect 112 66 141 79)(font "Arial" (font_size 8)))
-		(line (pt 160 72)(pt 144 72)(line_width 1))
-	)
-	(port
-		(pt 160 88)
-		(output)
 		(text "usedw[4..0]" (rect 0 0 68 14)(font "Arial" (font_size 8)))
-		(text "usedw[4..0]" (rect 83 82 136 95)(font "Arial" (font_size 8)))
-		(line (pt 160 88)(pt 144 88)(line_width 3))
+		(text "usedw[4..0]" (rect 83 50 136 63)(font "Arial" (font_size 8)))
+		(line (pt 160 56)(pt 144 56)(line_width 3))
 	)
 	(drawing
 		(text "(ack)" (rect 51 67 72 79)(font "Arial" ))

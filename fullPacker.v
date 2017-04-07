@@ -19,6 +19,7 @@ module fullPacker(
 	input[11:0] fData2,
 	input[11:0] sData1,
 	input[11:0] sData2,
+	input SW,
 	output reg rAckF1,
 	output reg rAckS1,
 	output reg rAckF2,
@@ -40,6 +41,7 @@ reg[5:0] cntPack1;
 reg[5:0] cntPack2;
 reg [2:0] cntS1, cntS2, cntF1, cntF2;
 reg [4:0] pause;
+reg oldSW;
 
 
 assign doneBus[0] = (usedwF1 == 5'd16) ? 1'b1 : 1'b0;
@@ -131,19 +133,32 @@ always@(posedge clk or negedge rst) begin
 		cntF1 <= 3'd0;
 		cntF2 <= 3'd0;
 		pause <= 5'd0;
+		oldSW <= 1'b0;
 	end else begin
+		if(SW != oldSW) begin
+			state <= 5'd0;
+			rAckS1 <= 1'b0;
+			rAckS2 <= 1'b0;
+			wAddr <= 11'd0;
+			orbWord <= 12'd0;
+			WE <= 1'b0;
+		end
+		oldSW <= SW;
 		case(state)
-			IDLE: 
+			IDLE:  begin
+				rAckS2 <= 1'b0;
+				rAckS1 <= 1'b0;
 				if(doneBus[0] == 1)
 					state<= STARTF1;
 				else if(doneBus[1] == 1)
 					state <= STARTF2;
 				else if(doneBus[2] == 1)
 					state <= STARTS1;
-				/*else if(doneBus[3] == 1)
-					state <= STARTS2;*/
+				else if(doneBus[3] == 1)
+					state <= STARTS2;
 				else
 					state <= IDLE;
+			end
 			STARTF1: begin
 				cntF1 <= cntF1 + 1'b1;
 				case(cntF1)
@@ -228,6 +243,7 @@ always@(posedge clk or negedge rst) begin
 							rAckS1 <= 1'b1;
 						end else begin
 							cntS1 <= 0;
+							rAckS1 <= 1'b1;
 							wAddr <= 11'd0;
 							state <= IDLE;
 							/*wAddrS1 <= 11'd0;
@@ -254,10 +270,10 @@ always@(posedge clk or negedge rst) begin
 					end
 				endcase
 			end
-			/*STARTS2: begin
+			STARTS2: begin
 				cntS2 <= cntS2 + 1'b1;
-				case(cntS1)
-					0: begin
+				case(cntS2)
+					3: begin
 						if(sAddr2 != 11'd0) begin
 							wAddr <= sAddr2;
 							orbWord <= sData2;
@@ -265,31 +281,32 @@ always@(posedge clk or negedge rst) begin
 						end else begin
 							cntS2 <= 0;
 							wAddr <= 11'd0;
-							state <= IDLE;*/
+							rAckS2 <= 1'b1;
+							state <= IDLE;
 							/*wAddrS1 <= 11'd0;
 							orbWordS1 <= 12'd0;
 							orbWord <= 12'd0;
 							wAddr <= 11'd0;*/
-						/*end
+						end
 					end
-					1: begin
+					4: begin
 						rAckS2 <= 1'b0;
 						WE <= 1'b1;
 					end
-					3: begin 
+					6: begin 
 						WE <= 1'b0;
 						
 					end
 					7: begin
-						cntS2 <= 0;*/
+						cntS2 <= 0;
 						/*wAddrS1 <= 11'd0;
 						orbWordS1 <= 12'd0;
 						orbWord <= 12'd0;
 						wAddr <= 11'd0;*/
-						/*state <= WAIT;
+						state <= WAIT;
 					end
 				endcase
-			end*/
+			end
 		endcase
 	end
 end

@@ -21,8 +21,6 @@ component fifoS
 		rdreq		: IN STD_LOGIC ;
 		sclr		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
-		empty		: OUT STD_LOGIC ;
-		full		: OUT STD_LOGIC ;
 		q		: OUT STD_LOGIC_VECTOR (11 DOWNTO 0);
 		usedw		: OUT STD_LOGIC_VECTOR (0 DOWNTO 0)
 	);

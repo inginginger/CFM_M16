@@ -47,13 +47,13 @@ always@(posedge clk or negedge rst) begin
 				fBuf <= {1'b0, iData, 3'd0};
 				fVal <= 1'b1;
 			end else if(cntWord == 5'd16) begin
-				if(sAddr!= 11'd0)
+				//if(sAddr!= 11'd0)
 					tmp <= iData;
 			end else if(cntWord == 5'd17)begin
-				if(sAddr!= 11'd0) begin
+				//if(sAddr!= 11'd0) begin
 					sBuf <= {1'b0, iData[1:0], tmp, 1'b0};
 					sVal <= 1'b1;
-				end
+				//end
 				cntWord <= 5'd0;
 			end else begin
 				tmp <= 8'd0;

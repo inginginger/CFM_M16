@@ -37,8 +37,6 @@ module fifoF1 (
 	rdreq,
 	sclr,
 	wrreq,
-	empty,
-	full,
 	q,
 	usedw);
 
@@ -47,8 +45,6 @@ module fifoF1 (
 	input	  rdreq;
 	input	  sclr;
 	input	  wrreq;
-	output	  empty;
-	output	  full;
 	output	[11:0]  q;
 	output	[4:0]  usedw;
 
@@ -64,8 +60,8 @@ endmodule
 // Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "0"
 // Retrieval info: PRIVATE: Clock NUMERIC "0"
 // Retrieval info: PRIVATE: Depth NUMERIC "32"
-// Retrieval info: PRIVATE: Empty NUMERIC "1"
-// Retrieval info: PRIVATE: Full NUMERIC "1"
+// Retrieval info: PRIVATE: Empty NUMERIC "0"
+// Retrieval info: PRIVATE: Full NUMERIC "0"
 // Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: PRIVATE: LE_BasedFIFO NUMERIC "0"
 // Retrieval info: PRIVATE: LegacyRREQ NUMERIC "0"
@@ -101,8 +97,6 @@ endmodule
 // Retrieval info: CONSTANT: USE_EAB STRING "ON"
 // Retrieval info: USED_PORT: clock 0 0 0 0 INPUT NODEFVAL clock
 // Retrieval info: USED_PORT: data 0 0 12 0 INPUT NODEFVAL data[11..0]
-// Retrieval info: USED_PORT: empty 0 0 0 0 OUTPUT NODEFVAL empty
-// Retrieval info: USED_PORT: full 0 0 0 0 OUTPUT NODEFVAL full
 // Retrieval info: USED_PORT: q 0 0 12 0 OUTPUT NODEFVAL q[11..0]
 // Retrieval info: USED_PORT: rdreq 0 0 0 0 INPUT NODEFVAL rdreq
 // Retrieval info: USED_PORT: sclr 0 0 0 0 INPUT NODEFVAL sclr
@@ -113,8 +107,6 @@ endmodule
 // Retrieval info: CONNECT: @wrreq 0 0 0 0 wrreq 0 0 0 0
 // Retrieval info: CONNECT: @rdreq 0 0 0 0 rdreq 0 0 0 0
 // Retrieval info: CONNECT: @clock 0 0 0 0 clock 0 0 0 0
-// Retrieval info: CONNECT: full 0 0 0 0 @full 0 0 0 0
-// Retrieval info: CONNECT: empty 0 0 0 0 @empty 0 0 0 0
 // Retrieval info: CONNECT: usedw 0 0 5 0 @usedw 0 0 5 0
 // Retrieval info: CONNECT: @sclr 0 0 0 0 sclr 0 0 0 0
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
