@@ -9,7 +9,8 @@ module answerLCS(
 	input [7:0] dataLCS,
 	output reg ack,
 	output  [7:0] dataTx,
-	output  [6:0] addrTemp
+	output  [6:0] addrTemp,
+	output test
 	);
 	
 	reg [1:0] syncSW;
@@ -20,7 +21,7 @@ module answerLCS(
 	reg [4:0] shiftByte;
 	reg enTemp;
 	reg [3:0] cnt;
-	
+	assign test = enTemp;
 	assign addrTemp = (enTemp == 1'b0)? 7'd0 :(cntTemp  + (shiftByte << 2'd2));
 	assign dataTx = (enTemp == 1'b0) ? dataLCS : dataTemp;
 	
@@ -44,30 +45,29 @@ module answerLCS(
 			case(state)
 				IDLE: begin
 					if(req) begin	//если приняли запрос на данные
-						ack <= 1'b1;		//формируем подтверждение
 						state <= CHECK;
 					end
 				end
 
 				CHECK: begin
-					if(syncSW[1] && (addrLCS == 184 || addrLCS == 185
-						|| addrLCS == 186 || addrLCS == 187)) begin	
+					if(syncSW[1] && (addrLCS == 240 || addrLCS == 241
+						|| addrLCS == 242 || addrLCS == 243)) begin	
 						enTemp <= 1'b1;
 						cntTemp <= cntTemp + 1'b1;
 						if(cntTemp == 2'd3) begin
 							shiftByte <= shiftByte + 1'b1;	
 						end
 						state <= DELAY;
-						ack <= 1'b0;
+						
 					end else begin
 						enTemp <= 1'b0;									//отдаем данные ялк
 						state <= DELAY;
-						ack <= 1'b0;
 					end	
 												
 				end
 				
 				DELAY: begin
+					ack <= 1'b1;		
 					cnt <= cnt + 1'b1;
 					if(cnt == 4'd9) begin
 						cnt <= 4'd0;
@@ -76,7 +76,10 @@ module answerLCS(
 				end
 
 				WAIT: begin
+					ack <= 1'b0;
 					if(~req) begin
+						if(cntTemp == 2'd0)
+							enTemp <= 1'b0;
 						state <= IDLE;
 						
 					end

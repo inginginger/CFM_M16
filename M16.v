@@ -136,15 +136,6 @@ always@(negedge reset or posedge iClkOrb)begin
 			20: RqFast <= 1'd0;
 			1530: begin
 				cycle <= cycle + 1'b1;
-				if(cycle == 6'd63) begin
-					cntTemp <= cntTemp + 1'b1;
-					if(cntTemp == 3'd7) begin
-						sel <= 1'b1;
-					end
-				end
-				else if(cycle == 6'd0) begin
-					sel <= 1'b0;
-				end
 			end
 			1535:  begin 
 				cntRqFast <= 11'd0;
