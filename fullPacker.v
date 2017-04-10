@@ -42,7 +42,7 @@ reg[5:0] cntPack2;
 reg [2:0] cntS1, cntS2, cntF1, cntF2;
 reg [4:0] pause;
 reg oldSW;
-
+reg [1:0] syncSW;
 
 assign doneBus[0] = (usedwF1 == 5'd16) ? 1'b1 : 1'b0;
 assign doneBus[1] = (usedwF2 == 5'd15) ? 1'b1 : 1'b0;
@@ -84,6 +84,13 @@ always@(posedge clk) begin
 	rom2[13] <= 23;
 	rom2[14] <= 27;
 	
+end
+
+always@(posedge clk or negedge rst) begin
+	if(~rst)
+		syncSW <= 2'd0;
+	else 
+		syncSW <= {syncSW[0], SW};
 end
 
 /*always@(*) begin
@@ -135,7 +142,7 @@ always@(posedge clk or negedge rst) begin
 		pause <= 5'd0;
 		oldSW <= 1'b0;
 	end else begin
-		if(SW != oldSW) begin
+		if(syncSW[1] != oldSW) begin
 			state <= 5'd0;
 			rAckS1 <= 1'b0;
 			rAckS2 <= 1'b0;
@@ -143,7 +150,7 @@ always@(posedge clk or negedge rst) begin
 			orbWord <= 12'd0;
 			WE <= 1'b0;
 		end
-		oldSW <= SW;
+		oldSW <= syncSW[1];
 		case(state)
 			IDLE:  begin
 				rAckS2 <= 1'b0;
@@ -236,7 +243,7 @@ always@(posedge clk or negedge rst) begin
 			STARTS1: begin
 				cntS1 <= cntS1 + 1'b1;
 				case(cntS1)
-					3: begin
+					1: begin
 						if(sAddr1 != 11'd0) begin
 							wAddr <= sAddr1;
 							orbWord <= sData1;
@@ -252,7 +259,7 @@ always@(posedge clk or negedge rst) begin
 							wAddr <= 11'd0;*/
 						end
 					end
-					4: begin
+					2: begin
 						rAckS1 <= 1'b0;
 						WE <= 1'b1;
 					end

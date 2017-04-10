@@ -230,7 +230,7 @@ writer instWrUart2(
 );
 defparam instWrUart2.BYTES = 5'd15;
 
-wire fempty1, fempty2, sempty1, sempty2;
+
 fifoF1 instFastFifo1(
 	.clock(clk80MHz),
 	.data(fData1),
@@ -244,7 +244,7 @@ fifoS instSlowFifo1(
 	.clock(clk80MHz),
 	.data(sData1),
 	.rdreq(rqS1),//from FullPacker
-	.sclr(f1),
+	.sclr(1'b0),
 	.wrreq(sVal1),//valid
 	.q(oSlowData1),//oData
 	.usedw(oTestS1));
@@ -262,7 +262,7 @@ fifoS instSlowFifo2(
 	.clock(clk80MHz),
 	.data(sData2),
 	.rdreq(rqS2),//from FullPacker
-	.sclr(f2),
+	.sclr(1'b0),
 	.wrreq(sVal2),//valid
 	.q(oSlowData2),//oData
 	.usedw(oTestS2));

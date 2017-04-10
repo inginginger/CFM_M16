@@ -14,7 +14,7 @@ module writer
 	output reg sVal
 );
 
-reg[1:0] syncStrob;
+reg[2:0] syncStrob;
 reg[4:0] cntWord;
 reg[11:0] fBuf;
 reg[11:0] sBuf;
@@ -25,12 +25,12 @@ assign sData = sBuf;
 
 always@(posedge clk or negedge rst) begin
 	if(~rst)
-		syncStrob <= 2'd0;
+		syncStrob <= 3'd0;
 	else
-		syncStrob <= {syncStrob[0], strob};
+		syncStrob <= {syncStrob[1:0], strob};
 end
 
-wire dtctStrob = !syncStrob[1] & syncStrob[0];
+wire dtctStrob = !syncStrob[2] & syncStrob[1];
 
 always@(posedge clk or negedge rst) begin
 	if(~rst) begin
