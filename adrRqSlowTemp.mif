@@ -1,0 +1,112 @@
+-- Copyright (C) 1991-2009 Altera Corporation
+-- Your use of Altera Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Altera Program License 
+-- Subscription Agreement, Altera MegaCore Function License 
+-- Agreement, or other applicable license agreement, including, 
+-- without limitation, that your use is for the sole purpose of 
+-- programming logic devices manufactured by Altera and sold by 
+-- Altera or its authorized distributors.  Please refer to the 
+-- applicable agreement for further details.
+
+-- Quartus II generated Memory Initialization File (.mif)
+
+WIDTH=11;
+DEPTH=128;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=UNS;
+
+CONTENT BEGIN
+	0    :   31;
+	1    :   95;
+	2    :   159;
+	3    :   223;
+	4    :   287;
+	5    :   351;
+	6    :   415;
+	7    :   479;
+	8    :   63;
+	9    :   127;
+	10   :   191;
+	11   :   255;
+	[12..15]  :   0;
+	16   :   543;
+	17   :   607;
+	18   :   671;
+	19   :   735;
+	20   :   799;
+	21   :   863;
+	22   :   927;
+	23   :   991;
+	24   :   575;
+	[25..31]  :   0;
+	32   :   1055;
+	33   :   1119;
+	34   :   1183;
+	35   :   1247;
+	36   :   1311;
+	37   :   1375;
+	38   :   1439;
+	39   :   1503;
+	40   :   1087;
+	[41..47]  :   0;
+	48   :   1567;
+	49   :   1631;
+	50   :   1695;
+	51   :   1759;
+	52   :   1823;
+	53   :   1887;
+	54   :   1951;
+	55   :   2015;
+	56   :   1599;
+	[57..63]  :   0;
+	64   :   31;
+	65   :   95;
+	66   :   159;
+	67   :   223;
+	68   :   287;
+	69   :   351;
+	70   :   415;
+	71   :   479;
+	72   :   63;
+	73   :   127;
+	74   :   191;
+	75   :   255;
+	[76..79]  :   0;
+	80   :   543;
+	81   :   607;
+	82   :   671;
+	83   :   735;
+	84   :   799;
+	85   :   863;
+	86   :   927;
+	87   :   991;
+	88   :   575;
+	[89..95]  :   0;
+	96   :   1055;
+	97   :   1119;
+	98   :   1183;
+	99   :   1247;
+	100  :   1311;
+	101  :   1375;
+	102  :   1439;
+	103  :   1503;
+	104  :   1087;
+	[105..111]  :   0;
+	112  :   1567;
+	113  :   1631;
+	114  :   1695;
+	115  :   1759;
+	116  :   1823;
+	117  :   1887;
+	118  :   1951;
+	119  :   2015;
+	120  :   1599;
+	121  :   0;
+	122  :   831;
+	[123..127]  :   0;
+END;

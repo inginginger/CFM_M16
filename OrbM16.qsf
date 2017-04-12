@@ -79,6 +79,7 @@ set_location_assignment PIN_39 -to UART_dTX2
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_location_assignment PIN_173 -to test4
+set_global_assignment -name VERILOG_FILE newUart.v
 set_global_assignment -name VERILOG_FILE M16.v
 set_global_assignment -name VERILOG_FILE UARTTXBIG.v
 set_global_assignment -name MIF_FILE OrbM16.mif
@@ -119,3 +120,6 @@ set_global_assignment -name QIP_FILE fifoF1.qip
 set_global_assignment -name QIP_FILE fifoS.qip
 set_global_assignment -name VERILOG_FILE writer.v
 set_global_assignment -name VERILOG_FILE fullPacker.v
+set_global_assignment -name VERILOG_FILE commutator.v
+set_global_assignment -name CDF_FILE OrbM16.cdf
+set_global_assignment -name MIF_FILE adrRqSlowTemp.mif

@@ -53,7 +53,7 @@ if (~reset) begin					// global asyncronous reset, initial values
 	//txOn <= 1'b0;
 	addr <= 9'd0;
 end else begin						// main circuit
-	
+	addr <= (switch + (cycle << 2));
 	case (state)					// state machine
 		WAIT: begin					// waiting for transfer request
 			full <= 1'b0;
@@ -66,7 +66,6 @@ end else begin						// main circuit
 			//bufTemp <= data;
 			if(ack) begin
 				rqRom <= 1'b0;
-				addr <= (switch + (cycle << 2));
 				state <= TX;
 			end
 			//state <= ACK;		// just move on

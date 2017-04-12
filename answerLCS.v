@@ -1,87 +1,60 @@
 module answerLCS(
 	input clk,
-	input edgeTx,
 	input rst,
-	input SW, 
-	input [8:0] addrLCS,
 	input req,
+	input [2:0] sel,
 	input [7:0] dataTemp,
 	input [7:0] dataLCS,
-	output reg ack,
-	output  [7:0] dataTx,
-	output  [6:0] addrTemp
+	output [7:0] dataTx,
+	output [6:0] addrTemp
 	);
 	
-	reg [1:0] syncSW;
-	reg [1:0] syncReq;
-	reg [1:0] syncEdge;
-	reg [2:0] state;
-	reg [1:0] cntTemp;
-	reg [4:0] shiftByte;
-	reg enTemp;
-	reg [3:0] cnt;
-	
-	assign addrTemp = (enTemp == 1'b0)? 7'd0 :(cntTemp  + (shiftByte << 2'd2));
-	assign dataTx = (enTemp == 1'b0) ? dataLCS : dataTemp;
-	
-	localparam IDLE = 0, EDGE = 1, CHECK = 2, WAIT = 3, DELAY = 4;
+reg [1:0] syncRq;
+reg [4:0] waitTime;
+reg [4:0] shift;
+reg [1:0] cntTemp;
+reg [5:0] pause;
+reg [6:0] cntRq;
+reg [2:0] state;
+reg [3:0] cnt;
+reg ena;
 
-	always@(posedge edgeTx) begin
-		syncSW <= {syncSW[0], SW};
-		syncReq <= {syncReq[0], req};
-		//syncEdge <= {syncEdge[0], edgeTx};
+localparam IDLE = 0, WAITINGFOR = 1, CHECK = 2, DELAY = 3, WAIT = 4;
+
+assign addrTemp = sel + (shift << 2);
+assign dataTx = (cntRq == 7'd122) ? dataTemp : dataLCS;
+
+always@(posedge clk or negedge rst) 
+	if(~rst)
+		syncRq <= 2'd0;
+	else 
+		syncRq <= {syncRq[0], req};
+		
+always@(posedge clk or negedge rst) begin
+	if(~rst) begin
+		state <= 3'd0;
+		cntTemp <= 2'd0;
+		cntRq <= 7'd0;
+		pause <= 6'd0;
+		shift <= 5'd0;
+		cnt <= 4'd0;
+		ena <= 1'b0;
+	end else begin
+		
+		case(state)
+			IDLE: if(syncRq[1]) begin
+				cntRq <= cntRq + 1'b1;
+				state <= CHECK;
+			end
+			CHECK: begin
+				if(cntRq == 7'd123) begin
+					shift <= shift + 1'b1;
+				end 
+				state <= WAIT;		
+			end
+			WAIT: if(~syncRq[1])
+				state <= IDLE;
+		endcase
 	end
-
-	always@(posedge edgeTx or negedge rst) begin
-		if(~rst) begin
-			ack <= 1'b0;
-			state <= 3'd0;
-			cntTemp <= 2'd0;
-			shiftByte <= 5'd0;
-			enTemp <= 1'b0;
-			cnt <= 4'd0;
-		end else begin
-			case(state)
-				IDLE: begin
-					if(req) begin	//если приняли запрос на данные
-						ack <= 1'b1;		//формируем подтверждение
-						state <= CHECK;
-					end
-				end
-
-				CHECK: begin
-					if(syncSW[1] && (addrLCS == 184 || addrLCS == 185
-						|| addrLCS == 186 || addrLCS == 187)) begin	
-						enTemp <= 1'b1;
-						cntTemp <= cntTemp + 1'b1;
-						if(cntTemp == 2'd3) begin
-							shiftByte <= shiftByte + 1'b1;	
-						end
-						state <= DELAY;
-						ack <= 1'b0;
-					end else begin
-						enTemp <= 1'b0;									//отдаем данные ялк
-						state <= DELAY;
-						ack <= 1'b0;
-					end	
-												
-				end
-				
-				DELAY: begin
-					cnt <= cnt + 1'b1;
-					if(cnt == 4'd9) begin
-						cnt <= 4'd0;
-						state <= WAIT;
-					end
-				end
-
-				WAIT: begin
-					if(~req) begin
-						state <= IDLE;
-						
-					end
-				end
-			endcase
-		end
-	end
+end
 endmodule

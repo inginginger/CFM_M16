@@ -41,7 +41,7 @@ wire [6:0] tempAddr;
 wire [8:0] LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr3, LCB_rq_addr4, LCB_rq_addr5, fastAddr;
 wire [7:0]  LCB_rq_data1, LCB_rq_data2, LCB_rq_data3, LCB_rq_data4, LCB_rq_data5, LCBdata, tempData;
 wire [7:0] txData;
-wire [2:0] switch;
+wire [2:0] switch1, switch2;
 wire [10:0] RdAddr;
 wire [10:0] WrAddr;
 reg [11:0] OrbData;
@@ -289,32 +289,6 @@ fullPacker instPackerFull(
 	.WE(WE),
 	.SW(SW)
 );
-/*uartRx instRX3(
-	.clk(clk80MHz),
-	.rstTx(f3),
-	.rst(rst),
-	.rx(UART_RX3),
-	.oValid(ValRX3),
-	.oData(iUART3)
-);
-
-uartRx instRX4(
-	.clk(clk80MHz),
-	.rstTx(f4),
-	.rst(rst),
-	.rx(UART_RX4),
-	.oValid(ValRX4),
-	.oData(iUART4)
-);
-
-uartRx instRX5(
-	.clk(clk80MHz),
-	.rstTx(f5),
-	.rst(rst),
-	.rx(UART_RX5),
-	.oValid(ValRX5),
-	.oData(iUART5)
-);*/
 
 ramUART instRam1(
 	.clock(clk80MHz),
@@ -335,171 +309,10 @@ ramUART instRam2(
 	.wren(WR2),
 	.q(oUART2)
 );
-/*
-ramUART instRam3(
-	.clock(clk80MHz),
-	.data(iUART3),
-	.rdaddress(RAdr3),
-	.rden(RD3),
-	.wraddress(WAdr3),
-	.wren(WR3),
-	.q(oUART3)
-);
 
-ramUART instRam4(
-	.clock(clk80MHz),
-	.data(iUART4),
-	.rdaddress(RAdr4),
-	.rden(RD4),
-	.wraddress(WAdr4),
-	.wren(WR4),
-	.q(oUART4)
-);
-
-ramUART instRam5(
-	.clock(clk80MHz),
-	.data(iUART5),
-	.rdaddress(RAdr5),
-	.rden(RD5),
-	.wraddress(WAdr5),
-	.wren(WR5),
-	.q(oUART5)
-);*/
 
 wire rstWr1, rstWr2;
 
-/*commutAdr instWrAdr1(
-	.clk(clk80MHz),
-	.rst(rst),
-	.rstWr(rstWr1),
-	.strob(ValRX1),
-	.wrAdr(WAdr1),
-	.full(done1),
-	.WE(WR1)
-);
-
-commutAdr instWrAdr2(
-	.clk(clk80MHz),
-	.rst(rst),
-	.rstWr(rstWr2),
-	.strob(ValRX2),
-	.wrAdr(WAdr2),
-	.full(done2),
-	.WE(WR2)
-);*/
-/*commutAdr instWrAdr3(
-	.clk(clk80MHz),
-	.rst(rst),
-	.strob(ValRX3),
-	.wrAdr(WAdr3),
-	.full(done3),
-	.WE(WR3)
-);
-
-commutAdr instWrAdr4(
-	.clk(clk80MHz),
-	.rst(rst),
-	.strob(ValRX4),
-	.wrAdr(WAdr4),
-	.full(done4),
-	.WE(WR4)
-);
-
-commutAdr instWrAdr5(
-	.clk(clk80MHz),
-	.rst(rst),
-	.strob(ValRX5),
-	.wrAdr(WAdr5),
-	.full(done5),
-	.WE(WR5)
-);*/
-
-/*commRdAdr instRdAdr1(
-	.clk(clk80MHz),
-	.rst(rst),
-	.busy(busy),
-	.strob1(done1),
-	.strob2(done2),
-	.strob3(done3),
-	.strob4(done4),
-	.strob5(done5),
-	.RD1(RD1),
-	.RD2(RD2),
-	.RD3(RD3),
-	.RD4(RD4),
-	.RD5(RD5),
-	.RdAdr1(RAdr1),
-	.RdAdr2(RAdr2),
-	.RdAdr3(RAdr3),
-	.RdAdr4(RAdr4),
-	.RdAdr5(RAdr5),
-	.rstWr1(rstWr1),
-	.rstWr2(rstWr2)
-);	*/
-
-
-/*SlowPacker instSlowPACK1(
-	.clk(clk80MHz),
-	.rst(rst),
-	.iData(oUART1),
-	.addrRam(addrRamGr1),
-	.strob(RD1),
-	.SW(SW),
-	.test(testSlow1),
-	.orbWord(slowWord1),
-	.WE(WEslow1),
-	.WrAddr(SlowAddr1)
-);
-SlowPacker instSlowPACK2(
-	.clk(clk80MHz),
-	.rst(rst),
-	.iData(oUART2),
-	.addrRam(addrRamGr2),
-	.strob(RD2),
-	.SW(SW),
-	.test(testSlow2),
-	.orbWord(slowWord2),
-	.WE(WEslow2),
-	.WrAddr(SlowAddr2)
-);
-
-
-
-tempPacker instTempPack(
-	.clk(clk80MHz),
-	.rst(rst),
-	.iData(oUART1),
-	.addrRam(iTempAddr),
-	.strob(RD1),
-	.SW(SW),
-	.orbWord(tempWord),
-	.WE(WEtemp),
-	.WrAddr(oTempAddr)
-);
-
-*/
-/*OrbPacker instPACKER(
-	.clk(clk80MHz),
-	.rst(rst),
-	.iData1(oUART1),
-	.strob1(RD1),
-	.iData2(oUART2),
-	.strob2(RD2),
-	.iData3(oUART3),
-	.strob3(RD3),
-	.iData4(oUART4),
-	.strob4(RD4),
-	.iData5(oUART5),
-	.strob5(RD5),
-	.SW(SW),
-	.test(test),
-	.orbWord1(fastWord1),
-	.orbWord2(fastWord2),
-	.WE1(WEfast1),
-	.WE2(WEfast2),
-	.WrAddr1(FastAddr1),
-	.WrAddr2(FastAddr2)
-);*/
 
 ramM16 instRamM16_1(
 	.clock(clk80MHz),
@@ -531,23 +344,9 @@ M16 instM16(
 	.oOrbit(orbFrame),
 	.swTemp(swTemp)
 );
+wire [2:0] swsel;
 
-/*newUart instTX1(
-	.reset(rst),
-	.clk(clk80MHz),
-	.edgeTx(clk4_8MHz),
-	.RQ(RqFast),
-	.ack(ack),
-	.cycle(cycle),
-	.data(txData),
-	.rqRom(rqRom),
-	.addr(LCB_rq_addr1),
-	.full(f1),
-	.tx(UART_TX1),
-	.dirTX(UART_dTX1),
-	.dirRX(UART_dRX1),
-	.switch(switch));
-defparam instTX1.BYTES = 5'd4;*/
+assign swsel = switch1;
 
 UARTTXBIG instTX1(
   .reset(rst),          // global reset and enable signal
@@ -555,14 +354,15 @@ UARTTXBIG instTX1(
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
-  .data(LCB_rq_data1),      // data to transmit (from ROM)
+  .data(txData),      // data to transmit (from ROM)
   .addr(LCB_rq_addr1),      // address to read (to ROM)
   .tx(UART_TX1),          // serial transmitted data
   .dirTX(UART_dTX1),        // rs485 TX dir controller 
   .dirRX(UART_dRX1),        // rs485 RX dir controller
-  .switch(switch)
+  .switch(switch1)
 );
 defparam instTX1.BYTES = 5'd4;
+
 
 UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal
@@ -575,85 +375,23 @@ UARTTXBIG instTX2(
   .tx(UART_TX2),          // serial transmitted data
   .dirTX(UART_dTX2),        // rs485 TX dir controller 
   .dirRX(UART_dRX2),        // rs485 RX dir controller
-  .switch(switch)
+  .switch(switch2)
 );
 defparam instTX2.BYTES = 5'd4;
 
-/*UARTTXBIG instTX3(
-  .reset(rst),          // global reset and enable signal
-  .full(f3),
-  .clk(clk4_8MHz),            // actual needed baudrate
-  .RQ(RqFast),
-  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
-  .data(LCB_rq_data3),      // data to transmit (from ROM)
-  .addr(LCB_rq_addr3),      // address to read (to ROM)
-  .tx(UART_TX3),          // serial transmitted data
-  .dirTX(UART_dTX3),        // rs485 TX dir controller 
-  .dirRX(UART_dRX3),        // rs485 RX dir controller
-  .switch(switch)
-);
-defparam instTX3.BYTES = 5'd4;
-
-UARTTXBIG instTX4(
-  .reset(rst),          // global reset and enable signal
-  .full(f4),
-  .clk(clk4_8MHz),            // actual needed baudrate
-  .RQ(RqFast),
-  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
-  .data(LCB_rq_data4),      // data to transmit (from ROM)
-  .addr(LCB_rq_addr4),      // address to read (to ROM)
-  .tx(UART_TX4),          // serial transmitted data
-  .dirTX(UART_dTX4),        // rs485 TX dir controller 
-  .dirRX(UART_dRX4),        // rs485 RX dir controller
-  .switch(switch)
-);
-defparam instTX4.BYTES = 5'd4;
-
-UARTTXBIG instTX5(
-  .reset(rst),          // global reset and enable signal
-  .full(f5),
-  .clk(clk4_8MHz),            // actual needed baudrate
-  .RQ(RqFast),
-  .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
-  .data(LCB_rq_data5),      // data to transmit (from ROM)
-  .addr(LCB_rq_addr5),      // address to read (to ROM)
-  .tx(UART_TX5),          // serial transmitted data
-  .dirTX(UART_dTX5),        // rs485 TX dir controller 
-  .dirRX(UART_dRX5),        // rs485 RX dir controller
-  .switch(switch)
-);
-defparam instTX5.BYTES = 5'd4;*/
-
-/*formTempRQ instTempRQ(
-	.clk(clk80MHz),
-	.rst(rst),
-	.SW(SW),
-	.LCB(LCBdata),
-	.temp(tempData),
-	.fastAddr(fastAddr),
-	.tempAddr(tempAddr),
-	.LCB_rq_data(LCB_rq_data),
-	.LCB_rq_addr1(LCB_rq_addr1),
-	.tempFull(tempFull),
-	.test(tempTest)
-);*/
-
 answerLCS instTempRQ(
-	.clk(clk80MHz),
-	.edgeTx(clk4_8MHz),
+	.clk(clk4_8MHz),
 	.rst(rst),
-	.req(rqRom),
-	.addrLCS(LCB_rq_addr1),
+	.req(RqFast),
 	.dataLCS(LCB_rq_data1),
 	.dataTemp(tempData),
-	.SW(SW),
 	.dataTx(txData),
-	.ack(ack),
+	.sel(swsel),
 	.addrTemp(tempAddr)
 );
 
 romRqAdr instRomAdr1(
-	.address(cycle),
+	.address({SW,cycle}),
 	.inclock(clk80MHz),
 	.outclock(clk80MHz),
 	.q(addrRamGr1)
@@ -671,13 +409,13 @@ reqMem instRqMem1(
   .outclock(clk80MHz),
   .q(LCB_rq_data1)
 );
-/*
+
 tempROM instRQtemp(
   .address(tempAddr),
   .inclock(clk80MHz),
   .outclock(clk80MHz),
   .q(tempData)
-);*/
+);
 
 reqMem instRqMem2(
   .address(LCB_rq_addr2),
@@ -685,25 +423,5 @@ reqMem instRqMem2(
   .outclock(clk80MHz),
   .q(LCB_rq_data2)
 );
-/*
-reqMem instRqMem3(
-  .address(LCB_rq_addr3),
-  .inclock(clk80MHz),
-  .outclock(clk80MHz),
-  .q(LCB_rq_data3)
-);
 
-reqMem instRqMem4(
-  .address(LCB_rq_addr4),
-  .inclock(clk80MHz),
-  .outclock(clk80MHz),
-  .q(LCB_rq_data4)
-);
-
-reqMem instRqMem5(
-  .address(LCB_rq_addr5),
-  .inclock(clk80MHz),
-  .outclock(clk80MHz),
-  .q(LCB_rq_data5)
-);*/
 endmodule
