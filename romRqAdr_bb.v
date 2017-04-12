@@ -37,7 +37,7 @@ module romRqAdr (
 	outclock,
 	q);
 
-	input	[6:0]  address;
+	input	[5:0]  address;
 	input	  inclock;
 	input	  outclock;
 	output	[10:0]  q;
@@ -65,7 +65,7 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
 // Retrieval info: PRIVATE: MIFfilename STRING "AdrRq.mif"
-// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "128"
+// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "64"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 // Retrieval info: PRIVATE: RegAdd NUMERIC "1"
@@ -74,7 +74,7 @@ endmodule
 // Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
 // Retrieval info: PRIVATE: SingleClock NUMERIC "0"
 // Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
-// Retrieval info: PRIVATE: WidthAddr NUMERIC "7"
+// Retrieval info: PRIVATE: WidthAddr NUMERIC "6"
 // Retrieval info: PRIVATE: WidthData NUMERIC "11"
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
@@ -83,12 +83,12 @@ endmodule
 // Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
 // Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "11"
-// Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "7"
-// Retrieval info: USED_PORT: address 0 0 7 0 INPUT NODEFVAL address[6..0]
+// Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "6"
+// Retrieval info: USED_PORT: address 0 0 6 0 INPUT NODEFVAL address[5..0]
 // Retrieval info: USED_PORT: inclock 0 0 0 0 INPUT NODEFVAL inclock
 // Retrieval info: USED_PORT: outclock 0 0 0 0 INPUT NODEFVAL outclock
 // Retrieval info: USED_PORT: q 0 0 11 0 OUTPUT NODEFVAL q[10..0]
-// Retrieval info: CONNECT: @address 0 0 7 0 address 0 0 7 0
+// Retrieval info: CONNECT: @address 0 0 6 0 address 0 0 6 0
 // Retrieval info: CONNECT: q 0 0 11 0 @q 0 0 11 0
 // Retrieval info: CONNECT: @inclock 0 0 0 0 inclock 0 0 0 0
 // Retrieval info: CONNECT: @outclock 0 0 0 0 outclock 0 0 0 0

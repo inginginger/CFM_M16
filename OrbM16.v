@@ -391,7 +391,7 @@ answerLCS instTempRQ(
 );
 
 romRqAdr instRomAdr1(
-	.address({SW,cycle}),
+	.address(cycle),
 	.inclock(clk80MHz),
 	.outclock(clk80MHz),
 	.q(addrRamGr1)

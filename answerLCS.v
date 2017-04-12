@@ -3,6 +3,7 @@ module answerLCS(
 	input rst,
 	input req,
 	input [2:0] sel,
+	input [8:0] addrLCS,
 	input [7:0] dataTemp,
 	input [7:0] dataLCS,
 	output [7:0] dataTx,
