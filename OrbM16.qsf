@@ -123,3 +123,5 @@ set_global_assignment -name VERILOG_FILE fullPacker.v
 set_global_assignment -name VERILOG_FILE commutator.v
 set_global_assignment -name CDF_FILE OrbM16.cdf
 set_global_assignment -name MIF_FILE adrRqSlowTemp.mif
+set_global_assignment -name MIF_FILE temper.mif
+set_global_assignment -name HEX_FILE adrRq.hex
