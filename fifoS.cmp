@@ -19,7 +19,6 @@ component fifoS
 		clock		: IN STD_LOGIC ;
 		data		: IN STD_LOGIC_VECTOR (11 DOWNTO 0);
 		rdreq		: IN STD_LOGIC ;
-		sclr		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
 		q		: OUT STD_LOGIC_VECTOR (11 DOWNTO 0);
 		usedw		: OUT STD_LOGIC_VECTOR (0 DOWNTO 0)

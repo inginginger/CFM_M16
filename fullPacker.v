@@ -1,6 +1,7 @@
 module fullPacker(
 	input clk,
 	input rst,
+	input rq,
 	input doneF1,
 	input doneF2,
 	input doneS1,
@@ -43,6 +44,7 @@ reg [2:0] cntS1, cntS2, cntF1, cntF2;
 reg [4:0] pause;
 reg oldSW;
 reg [1:0] syncSW;
+reg [1:0] syncRq;
 
 assign doneBus[0] = (usedwF1 == 5'd16) ? 1'b1 : 1'b0;
 assign doneBus[1] = (usedwF2 == 5'd15) ? 1'b1 : 1'b0;
@@ -87,11 +89,15 @@ always@(posedge clk) begin
 end
 
 always@(posedge clk or negedge rst) begin
-	if(~rst)
+	if(~rst) begin
 		syncSW <= 2'd0;
-	else 
+		syncRq <= 2'd0;
+	end else begin
 		syncSW <= {syncSW[0], SW};
+		syncRq <= {syncRq[0], rq};
+	end
 end
+wire dtctRq = !syncRq[1] & syncRq[0];
 
 /*always@(*) begin
 	case(doneBus)

@@ -125,7 +125,7 @@ endmodule
 // Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL reqMem.bsf TRUE FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL reqMem_inst.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL reqMem_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

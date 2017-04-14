@@ -35,7 +35,6 @@ module fifoS (
 	clock,
 	data,
 	rdreq,
-	sclr,
 	wrreq,
 	q,
 	usedw);
@@ -43,7 +42,6 @@ module fifoS (
 	input	  clock;
 	input	[11:0]  data;
 	input	  rdreq;
-	input	  sclr;
 	input	  wrreq;
 	output	[11:0]  q;
 	output	[0:0]  usedw;
@@ -81,7 +79,7 @@ endmodule
 // Retrieval info: PRIVATE: rsFull NUMERIC "0"
 // Retrieval info: PRIVATE: rsUsedW NUMERIC "0"
 // Retrieval info: PRIVATE: sc_aclr NUMERIC "0"
-// Retrieval info: PRIVATE: sc_sclr NUMERIC "1"
+// Retrieval info: PRIVATE: sc_sclr NUMERIC "0"
 // Retrieval info: PRIVATE: wsEmpty NUMERIC "0"
 // Retrieval info: PRIVATE: wsFull NUMERIC "1"
 // Retrieval info: PRIVATE: wsUsedW NUMERIC "0"
@@ -99,7 +97,6 @@ endmodule
 // Retrieval info: USED_PORT: data 0 0 12 0 INPUT NODEFVAL data[11..0]
 // Retrieval info: USED_PORT: q 0 0 12 0 OUTPUT NODEFVAL q[11..0]
 // Retrieval info: USED_PORT: rdreq 0 0 0 0 INPUT NODEFVAL rdreq
-// Retrieval info: USED_PORT: sclr 0 0 0 0 INPUT NODEFVAL sclr
 // Retrieval info: USED_PORT: usedw 0 0 1 0 OUTPUT NODEFVAL usedw[0..0]
 // Retrieval info: USED_PORT: wrreq 0 0 0 0 INPUT NODEFVAL wrreq
 // Retrieval info: CONNECT: @data 0 0 12 0 data 0 0 12 0
@@ -108,7 +105,6 @@ endmodule
 // Retrieval info: CONNECT: @rdreq 0 0 0 0 rdreq 0 0 0 0
 // Retrieval info: CONNECT: @clock 0 0 0 0 clock 0 0 0 0
 // Retrieval info: CONNECT: usedw 0 0 1 0 @usedw 0 0 1 0
-// Retrieval info: CONNECT: @sclr 0 0 0 0 sclr 0 0 0 0
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: GEN_FILE: TYPE_NORMAL fifoS.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL fifoS.inc FALSE

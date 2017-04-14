@@ -83,13 +83,13 @@ wire fVal1, fVal2, sVal1, sVal2;
 wire rqF1, rqF2, rqS1, rqS2, fDone1, fDone2, sDone1, sDone2;
 wire [4:0] oTestF1, oTestF2;
 wire oTestS1, oTestS2;
-
+wire reqFewSeconds;
 assign iTempAddr  = (swTemp == 7'd110) ? 11'd1215 : 11'd0;
 //assign ValRx = ValRX1;
 
 //assign WE = WEfast1 | WEfast2/* | WEslow1 | WEslow2;// | WEtemp*/;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
-assign test1 = (oTestF1 == 16) ? 1 : 0;//WE;//ValRX1;//UART_dTX1;//testVal1;
+assign test1 = reqFewSeconds;//(oTestF1 == 16) ? 1 : 0;//WE;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = (oTestF2 == 15) ? 1 : 0;//ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = oTestS1;//WE;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = oTestS2;//WR1;//testpin2016;//RE2;//0;//WE2;
@@ -98,46 +98,27 @@ assign test4 = oTestS2;//WR1;//testpin2016;//RE2;//0;//WE2;
 assign orbWord = (WEfast1 == 1'b1)? fastWord1:((WEfast2 == 1'b1)? fastWord2:((WEslow1 == 1'b1)? slowWord1: ((WEslow2 == 1'b1) ? slowWord2 : ((WEtemp == 1'b1) ? tempWord :12'hZ))));
 */
 
-always@(posedge clk80MHz)
+always@(posedge clk80MHz or negedge rst)
 begin
-	syncWE1 <= {syncWE1[0], WE1};
-	syncWE2 <= {syncWE2[0], WE2};
+	if(~rst) begin
+		syncWE1 <= 2'd0;
+		syncWE2 <= 2'd0;
+	end else begin
+		syncWE1 <= {syncWE1[0], WE1};
+		syncWE2 <= {syncWE2[0], WE2};
+	end
 end
 
-always@(posedge clk100MHz)
+always@(posedge clk100MHz or negedge rst)
 begin
-	syncRE1 <= {syncRE1[0], RE1};
-	syncRE2 <= {syncRE2[0], RE2};
+	if(~rst) begin
+		syncRE1 <= 2'd0;
+		syncRE2 <= 2'd0;
+	end else begin
+		syncRE1 <= {syncRE1[0], RE1};
+		syncRE2 <= {syncRE2[0], RE2};
+	end 
 end
-
-/*always@(posedge clk80MHz) begin
-	if(WEfast1 == 1'b1) begin
-		WrAddr <= FastAddr1;
-		orbWord <= fastWord1;
-	end else
-	if(WEfast2 == 1'b1) begin
-		WrAddr <= FastAddr2;
-		orbWord <= fastWord2;*/
-	/*end else
-	if(WEslow1 == 1'b1) begin
-		WrAddr <= SlowAddr1;
-		orbWord <= slowWord1;
-	end else
-	if(WEslow2 == 1'b1) begin
-		WrAddr <= SlowAddr2;
-		orbWord <= slowWord2;*/
-	/*end else begin
-		WrAddr <= 0;
-		orbWord <= 0;
-	end*/
-	/*if(WEtemp == 1'b1) begin
-		WrAddr <= oTempAddr;
-		orbWord <= tempWord;
-	end*/
-	//WE <= WEfast1 | WEfast2 | WEslow1 | WEslow2;// | WEtemp;
-	//ValRX <= ValRX1 | ValRX2 | ValRX3 | ValRX4 | ValRX5;
-
-//end
 
 always@(*) begin
 	if(~SW) begin
@@ -164,7 +145,7 @@ always@(*) begin
 
 end
 
-assign ValRX = ValRX1 | ValRX2/* | ValRX3 | ValRX4 | ValRX5*/;
+assign ValRX = ValRX1 | ValRX2;
 
 globalReset instRST(
 	.clk(clk80MHz),				// 40 MHz
@@ -204,9 +185,18 @@ uartRx instRX2(
 	.oData(iUART2)
 );
 
+/*commutatorCC40 instCC40(
+	.clk(clk80MHz),
+	.rst(rst),
+	.req(reqFewSeconds),
+	.sAddr(addrRamGr2),
+	.sData(sData2)
+);*/
+
 writer instWrUart1(
 	.clk(clk80MHz),
 	.rst(rst),
+	.rstTx(f1),
 	.iData(iUART1),
 	.strob(ValRX1),
 	.sAddr(addrRamGr1),
@@ -220,6 +210,7 @@ defparam instWrUart1.BYTES = 5'd16;
 writer instWrUart2(
 	.clk(clk80MHz),
 	.rst(rst),
+	.rstTx(f2),
 	.iData(iUART2),
 	.strob(ValRX2),
 	.sAddr(addrRamGr2),
@@ -235,7 +226,7 @@ fifoF1 instFastFifo1(
 	.clock(clk80MHz),
 	.data(fData1),
 	.rdreq(rqF1),
-	.sclr(1'b0),
+	//.sclr(1'b0),
 	.wrreq(fVal1),
 	.q(oFastData1),
 	.usedw(oTestF1));
@@ -244,7 +235,7 @@ fifoS instSlowFifo1(
 	.clock(clk80MHz),
 	.data(sData1),
 	.rdreq(rqS1),//from FullPacker
-	.sclr(1'b0),
+	//.sclr(1'b0),
 	.wrreq(sVal1),//valid
 	.q(oSlowData1),//oData
 	.usedw(oTestS1));
@@ -253,7 +244,7 @@ fifoF1 instFastFifo2(
 	.clock(clk80MHz),
 	.data(fData2),
 	.rdreq(rqF2),
-	.sclr(1'b0),
+	//.sclr(1'b0),
 	.wrreq(fVal2),
 	.q(oFastData2),
 	.usedw(oTestF2));
@@ -262,7 +253,7 @@ fifoS instSlowFifo2(
 	.clock(clk80MHz),
 	.data(sData2),
 	.rdreq(rqS2),//from FullPacker
-	.sclr(1'b0),
+	//.sclr(1'b0),
 	.wrreq(sVal2),//valid
 	.q(oSlowData2),//oData
 	.usedw(oTestS2));
@@ -270,6 +261,7 @@ fifoS instSlowFifo2(
 fullPacker instPackerFull(
 	.clk(clk80MHz),
 	.rst(rst),
+	.rq(RqFast),
 	.usedwF1(oTestF1),
 	.usedwF2(oTestF2),
 	.usedwS1(oTestS1),

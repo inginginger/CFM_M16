@@ -28,12 +28,12 @@ module uartRx(
 			syncRx <= 2'd0;
 			syncRstTx <= 2'd0;
 		end else begin
-			syncRx <= {syncRx[0], rx};
-			syncRstTx <= {syncRstTx[0], rstTx};
+			syncRx <= {syncRx[0], rx};			//во избежание метастабильности
+			syncRstTx <= {syncRstTx[0], rstTx};	//все внешние входные провода пропускаем через 2 триггера
 		end
 	end
-		
-	always@(posedge clk or negedge rst)
+	wire dtctClr = !syncRstTx[1] & syncRstTx[0];	
+	always@(posedge clk or negedge rst)//асинхронный сброс
 	begin
 		if(~rst) begin
 			oValid <= 1'b0;
@@ -47,15 +47,23 @@ module uartRx(
 			delay <= 2'd0;
 		end
 		else begin
-			if(syncRstTx[1]) begin
+			/*if(dtctClr) begin
 				rxAct <= 1'b0;
-			end
+				oValid <= 1'b0;
+				oData <= 8'b0;
+				cntStrt <= 3'b0;
+				cntStep <= 5'd0;
+				cntPlace <= 4'd0;
+				data <= 8'd0;
+				delay <= 2'd0;
+				state <= 4'b0;
+			end*/
 			case(state)
 				STARTSEARCH: begin
 					if(~rxAct && ~syncRx[1]) begin//если передача неактивна и на приемной линии ноль
 						cntStrt <= cntStrt + 1'b1;
 						if(cntStrt == 3'd7) begin//отсчитываем середину стартового бита
-							rxAct <= 1'b1;
+							rxAct <= 1'b1;		//выставляем флаг активности передачи в 1	
 							state <= RECEIVER;
 						end
 					end
@@ -66,10 +74,10 @@ module uartRx(
 				RECEIVER: begin
 					if(rxAct == 1'b1) begin//если передача активна
 						cntStep <= cntStep + 1'b1;
-						if(cntStep == 5'd16) begin
+						if(cntStep == 5'd16) begin      //отсчитываем 16 бит 80 мгц = 1 биту 5 мгц
 							cntPlace <= cntPlace + 1'b1;
 							cntStep <= 5'd0;
-							if(cntPlace == 4'd8) begin//приняли данные
+							if(cntPlace == 4'd8) begin//приняли 8 бит информации
 								state <= STOPSEARCH;
 								cntPlace <= 4'd0;
 							end
@@ -82,17 +90,17 @@ module uartRx(
 				end
 				STOPSEARCH: begin
 					if(syncRx[1]) begin
-						oValid <= 1'b1;
+						oValid <= 1'b1;//считали один байт
 						oData <= data;//считываем данные из буфера
 						state <= VALIDHOLD;
 					end
 					else begin
-						data <= 8'd0;
+						data <= 8'd0;//очищаем буфер данных
 					end
-					rxAct <= 1'b0;
+					rxAct <= 1'b0;//ставим флаг активности передачи в 0
 				end	
 				VALIDHOLD: begin
-					if(oValid == 1'b1) begin
+					if(oValid == 1'b1) begin //удержание сигнала принятия байта
 						delay <= delay + 1'b1;
 						if(delay == 2'd2) begin
 							oValid <= 1'b0;
