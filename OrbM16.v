@@ -74,7 +74,7 @@ wire [4:0] WAdr1, WAdr2, WAdr3, WAdr4, WAdr5, RAdr1, RAdr2, RAdr3, RAdr4, RAdr5;
 wire RD1, RD2, RD3, RD4, RD5, WR1, WR2, WR3, WR4, WR5;
 wire done1, done2, done3, done4, done5, busy;
 wire [10:0] iTempAddr, oTempAddr;
-wire [6:0] swTemp;
+wire oneSec;
 wire [11:0] tempWord;
 wire WEtemp;
 wire [11:0] fData1, fData2, oFastData1, oFastData2;
@@ -83,14 +83,13 @@ wire fVal1, fVal2, sVal1, sVal2;
 wire rqF1, rqF2, rqS1, rqS2, fDone1, fDone2, sDone1, sDone2;
 wire [4:0] oTestF1, oTestF2;
 wire oTestS1, oTestS2;
-wire reqFewSeconds;
-assign iTempAddr  = (swTemp == 7'd110) ? 11'd1215 : 11'd0;
+wire reqFewSeconds, enaCC40;
 //assign ValRx = ValRX1;
 
 //assign WE = WEfast1 | WEfast2/* | WEslow1 | WEslow2;// | WEtemp*/;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = reqFewSeconds;//(oTestF1 == 16) ? 1 : 0;//WE;//ValRX1;//UART_dTX1;//testVal1;
-assign test2 = (oTestF2 == 15) ? 1 : 0;//ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
+assign test2 = enaCC40;//(oTestF2 == 15) ? 1 : 0;//ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
 assign test3 = oTestS1;//WE;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = oTestS2;//WR1;//testpin2016;//RE2;//0;//WE2;
 
@@ -166,7 +165,6 @@ clkDiv100 instClkDiv100(
 	.Outdiv8(clkOrb)			// divided by 8
 );	
 
-
 uartRx instRX1(
 	.clk(clk80MHz),
 	.rstTx(f1),
@@ -184,14 +182,6 @@ uartRx instRX2(
 	.oValid(ValRX2),
 	.oData(iUART2)
 );
-
-/*commutatorCC40 instCC40(
-	.clk(clk80MHz),
-	.rst(rst),
-	.req(reqFewSeconds),
-	.sAddr(addrRamGr2),
-	.sData(sData2)
-);*/
 
 writer instWrUart1(
 	.clk(clk80MHz),
@@ -282,24 +272,15 @@ fullPacker instPackerFull(
 	.SW(SW)
 );
 
-ramUART instRam1(
-	.clock(clk80MHz),
-	.data(iUART1),
-	.rdaddress(RAdr1),
-	.rden(RD1),
-	.wraddress(WAdr1),
-	.wren(WR1),
-	.q(oUART1)
-);
 
-ramUART instRam2(
-	.clock(clk80MHz),
-	.data(iUART2),
-	.rdaddress(RAdr2),
-	.rden(RD2),
-	.wraddress(WAdr2),
-	.wren(WR2),
-	.q(oUART2)
+commutatorCC40 instCC40(
+	.clk(clk80MHz),
+	.rst(rst),
+	.WE(WE),
+	.req(reqFewSeconds),
+	.sAddr(WrAddr),
+	.sData(orbWord),
+	.ena(enaCC40)
 );
 
 
@@ -334,7 +315,7 @@ M16 instM16(
 	.RqFast(RqFast),
 	.cycle(cycle),
 	.oOrbit(orbFrame),
-	.swTemp(swTemp)
+	.oneSec(oneSec)
 );
 wire [2:0] swsel;
 

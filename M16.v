@@ -10,7 +10,7 @@ module M16(
 	output reg oVal,
 	output reg [5:0] cycle,
 	output reg RqFast,
-	output [6:0] swTemp
+	output reg oneSec
 );
 
 reg [3:0]cntBit;
@@ -24,7 +24,6 @@ reg [2:0]seq;
 reg [11:0] cntRqFast;
 reg [2:0] cntTemp;
 
-assign swTemp = (cntTemp << 6) + cycle;
 
 always@(negedge reset or posedge iClkOrb)begin
 	if(~reset)begin
@@ -45,6 +44,7 @@ always@(negedge reset or posedge iClkOrb)begin
 		RqFast <= 1'd0;
 		cntRqFast <= 12'd0;
 		cntTemp <= 3'd0;
+		oneSec <= 1'b0;
 	end else begin
 		seq <= seq + 1'b1;
 		case(seq)
@@ -121,7 +121,11 @@ always@(negedge reset or posedge iClkOrb)begin
 					case (cntFrm)
 						0: begin
 							case (cntWrd)
-								240: outWord <= outWord | 12'b100000000000;
+								240:  begin 
+									outWord <= outWord | 12'b100000000000;
+									oneSec <= 1'b1;
+								end
+								default: oneSec <= 1'b0;
 							endcase
 						end
 					endcase
