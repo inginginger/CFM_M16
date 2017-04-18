@@ -90,7 +90,7 @@ wire reqFewSeconds, enaCC40;
 assign doubleOrbData = orbFrame;//aoaee?iaaiea ia eiioaeo, eioi?ue auaiaeo eaa? ia noaiaa
 assign test1 = reqFewSeconds;//(oTestF1 == 16) ? 1 : 0;//WE;//ValRX1;//UART_dTX1;//testVal1;
 assign test2 = enaCC40;//(oTestF2 == 15) ? 1 : 0;//ValRX;//testIO;//UART_dTX2;//testVal2;//SW;//0;//WE2;
-assign test3 = oTestS1;//WE;//busy;//WE;//testpin1984;//WrAddr[1];
+assign test3 = testpin3;//oTestS1;//WE;//busy;//WE;//testpin1984;//WrAddr[1];
 assign test4 = oTestS2;//WR1;//testpin2016;//RE2;//0;//WE2;
 
 /*assign WrAddr = (WEfast1 == 1'b1)? FastAddr1:((WEfast2 == 1'b1)? FastAddr2:((WEslow1 == 1'b1)? SlowAddr1: ((WEslow2 == 1'b1) ? SlowAddr2 : ((WEtemp == 1'b1) ? oTempAddr :11'hZ))));
@@ -103,8 +103,8 @@ begin
 		syncWE1 <= 2'd0;
 		syncWE2 <= 2'd0;
 	end else begin
-		syncWE1 <= {syncWE1[0], WE1};
-		syncWE2 <= {syncWE2[0], WE2};
+		syncWE1 <= {syncWE1[0], WE1};//во избежание метастабильности
+		syncWE2 <= {syncWE2[0], WE2};//используем 2 триггера
 	end
 end
 
@@ -114,8 +114,8 @@ begin
 		syncRE1 <= 2'd0;
 		syncRE2 <= 2'd0;
 	end else begin
-		syncRE1 <= {syncRE1[0], RE1};
-		syncRE2 <= {syncRE2[0], RE2};
+		syncRE1 <= {syncRE1[0], RE1};//во избежание метастабильности
+		syncRE2 <= {syncRE2[0], RE2};//используем 2 триггера
 	end 
 end
 
@@ -147,8 +147,8 @@ end
 assign ValRX = ValRX1 | ValRX2;
 
 globalReset instRST(
-	.clk(clk80MHz),				// 40 MHz
-	.rst(rst)			// global enable
+	.clk(clk80MHz),				// 80 MHz
+	.rst(rst)			// глобальный сброс
 );
 
 clkDiv21 instClkDiv21(
@@ -214,12 +214,12 @@ defparam instWrUart2.BYTES = 5'd15;
 
 fifoF1 instFastFifo1(
 	.clock(clk80MHz),
-	.data(fData1),
-	.rdreq(rqF1),
+	.data(fData1),//данные по первым быстрым параметрам
+	.rdreq(rqF1),//подтверждение считывания из буфера
 	//.sclr(1'b0),
-	.wrreq(fVal1),
-	.q(oFastData1),
-	.usedw(oTestF1));
+	.wrreq(fVal1),//запись по сигналу валидности параметра
+	.q(oFastData1),//выходные данные из буфера
+	.usedw(oTestF1));//шина, показывающая, сколько слов содержит буфер на текущий момент
 	
 fifoS instSlowFifo1(
 	.clock(clk80MHz),
@@ -251,27 +251,28 @@ fifoS instSlowFifo2(
 fullPacker instPackerFull(
 	.clk(clk80MHz),
 	.rst(rst),
-	.rq(RqFast),
+	.rq(RqFast),//запрос данных для вставки в кадр с частотой 8192 гц
 	.usedwF1(oTestF1),
 	.usedwF2(oTestF2),
 	.usedwS1(oTestS1),
 	.usedwS2(oTestS2),
-	.sAddr1(addrRamGr1),
-	.sAddr2(addrRamGr2),
+	.sAddr1(addrRamGr1),//адрес медленных параметров для улк
+	.sAddr2(addrRamGr2),//адрес медленных параметров для бсуфтк
 	.fData1(oFastData1),
 	.fData2(oFastData2),
 	.sData1(oSlowData1),
 	.sData2(oSlowData2),
-	.rAckF1(rqF1),
+	.rAckF1(rqF1),//подтверждение считывания параметра из буфера
 	.rAckS1(rqS1),
 	.rAckF2(rqF2),
 	.rAckS2(rqS2),
-	.wAddr(WrAddr),
-	.orbWord(orbWord),
-	.WE(WE),
-	.SW(SW)
+	.wAddr(WrAddr),//выходной адрес для записи в кадр
+	.orbWord(orbWord),//слово в формате орбита
+	.WE(WE),//сигнал разрешения записи
+	.SW(SW)//сигнал переключения массивов групп
 );
 
+wire [7:0] dataForCC40;
 
 commutatorCC40 instCC40(
 	.clk(clk80MHz),
@@ -279,8 +280,10 @@ commutatorCC40 instCC40(
 	.WE(WE),
 	.req(reqFewSeconds),
 	.sAddr(WrAddr),
+	.numBytes(switch2),
 	.sData(orbWord),
-	.ena(enaCC40)
+	.ena(enaCC40),
+	.oData(dataForCC40)
 );
 
 
@@ -336,6 +339,10 @@ UARTTXBIG instTX1(
 );
 defparam instTX1.BYTES = 5'd4;
 
+wire [7:0] txData2;
+assign txData2 = (reqFewSeconds == 1'b1) ? dataForCC40 : LCB_rq_data2;
+
+wire testpin3 = (txData2 == 8'd50) ? 1'b1 : 0;
 
 UARTTXBIG instTX2(
   .reset(rst),          // global reset and enable signal
@@ -343,7 +350,7 @@ UARTTXBIG instTX2(
   .clk(clk4_8MHz),            // actual needed baudrate
   .RQ(RqFast),
   .cycle(cycle),  // number of the request (from m8) + shift, to give LCB time to respond
-  .data(LCB_rq_data2),      // data to transmit (from ROM)
+  .data(txData2),      // data to transmit (from ROM)
   .addr(LCB_rq_addr2),      // address to read (to ROM)
   .tx(UART_TX2),          // serial transmitted data
   .dirTX(UART_dTX2),        // rs485 TX dir controller 

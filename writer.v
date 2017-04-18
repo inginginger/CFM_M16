@@ -35,8 +35,8 @@ always@(posedge clk or negedge rst) begin
 	end
 end
 
-wire dtctStrob = !syncStrob[2] & syncStrob[1];
-wire dtctRst = !syncRst[1] & syncRst[0];
+wire dtctStrob = !syncStrob[2] & syncStrob[1];//детектирование фронта сигнала валидности данных от приемника уарт
+wire dtctRst = !syncRst[1] & syncRst[0];//детектирование фронта сигнала сброса передатчика, который срабатывает, когда отправлен запрос в ялк
 
 always@(posedge clk or negedge rst) begin
 	if(~rst) begin
@@ -55,20 +55,20 @@ always@(posedge clk or negedge rst) begin
 			sVal <= 1'b0;
 			tmp <= 8'd0;
 		end
-		if(dtctStrob == 1)begin
-			cntWord <= cntWord + 1'b1;
+		if(dtctStrob == 1)begin//по фронту сигнала валидности данных
+			cntWord <= cntWord + 1'b1;//считаем количество параметров
 			if(cntWord < BYTES) begin
-				fBuf <= {1'b0, iData, 3'd0};
-				fVal <= 1'b1;
-			end else if(cntWord == 5'd16) begin
+				fBuf <= {1'b0, iData, 3'd0};//пишем 12-разрядный быстрый параметр
+				fVal <= 1'b1;//выставляем сигнал валидности быстрого параметра
+			end else if(cntWord == 5'd16) begin//медленный параметр собираем из 16 и 17 слов
 				if(sAddr!= 11'd0)
 					tmp <= iData;
 			end else if(cntWord == 5'd17)begin
 				if(sAddr!= 11'd0) begin
-					sBuf <= {1'b0, iData[1:0], tmp, 1'b0};
-					sVal <= 1'b1;
+					sBuf <= {1'b0, iData[1:0], tmp, 1'b0};//пишем медленный параметр
+					sVal <= 1'b1;//выставляем для него сигнал валидности
 				end
-				cntWord <= 5'd0;
+				cntWord <= 5'd0;//обнуляем счетчик параметров
 			end else begin
 				tmp <= 8'd0;
 				sBuf <= 12'd0;

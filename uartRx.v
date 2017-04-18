@@ -26,13 +26,10 @@ module uartRx(
 	begin
 		if(~rst) begin
 			syncRx <= 2'd0;
-			syncRstTx <= 2'd0;
 		end else begin
-			syncRx <= {syncRx[0], rx};			//во избежание метастабильности
-			syncRstTx <= {syncRstTx[0], rstTx};	//все внешние входные провода пропускаем через 2 триггера
+			syncRx <= {syncRx[0], rx};			//во избежание метастабильности все внешние входные провода пропускаем через 2 триггера
 		end
 	end
-	wire dtctClr = !syncRstTx[1] & syncRstTx[0];	
 	always@(posedge clk or negedge rst)//асинхронный сброс
 	begin
 		if(~rst) begin
@@ -47,17 +44,6 @@ module uartRx(
 			delay <= 2'd0;
 		end
 		else begin
-			/*if(dtctClr) begin
-				rxAct <= 1'b0;
-				oValid <= 1'b0;
-				oData <= 8'b0;
-				cntStrt <= 3'b0;
-				cntStep <= 5'd0;
-				cntPlace <= 4'd0;
-				data <= 8'd0;
-				delay <= 2'd0;
-				state <= 4'b0;
-			end*/
 			case(state)
 				STARTSEARCH: begin
 					if(~rxAct && ~syncRx[1]) begin//если передача неактивна и на приемной линии ноль

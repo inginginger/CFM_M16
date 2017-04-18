@@ -126,3 +126,4 @@ set_global_assignment -name MIF_FILE adrRqSlowTemp.mif
 set_global_assignment -name MIF_FILE temper.mif
 set_global_assignment -name HEX_FILE adrRq.hex
 set_global_assignment -name VERILOG_FILE commutatorCC40.v
+set_global_assignment -name HEX_FILE AdrRq2.hex
